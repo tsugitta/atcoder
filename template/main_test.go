@@ -71,7 +71,7 @@ func TestSolve(t *testing.T) {
 				solveFunc(io)
 				io.Flush()
 
-				output := strings.TrimSuffix(buffer.String(), "\n")
+				output := buffer.String()
 				if output != c.Out {
 					t.Fatalf("expected: %#v, actual: %#v", c.Out, output)
 				}
