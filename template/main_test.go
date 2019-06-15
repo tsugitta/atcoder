@@ -4,16 +4,33 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"strings"
-	"testing"
 	"io/ioutil"
 	"log"
+	"strings"
+	"testing"
+	"os"
 
 	"gopkg.in/yaml.v2"
 )
 
+type SolveFunction = func(io *Io)
+var solveFuncMap map[string]SolveFunction
+
+func TestMain(m *testing.M) {
+	solveFuncMap = map[string]SolveFunction{
+		// Add solve functions here to test another solution
+		"solve": solve,
+	}
+
+	exit := m.Run()
+
+	if exit != 0 {
+		os.Exit(exit)
+	}
+}
+
 type TestCase struct {
-	In string
+	In  string
 	Out string
 }
 
@@ -22,8 +39,8 @@ func YamlBufToTestCases(buf []byte) ([]TestCase, error) {
 	err := yaml.Unmarshal(buf, &cases)
 
 	if err != nil {
-			fmt.Println(err)
-			return nil, err
+		fmt.Println(err)
+		return nil, err
 	}
 
 	return cases, nil
@@ -45,18 +62,20 @@ func TestSolve(t *testing.T) {
 
 	cases, err := YamlBufToTestCases(yamlBuf)
 
-	for idx, c := range cases {
-		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
-			buffer := bytes.Buffer{}
+	for funcName, solveFunc := range solveFuncMap {
+		for idx, c := range cases {
+			t.Run(fmt.Sprintf("%s %d", funcName, idx), func(t *testing.T) {
+				buffer := bytes.Buffer{}
 
-			io := NewMockIo(c.In, &buffer)
-			solve(io)
-			io.Flush()
+				io := NewMockIo(c.In, &buffer)
+				solveFunc(io)
+				io.Flush()
 
-			output := strings.TrimSuffix(buffer.String(), "\n")
-			if output != c.Out {
-				t.Fatalf("expected: %#v, actual: %#v", c.Out, output)
-			}
-		})
+				output := strings.TrimSuffix(buffer.String(), "\n")
+				if output != c.Out {
+					t.Fatalf("expected: %#v, actual: %#v", c.Out, output)
+				}
+			})
+		}
 	}
 }
