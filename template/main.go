@@ -9,7 +9,8 @@ import (
 	"strings"
 )
 
-func solve(io *Io) {
+// d: debug IO. it can print debug in test.
+func solve(io *Io, d *Io) {
 	input := io.NextLine()
 	io.Println(input)
 }
@@ -17,7 +18,7 @@ func solve(io *Io) {
 func main() {
 	io := NewIo()
 	defer io.Flush()
-	solve(io)
+	solve(io, nil)
 }
 
 /* IO Helpers */
@@ -131,6 +132,16 @@ func (io *Io) Print(a interface{}) {
 // Printfln calls Fprint to the writer
 func (io *Io) Printfln(format string, a ...interface{}) {
 	fmt.Fprintf(io.writer, format+"\n", a...)
+}
+
+// Debug calls Println and Flush immediately
+func (io *Io) Debug(a ...interface{}) {
+	if io == nil {
+		return
+	}
+
+	io.Println(a...)
+	io.Flush()
 }
 
 /* Math Helpers */

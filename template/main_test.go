@@ -13,7 +13,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type SolveFunction = func(io *Io)
+type SolveFunction = func(io, debugIo *Io)
 var solveFuncMap map[string]SolveFunction
 
 func TestMain(m *testing.M) {
@@ -68,7 +68,8 @@ func TestSolve(t *testing.T) {
 				buffer := bytes.Buffer{}
 
 				io := NewMockIo(c.In, &buffer)
-				solveFunc(io)
+				debugIo := NewIo()
+				solveFunc(io, debugIo)
 				io.Flush()
 
 				output := buffer.String()
