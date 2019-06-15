@@ -200,3 +200,33 @@ func Sum(numbers ...int) int {
 
 	return sum
 }
+
+/* Structure Helpers */
+
+// Set is orderless List
+type Set map[interface{}]struct{}
+
+// NewSet returns empty Set
+func NewSet() *Set {
+	return &Set{}
+}
+
+// Add the value to the set
+func (set *Set) Add(value interface{}) {
+	(*set)[value] = struct{}{}
+}
+
+// Includes check the set has the value
+func (set *Set) Includes(value interface{}) bool {
+	_, included := (*set)[value]
+	return included
+}
+
+// Remove deletes the value from the set if exists
+func (set *Set) Remove(value interface{}) {
+	if !set.Includes(value) {
+		return
+	}
+
+	delete(*set, value)
+}
