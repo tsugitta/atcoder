@@ -1,72 +1,55 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
+	"strings"
 	"testing"
 )
 
+func NewMockIo(input string, outputBuffer *bytes.Buffer) *Io {
+	return &Io{
+		reader: bufio.NewReader(strings.NewReader(input)),
+		writer: bufio.NewWriter(outputBuffer),
+	}
+}
+
 func TestSolve(t *testing.T) {
 	cases := []struct {
-		H        int
-		W        int
-		rows     []string
-		expected int
+		input    string
+		expected string
 	}{
 		{
-			4,
-			6,
-			[]string{
-				"#..#..",
-				".....#",
-				"....#.",
-				"#.#...",
-			},
-			8,
-		},
-		{
-			8,
-			8,
-			[]string{
-				"..#...#.",
-				"....#...",
-				"##......",
-				"..###..#",
-				"...#..#.",
-				"##....#.",
-				"#...#...",
-				"###.#..#",
-			},
-			13,
-		},
-		{
-			1,
-			8,
-			[]string{
-				"..#...#.",
-			},
-			3,
-		},
-		{
-			8,
-			1,
-			[]string{
-				".",
-				".",
-				"#",
-				".",
-				".",
-				"#",
-				"#",
-				"#",
-			},
-			2,
-		},
+			input: `4 6
+#..#..
+.....#
+....#.
+#.#...`,
+			expected: "8\n",
+		}, {
+			input: `8 8
+..#...#.
+....#...
+##......
+..###..#
+...#..#.
+##....#.
+#...#...
+###.#..#`,
+			expected: "13\n"},
 	}
 
 	for idx, c := range cases {
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
-			if actual := solve(c.H, c.W, c.rows); actual != c.expected {
-				t.Fatalf("expexted: %#v, actual: %#v", c.expected, actual)
+			buffer := bytes.Buffer{}
+
+			io := NewMockIo(c.input, &buffer)
+			solve(io)
+			io.Flush()
+
+			if actual := buffer.String(); actual != c.expected {
+				t.Fatalf("expected: %#v, actual: %#v", c.expected, actual)
 			}
 		})
 	}

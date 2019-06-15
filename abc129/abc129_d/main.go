@@ -1,33 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"bufio"
+	"bytes"
+	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
-var rdr = bufio.NewReaderSize(os.Stdin, 1000000)
+func solve(io *Io) {
+	H := io.NextInt()
+	W := io.NextInt()
 
-func readLine() string {
-	buf := make([]byte, 0, 1000000)
+	rows := io.NextLines(H)
 
-	for {
-		l, p, e := rdr.ReadLine()
-		if e != nil {
-			panic(e)
-		}
-
-		buf = append(buf, l...)
-
-		if !p {
-			break
-		}
-	}
-
-	return string(buf)
-}
-
-func solve(H, W int, rows []string) int {
 	h := make([][]int, H)
 	v := make([][]int, H)
 
@@ -53,7 +40,7 @@ func solve(H, W int, rows []string) int {
 			if rows[i][j] == '#' {
 				h[i][j] = 0
 				ct = 0
-				from = j+1
+				from = j + 1
 			} else {
 				ct++
 			}
@@ -77,7 +64,7 @@ func solve(H, W int, rows []string) int {
 			if rows[i][j] == '#' {
 				v[i][j] = 0
 				ct = 0
-				from = i+1
+				from = i + 1
 			} else {
 				ct++
 			}
@@ -96,22 +83,181 @@ func solve(H, W int, rows []string) int {
 		}
 	}
 
-	return max
+	io.Println(max)
 }
 
 func main() {
-	var H, W int
+	io := NewIo()
+	defer io.Flush()
+	solve(io)
+}
 
-	fmt.Scan(&H)
-	fmt.Scan(&W)
+/* Io Helpers */
 
-	rows := make([]string, H)
+// Io combines reader, writer, & tokens as the state when processing the input
+type Io struct {
+	reader    *bufio.Reader
+	writer    *bufio.Writer
+	tokens    []string
+	nextToken int
+}
 
-	for i := 0; i < H; i++ {
-		rows[i] = readLine()
+// NewIo creates Io with Stdin & Stdout
+func NewIo() *Io {
+	return &Io{
+		reader: bufio.NewReader(os.Stdin),
+		writer: bufio.NewWriter(os.Stdout),
+	}
+}
+
+// Flush calls the writer's Flush
+func (io *Io) Flush() {
+	io.writer.Flush()
+}
+
+// NextLine returns the string from reader.ReadLine()
+func (io *Io) NextLine() string {
+	if io.nextToken < len(io.tokens) {
+		panic("io.nextToken < len(io.tokens)")
 	}
 
-	output := solve(H, W, rows)
+	var buffer bytes.Buffer
 
-	fmt.Println(output)
+	for {
+		line, isPrefix, err := io.reader.ReadLine()
+		if err != nil {
+			panic(err)
+		}
+		buffer.Write(line)
+		if !isPrefix {
+			break
+		}
+	}
+
+	return buffer.String()
+}
+
+// NextLines returns []string from next n lines
+func (io *Io) NextLines(n int) []string {
+	res := make([]string, n)
+	for i := 0; i < n; i++ {
+		res[i] = io.NextLine()
+	}
+	return res
+}
+
+// Next returns the string token (partial string of the line divided by spaces)
+func (io *Io) Next() string {
+	if io.nextToken >= len(io.tokens) {
+		line := io.NextLine()
+		io.tokens = strings.Fields(line)
+		io.nextToken = 0
+	}
+
+	res := io.tokens[io.nextToken]
+	io.nextToken++
+	return res
+}
+
+// NextStrings returns the []string from the next n tokens
+func (io *Io) NextStrings(n int) []string {
+	res := make([]string, n)
+	for i := 0; i < n; i++ {
+		res[i] = io.Next()
+	}
+	return res
+}
+
+// NextInt returns the int from the next token
+func (io *Io) NextInt() int {
+	res, err := strconv.Atoi(io.Next())
+	if err != nil {
+		panic(err)
+	}
+	return res
+}
+
+// NextInts returns the []int from the next n tokens
+func (io *Io) NextInts(n int) []int {
+	res := make([]int, n)
+	for i := 0; i < n; i++ {
+		res[i] = io.NextInt()
+	}
+	return res
+}
+
+// Println prints the input to the writer in an easy-to-see form
+func (io *Io) Println(a ...interface{}) {
+	var values []string
+	for i := 0; i < len(a); i++ {
+		values = append(values, "%v")
+	}
+	io.Printfln(strings.Join(values, " "), a...)
+}
+
+// Print calls Fprint to the writer
+func (io *Io) Print(a interface{}) {
+	fmt.Fprint(io.writer, a)
+}
+
+// Printfln calls Fprint to the writer
+func (io *Io) Printfln(format string, a ...interface{}) {
+	fmt.Fprintf(io.writer, format+"\n", a...)
+}
+
+/* Math Helpers */
+
+// Max of the ints
+func Max(numbers ...int) int {
+	max := numbers[0]
+	for i, number := range numbers {
+		if i == 0 {
+			continue
+		}
+		if number > max {
+			max = number
+		}
+	}
+	return max
+}
+
+// Min of the ints
+func Min(numbers ...int) int {
+	max := numbers[0]
+	for i, number := range numbers {
+		if i == 0 {
+			continue
+		}
+		if max > number {
+			max = number
+		}
+	}
+	return max
+}
+
+// DigitSum returns sum of the int's digits
+func DigitSum(n int) int {
+	if n < 0 {
+		return -1
+	}
+
+	res := 0
+
+	for n > 0 {
+		res += n % 10
+		n /= 10
+	}
+
+	return res
+}
+
+// Sum of the ints
+func Sum(numbers ...int) int {
+	sum := 0
+
+	for _, number := range numbers {
+		sum += number
+	}
+
+	return sum
 }
