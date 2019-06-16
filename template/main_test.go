@@ -70,6 +70,7 @@ func TestSolve(t *testing.T) {
 
 				io := NewMockIo(c.In, &buffer)
 				debugIo := NewIo()
+				debugIo.Printfln("--- Func: %s, TestCase: %d ---", funcName, idx)
 				solveFunc(io, debugIo)
 				io.Flush()
 
