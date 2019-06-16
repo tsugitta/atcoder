@@ -249,3 +249,11 @@ func (set *Set) Remove(value interface{}) {
 
 	delete(*set, value)
 }
+
+// ImmutableSort returns sorted slice without mutating original one
+func ImmutableSort(slice []int) []int {
+	res := make([]int, len(slice))
+	copy(res, slice)
+	sort.Ints(res)
+	return res
+}

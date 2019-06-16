@@ -6,14 +6,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 	"testing"
-	"os"
 
 	"gopkg.in/yaml.v2"
 )
 
 type SolveFunction = func(io, debugIo *Io)
+
 var solveFuncMap map[string]SolveFunction
 
 func TestMain(m *testing.M) {
