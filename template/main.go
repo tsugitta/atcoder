@@ -257,3 +257,41 @@ func ImmutableSort(slice []int) []int {
 	sort.Ints(res)
 	return res
 }
+
+// MinCalculator is helper to get min value
+type MinCalculator struct {
+	current int
+}
+
+// NewMinCalculator returns new MinCalculator with initial value
+func NewMinCalculator(initial int) *MinCalculator {
+	return &MinCalculator{
+		current: initial,
+	}
+}
+
+// Check compares the value with current and update current if necessary
+func (mc *MinCalculator) Check(val int) {
+	if val < mc.current {
+		mc.current = val
+	}
+}
+
+// MaxCalculator is helper to get max value
+type MaxCalculator struct {
+	current int
+}
+
+// NewMaxCalculator returns new MaxCalculator with initial value
+func NewMaxCalculator(initial int) *MaxCalculator {
+	return &MaxCalculator{
+		current: initial,
+	}
+}
+
+// Check compares the value with current and update current if necessary
+func (mc *MaxCalculator) Check(val int) {
+	if val > mc.current {
+		mc.current = val
+	}
+}
