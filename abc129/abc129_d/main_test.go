@@ -4,16 +4,16 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"strings"
-	"testing"
 	"io/ioutil"
 	"log"
+	"strings"
+	"testing"
 
 	"gopkg.in/yaml.v2"
 )
 
 type TestCase struct {
-	In string
+	In  string
 	Out string
 }
 
@@ -22,8 +22,8 @@ func YamlBufToTestCases(buf []byte) ([]TestCase, error) {
 	err := yaml.Unmarshal(buf, &cases)
 
 	if err != nil {
-			fmt.Println(err)
-			return nil, err
+		fmt.Println(err)
+		return nil, err
 	}
 
 	return cases, nil

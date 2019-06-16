@@ -63,7 +63,7 @@ func solve(io *Io) {
 
 				for l := 0; l < N; l++ {
 					if k == l {
-						continue;
+						continue
 					}
 
 					p4 := positions[l]
