@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -199,6 +200,24 @@ func Sum(numbers ...int) int {
 	}
 
 	return sum
+}
+
+// Pow calculates the pow for int with O(log e)
+func Pow(a, e int) int {
+	if a < 0 || e < 0 {
+		panic(fmt.Sprintf("Pow was called for a < 0 or e < 0, a: %d, e: %d", a, e))
+	}
+
+	if e == 0 {
+		return 1
+	}
+
+	if e%2 == 0 {
+		half := Pow(a, e/2)
+		return half * half
+	}
+
+	return a * Pow(a, e-1)
 }
 
 /* Structure Helpers */
