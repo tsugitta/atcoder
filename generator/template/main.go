@@ -12,8 +12,7 @@ import (
 
 // d: debug IO. it can print debug in test.
 func solve(io *Io, d *Io) {
-	input := io.NextLine()
-	io.Println(input)
+
 }
 
 func main() {
