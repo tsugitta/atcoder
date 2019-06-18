@@ -294,3 +294,24 @@ func (mc *MaxCalculator) Check(val int) {
 		mc.current = val
 	}
 }
+
+/* Util helpers */
+
+// Ternary is like `cond ? a : b`. should assert the returned value like `Ternary(cond, a, b).(int)`
+func Ternary(cond bool, a, b interface{}) interface{} {
+	if cond {
+		return a
+	}
+
+	return b
+}
+
+// TernaryInt uses Ternary and assert the value as int
+func TernaryInt(cond bool, a, b int) int {
+	return Ternary(cond, a, b).(int)
+}
+
+// TernaryString uses Ternary and assert the value as string
+func TernaryString(cond bool, a, b string) string {
+	return Ternary(cond, a, b).(string)
+}
