@@ -1,64 +1,17 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"regexp"
 
-	"github.com/gocolly/colly"
 	"github.com/pkg/errors"
+	"github.com/tsugitta/atcoder/generator/testcase"
 	"github.com/urfave/cli"
-	"gopkg.in/yaml.v2"
 )
-
-type testCase struct {
-	In  string
-	Out string
-}
-
-func scrapeTestCases(URL string) ([]*testCase, error) {
-	c := colly.NewCollector(
-		colly.AllowedDomains("atcoder.jp"),
-	)
-
-	inputs := []string{}
-	outputs := []string{}
-	elementCount := 0
-
-	c.OnHTML("#task-statement .lang-ja pre", func(e *colly.HTMLElement) {
-		elementCount++
-
-		if elementCount == 1 {
-			// this is not a test case, but a description about input / output
-			return
-		} else if elementCount%2 == 0 {
-			inputs = append(inputs, e.Text)
-		} else {
-			outputs = append(outputs, e.Text)
-		}
-	})
-
-	err := c.Visit(URL)
-
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
-	c.Wait()
-
-	testCases := make([]*testCase, len(inputs))
-
-	for i, in := range inputs {
-		out := outputs[i]
-		testCases[i] = &testCase{
-			In:  in,
-			Out: out,
-		}
-	}
-
-	return testCases, nil
-}
 
 // https://atcoder.jp/contests/abc130/tasks/abc130_d -> (abc130, abc130_d)
 func getProblemIdentifiers(URL string) (string, string, error) {
@@ -92,20 +45,67 @@ func copyTemplates(path string) error {
 	return nil
 }
 
-func writeTestCase(path string, testCases []*testCase) error {
-	testCaseData, err := yaml.Marshal(testCases)
-
+func readFile(path string) ([]string, error) {
+	file, err := os.OpenFile(path, os.O_RDONLY, 0600)
 	if err != nil {
-		return errors.WithStack(err)
+		return nil, err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	lines := make([]string, 0)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		lines = append(lines, line)
 	}
 
+	return lines, nil
+}
+
+func prependURLToCode(dirPath, url string) error {
+	path := dirPath + "/main.go"
+	lines, err := readFile(path)
+
+	if err != nil {
+		return err
+	}
+
+	file, err := os.OpenFile(path, os.O_WRONLY|os.O_TRUNC, 0600)
+
+	if err != nil {
+		return err
+	}
+
+	defer file.Close()
+
+	writer := bufio.NewWriter(file)
+	comment := fmt.Sprintf("// %s\n\n", url)
+	writer.WriteString(comment)
+	for _, line := range lines {
+		_, err = writer.WriteString(fmt.Sprintf("%s\n", line))
+		if err != nil {
+			return err
+		}
+	}
+
+	if err := writer.Flush(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func writeTestCase(path string, testCaseYamlData []byte) error {
 	file, err := os.Create(path + "/test.yaml")
 
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	_, err = file.Write(testCaseData)
+	defer file.Close()
+
+	_, err = file.Write(testCaseYamlData)
 
 	if err != nil {
 		return errors.WithStack(err)
@@ -129,13 +129,19 @@ func prepareFiles(URL string) error {
 		return errors.WithStack(err)
 	}
 
-	testCases, err := scrapeTestCases(URL)
+	err = prependURLToCode(path, URL)
 
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	err = writeTestCase(path, testCases)
+	testCaseData, err := testcase.GenerateYaml(URL)
+
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	err = writeTestCase(path, testCaseData)
 
 	if err != nil {
 		return errors.WithStack(err)
