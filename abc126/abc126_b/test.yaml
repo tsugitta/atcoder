@@ -1,0 +1,12 @@
+- in: |
+    1905
+  out: |
+    YYMM
+- in: |
+    0112
+  out: |
+    AMBIGUOUS
+- in: |
+    1700
+  out: |
+    NA
