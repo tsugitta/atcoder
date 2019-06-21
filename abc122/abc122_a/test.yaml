@@ -1,0 +1,8 @@
+- in: |
+    A
+  out: |
+    T
+- in: |
+    G
+  out: |
+    C

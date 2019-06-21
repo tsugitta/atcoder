@@ -1,0 +1,16 @@
+- in: |
+    ATCODER
+  out: |
+    3
+- in: |
+    HATAGAYA
+  out: |
+    5
+- in: |
+    SHINJUKU
+  out: |
+    0
+- in: |
+    TTTT
+  out: |
+    4
