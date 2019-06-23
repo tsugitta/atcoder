@@ -128,14 +128,13 @@ func solve(io *Io, d *Io) {
 	io.Println(res)
 }
 
-// WIP: WA & RE
 func solve2(io *Io, d *Io) {
 	N := io.NextInt()
 
 	uf := &UnionFind{}
 
 	max := 100000
-	uf.init(max * 2)
+	uf.init(2*max + 1) // index 1..max for x, max+1..2*max for y.
 
 	for i := 0; i < N; i++ {
 		x := io.NextInt()
@@ -146,15 +145,15 @@ func solve2(io *Io, d *Io) {
 
 	mx := map[int]int{}
 	my := map[int]int{}
-	for i := 0; i < max; i++ {
+	for i := 1; i <= max; i++ {
 		mx[uf.root(i)]++
 	}
-	for i := max; i < max*2; i++ {
+	for i := max + 1; i <= 2*max; i++ {
 		my[uf.root(i)]++
 	}
 
 	total := 0
-	for i := 0; i < max*2; i++ {
+	for i := 1; i <= max*2; i++ {
 		// 存在しなかった座標は mx, my いずれかが 0 になっている
 		total += mx[i] * my[i]
 	}
