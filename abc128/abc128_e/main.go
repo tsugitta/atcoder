@@ -13,7 +13,7 @@ import (
 )
 
 type event struct {
-	t       int
+	t       int // x: 0 における時刻
 	x       int
 	isStart bool
 }
@@ -29,10 +29,104 @@ func (e events) Swap(i, j int) {
 }
 
 func (e events) Less(i, j int) bool {
+	if e[i].t == e[j].t {
+		// 別時刻の工事だが x: 0 で考えると同時に機能するケース.
+		// 前の時刻の工事を終了させてから次の時刻の工事を開始させる必要があり、 isStart でないものが先に来る必要がある
+		return !e[i].isStart
+	}
+
 	return e[i].t < e[j].t
 }
 
-// WIP: 1 WA & 1 TLE
+type Node struct {
+	Value int
+	Left  *Node
+	Right *Node
+}
+
+func NewNode(value int) *Node {
+	return &Node{
+		Value: value,
+		Left:  nil,
+		Right: nil,
+	}
+}
+
+func (n *Node) Add(value int) {
+	if value <= n.Value {
+		if n.Left != nil {
+			n.Left.Add(value)
+		} else {
+			n.Left = NewNode(value)
+		}
+	} else {
+		if n.Right != nil {
+			n.Right.Add(value)
+		} else {
+			n.Right = NewNode(value)
+		}
+	}
+}
+
+func (n *Node) MinNode() *Node {
+	curr := n
+	for curr != nil && curr.Left != nil {
+		curr = curr.Left
+	}
+	return curr
+}
+
+func (n *Node) Remove(value int) *Node {
+	if n == nil {
+		return n
+	}
+
+	if value < n.Value {
+		n.Left = n.Left.Remove(value)
+	} else if value > n.Value {
+		n.Right = n.Right.Remove(value)
+	} else {
+		if n.Left == nil {
+			return n.Right
+		} else if n.Right == nil {
+			return n.Left
+		}
+
+		rightMinNode := n.Right.MinNode()
+		n.Value = rightMinNode.Value
+		n.Right = n.Right.Remove(n.Value)
+	}
+
+	return n
+}
+
+type Tree struct {
+	root *Node
+}
+
+func (t *Tree) Add(value int) {
+	if t.root == nil {
+		t.root = NewNode(value)
+	} else {
+		t.root.Add(value)
+	}
+}
+func (t *Tree) Remove(value int) {
+	if t.root == nil {
+		return
+	} else {
+		t.root = t.root.Remove(value)
+	}
+}
+
+func (t *Tree) MinNode() *Node {
+	if t.root == nil {
+		return nil
+	}
+
+	return t.root.MinNode()
+}
+
 // d: debug IO. it can print debug in test.
 func solve(io *Io, d *Io) {
 	N := io.NextInt()
@@ -61,11 +155,8 @@ func solve(io *Io, d *Io) {
 	sort.Sort(es)
 
 	nextIndex := 0
-	activeWorkSet := NewSet()
-
-	for nextIndex < 2*N && es[nextIndex].t == 0 {
-		activeWorkSet.Add(es[nextIndex].x)
-		nextIndex++
+	activeWorkTree := &Tree{
+		root: nil,
 	}
 
 	for i := 0; i < Q; i++ {
@@ -74,28 +165,21 @@ func solve(io *Io, d *Io) {
 		for nextIndex < 2*N && es[nextIndex].t <= D {
 			e := es[nextIndex]
 			if e.isStart {
-				activeWorkSet.Add(e.x)
+				activeWorkTree.Add(e.x)
 			} else {
-				activeWorkSet.Remove(e.x)
+				activeWorkTree.Remove(e.x)
 			}
 			nextIndex++
 		}
 
-		min := int(10e10)
-
-		for x := range *activeWorkSet {
-			if x.(int) < min {
-				min = x.(int)
-			}
-		}
-
-		if min == int(10e10) {
+		if activeWorkTree.MinNode() == nil {
 			io.Println(-1)
-		} else {
-			io.Println(min)
+			continue
 		}
-	}
 
+		min := activeWorkTree.MinNode().Value
+		io.Println(min)
+	}
 }
 
 func main() {
