@@ -146,6 +146,9 @@ func (io *Io) Debug(a ...interface{}) {
 
 /* Math Helpers */
 
+// MOD is 10^9 + 7
+const MOD = 1000000007
+
 // Max of the ints
 func Max(numbers ...int) int {
 	max := numbers[0]
