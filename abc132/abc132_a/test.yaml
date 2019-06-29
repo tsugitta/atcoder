@@ -1,0 +1,16 @@
+- in: |
+    ASSA
+  out: |
+    Yes
+- in: |
+    Stop
+  out: |
+    No
+- in: |
+    AAAA
+  out: |
+    No
+- in: |
+    AABB
+  out: |
+    Yes
