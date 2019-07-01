@@ -147,6 +147,7 @@ func prepareFiles(URL string) error {
 		return errors.WithStack(err)
 	}
 
+	fmt.Println("done.")
 	return nil
 }
 
