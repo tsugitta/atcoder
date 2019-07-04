@@ -43,7 +43,7 @@ func getCredentialsToLogin() (string, []*http.Cookie, error) {
 	err := c.Visit(loginURL)
 
 	if err != nil {
-		return "", nil, err
+		return "", nil, errors.WithStack(err)
 	}
 
 	c.Wait()
@@ -92,7 +92,7 @@ func scrapeTestCases(URL string) ([]*TestCase, error) {
 	err := envconfig.Process("ATCODER", &cred)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	c := newCollector()
@@ -101,7 +101,7 @@ func scrapeTestCases(URL string) ([]*TestCase, error) {
 		cookies, err := getAuthedCookies(&cred)
 
 		if err != nil {
-			return nil, err
+			return nil, errors.WithStack(err)
 		}
 
 		c.SetCookies(URL, cookies)
