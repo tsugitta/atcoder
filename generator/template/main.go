@@ -240,6 +240,15 @@ func Pow(a, e int) int {
 	return a * Pow(a, e-1)
 }
 
+// Abs returns the absolute value of the input
+func Abs(a int) int {
+	if a < 0 {
+		return -a
+	}
+
+	return a
+}
+
 /* Structure Helpers */
 
 // Set is orderless List
