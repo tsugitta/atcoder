@@ -115,6 +115,24 @@ func (io *Io) NextInts(n int) []int {
 	return res
 }
 
+// NextFloat returns the float64 from the next token
+func (io *Io) NextFloat() float64 {
+	res, err := strconv.ParseFloat(io.Next(), 64)
+	if err != nil {
+		panic(err)
+	}
+	return res
+}
+
+// NextFloats returns the []float64 from the next n tokens
+func (io *Io) NextFloats(n int) []float64 {
+	res := make([]float64, n)
+	for i := 0; i < n; i++ {
+		res[i] = io.NextFloat()
+	}
+	return res
+}
+
 // Println prints the input to the writer in an easy-to-see form
 func (io *Io) Println(a ...interface{}) {
 	var values []string
