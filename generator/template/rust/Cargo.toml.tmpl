@@ -1,5 +1,5 @@
 [package]
-name = "abc133_a"
+name = "{{ .TaskName }}"
 version = "0.1.0"
 authors = ["Toshinori Tsugita <tsugita.dev@gmail.com>"]
 edition = "2018"
@@ -12,9 +12,9 @@ serde_derive = "1.0.94"
 serde = "1.0.94"
 
 [[bin]]
-name = "abc133_a"
+name = "{{ .TaskName }}"
 path = "main.rs"
 
 [[bin]]
-name = "abc133_a_test"
+name = "{{ .TaskName }}_test"
 path = "main_test.rs"

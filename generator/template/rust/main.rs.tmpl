@@ -1,3 +1,5 @@
+// {{ .URL }}
+
 #[allow(unused)]
 use std::cmp::{max, min};
 use std::collections::HashSet;
@@ -8,14 +10,6 @@ use std::str::FromStr;
 
 #[allow(unused, non_snake_case)]
 pub fn solve<R: BufRead, W: Write>(mut io: Io<R, W>) {
-    let N: isize = io.next();
-    let A: isize = io.next();
-    let B: isize = io.next();
-
-    let train = N * A;
-    let taxi = B;
-    let res = min(train, taxi);
-    io.println(res);
 }
 
 #[allow(dead_code)]

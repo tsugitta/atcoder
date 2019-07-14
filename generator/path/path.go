@@ -7,7 +7,7 @@ import (
 )
 
 // https://atcoder.jp/contests/abc130/tasks/abc130_d -> (abc130, abc130_d)
-func getProblemIdentifiers(URL string) (string, string, error) {
+func GetProblemIdentifiers(URL string) (string, string, error) {
 	reg := regexp.MustCompile(`contests\/(.+)\/tasks\/(.+)`)
 	res := reg.FindStringSubmatch(URL)
 
@@ -19,7 +19,7 @@ func getProblemIdentifiers(URL string) (string, string, error) {
 }
 
 func GetPath(URL string) (string, error) {
-	contest, problem, err := getProblemIdentifiers(URL)
+	contest, problem, err := GetProblemIdentifiers(URL)
 
 	if err != nil {
 		return "", errors.WithStack(err)

@@ -40,9 +40,7 @@ func getCredentialsToLogin() (string, []*http.Cookie, error) {
 		token = e.Attr("value")
 	})
 
-	err := c.Visit(loginURL)
-
-	if err != nil {
+	if err := c.Visit(loginURL); err != nil {
 		return "", nil, errors.WithStack(err)
 	}
 
@@ -89,9 +87,7 @@ func getAuthedCookies(cred *AuthCredential) ([]*http.Cookie, error) {
 
 func scrapeTestCases(URL string) ([]*TestCase, error) {
 	var cred AuthCredential
-	err := envconfig.Process("ATCODER", &cred)
-
-	if err != nil {
+	if err := envconfig.Process("ATCODER", &cred); err != nil {
 		return nil, errors.WithStack(err)
 	}
 
@@ -147,9 +143,7 @@ func scrapeTestCases(URL string) ([]*TestCase, error) {
 		})
 	})
 
-	err = c.Visit(URL)
-
-	if err != nil {
+	if err := c.Visit(URL); err != nil {
 		return nil, errors.WithStack(err)
 	}
 
