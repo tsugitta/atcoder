@@ -1,4 +1,4 @@
-AtCoder challenge. mainly with Go.
+AtCoder challenge. mainly with Go (& Rust).
 
 ## Structure
 

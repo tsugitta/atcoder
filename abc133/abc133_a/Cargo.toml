@@ -1,0 +1,16 @@
+[package]
+name = "abc133_a"
+version = "1.0.0"
+
+[[bin]]
+name = "main"
+path = "main.rs"
+
+[[bin]]
+name = "test"
+path = "main_test.rs"
+
+[dependencies]
+serde_yaml = "0.8.9"
+serde_derive = "1.0.94"
+serde = "1.0.94"
