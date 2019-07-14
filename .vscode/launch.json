@@ -2,7 +2,22 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Test",
+			"type": "lldb",
+			"request": "launch",
+			"name": "Cargo test",
+			"cargo": {
+				"args": [
+					"test",
+					"--bin",
+					"main"
+				]
+			},
+			"preLaunchTask": "cargo build",
+			"program": "${workspaceRoot}/target/debug/test",
+			"args": []
+		},
+		{
+			"name": "Go Test",
 			"type": "go",
 			"request": "launch",
 			"mode": "test",
