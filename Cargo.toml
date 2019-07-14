@@ -1,5 +1,7 @@
 [workspace]
 
 members = [
-  "abc133/abc133_a"
+  "abc133/abc133_a",
+  "abc116/abc116_a",
+  "abc116/abc116_b",
 ]

@@ -1,4 +1,4 @@
-// {{ .URL }}
+// https://atcoder.jp/contests/abc116/tasks/abc116_a
 
 #[allow(unused)]
 use std::cmp::{max, min};
@@ -12,6 +12,12 @@ use std::str::FromStr;
 
 #[allow(unused, non_snake_case)]
 pub fn solve<R: BufRead, W: Write>(mut io: Io<R, W>) {
+    let ab: usize = io.next();
+    let bc: usize = io.next();
+    let ca: usize = io.next();
+
+    let res = ab * bc / 2;
+    io.println(res);
 }
 
 #[allow(dead_code)]

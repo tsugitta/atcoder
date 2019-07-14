@@ -1,4 +1,4 @@
-// {{ .URL }}
+// https://atcoder.jp/contests/abc116/tasks/abc116_b
 
 #[allow(unused)]
 use std::cmp::{max, min};
@@ -12,6 +12,25 @@ use std::str::FromStr;
 
 #[allow(unused, non_snake_case)]
 pub fn solve<R: BufRead, W: Write>(mut io: Io<R, W>) {
+    let s: usize = io.next();
+
+    let mut cur = s;
+    let mut used: HashSet<usize> = HashSet::new();
+    used.insert(cur);
+
+    let mut res = 1;
+    loop {
+        res += 1;
+        cur = if cur % 2 == 0 { cur / 2 } else { 3 * cur + 1 };
+
+        if used.contains(&cur) {
+            break;
+        }
+
+        used.insert(cur);
+    }
+
+    io.println(res);
 }
 
 #[allow(dead_code)]
