@@ -123,9 +123,11 @@ func scrapeTestCases(URL string) ([]*TestCase, error) {
 
 		// only one h3 is included
 		e.ForEach("h3", func(i int, he *colly.HTMLElement) {
-			if strings.Contains(e.Text, "入力例") {
+			trimmed := strings.TrimSpace(e.Text)
+
+			if strings.HasPrefix(trimmed, "入力例") {
 				isInputExample = true
-			} else if strings.Contains(e.Text, "出力例") {
+			} else if strings.HasPrefix(trimmed, "出力例") {
 				isOutputExample = true
 			}
 		})
