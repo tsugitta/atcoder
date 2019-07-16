@@ -52,6 +52,10 @@ where
         write!(&mut self.writer, "{}", value).expect("Unable to write");
     }
 
+    fn debug<T: std::fmt::Debug>(&mut self, value: T) {
+        writeln!(&mut self.writer, "{:?}", value).expect("Unable to write");
+    }
+
     fn next<T: FromStr>(&mut self) -> T {
         let token = self
             .reader
