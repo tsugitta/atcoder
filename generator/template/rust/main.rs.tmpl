@@ -3,9 +3,7 @@
 #[allow(unused)]
 use std::cmp::{max, min};
 #[allow(unused)]
-use std::collections::HashSet;
-#[allow(unused)]
-use std::collections::VecDeque;
+use std::collections::{HashSet, VecDeque};
 use std::io;
 use std::io::{BufRead, Read, Write};
 use std::str::FromStr;
@@ -64,6 +62,10 @@ where
             .take_while(|c| !c.is_whitespace())
             .collect::<String>();
         token.parse::<T>().ok().expect("Unable to parse")
+    }
+
+    fn nexts<T: FromStr>(&mut self, n: usize) -> Vec<T> {
+        (0..n).map(|_| self.next::<T>()).collect::<Vec<T>>()
     }
 }
 
