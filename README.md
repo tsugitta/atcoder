@@ -7,6 +7,9 @@ AtCoder challenge. mainly with Go (& Rust).
     └── problem_id
         ├── main.go
         ├── main_test.go
+        ├── Cargo.toml
+        ├── main.rs
+        ├── main_test.rs
         └── test.yaml
 ```
 
