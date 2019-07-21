@@ -20,7 +20,8 @@ var solveFuncMap map[string]SolveFunction
 func TestMain(m *testing.M) {
 	solveFuncMap = map[string]SolveFunction{
 		// Add solve functions here to test another solution
-		"solve": solve,
+		"solve":  solve,
+		"solve2": solve2,
 	}
 
 	exit := m.Run()

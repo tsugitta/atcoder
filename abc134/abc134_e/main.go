@@ -41,6 +41,34 @@ func solve(io *Io, d *Io) {
 	io.Println(res)
 }
 
+// LIS を複数作り、もっとも差分の小さい所に新しい要素を入れるか、入れられなければ新しく追加して構成する
+func solve2(io *Io, d *Io) {
+	N := io.NextInt()
+	As := io.NextInts(N)
+
+	mins := []int{}
+
+	// 新しい要素が入れられる場所を二分探索で求めたい。それは新しい要素より小さく、現状あるレーンで最大の要素があるレーン。
+	// マイナスをかけるとそれは新しい要素より大きく、現状あるレーンで最小の要素があるレーンとなり、 lower_bound が使える。
+	for i := range As {
+		As[i] = -As[i]
+	}
+
+	for _, a := range As {
+		toBeReplacedIndex := sort.SearchInts(mins, a+1)
+
+		if toBeReplacedIndex == len(mins) {
+			mins = append(mins, a)
+		} else {
+			mins[toBeReplacedIndex] = a
+		}
+	}
+
+	res := len(mins)
+
+	io.Println(res)
+}
+
 func main() {
 	io := NewIo()
 	defer io.Flush()
