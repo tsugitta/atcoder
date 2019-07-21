@@ -17,32 +17,24 @@ func solve(io *Io, d *Io) {
 	N := io.NextInt()
 	as := io.NextInts(N)
 
-	// 左から as[i] を含む要素までの max
-	maxLs := make([]int, N)
-	maxLs[0] = as[0]
+	// maxLs[i]: 左から as[i-1] を含む要素までの max
+	maxLs := make([]int, N+1)
+	maxLs[0] = 0
 
-	// 右から as[i] を含む要素までの max
-	maxRs := make([]int, N)
-	maxRs[N-1] = as[N-1]
+	// maxRs[i]: 右から as[i] を含む要素までの max
+	maxRs := make([]int, N+1)
+	maxRs[N] = 0
 
-	for i := 1; i < N; i++ {
-		maxLs[i] = Max(maxLs[i-1], as[i])
+	for i := 0; i < N; i++ {
+		maxLs[i+1] = Max(maxLs[i], as[i])
 	}
 
-	for i := N - 2; i >= 0; i-- {
+	for i := N - 1; i >= 0; i-- {
 		maxRs[i] = Max(maxRs[i+1], as[i])
 	}
 
 	for i := 0; i < N; i++ {
-		if i == 0 {
-			io.Println(maxRs[1])
-			continue
-		} else if i == N-1 {
-			io.Println(maxLs[N-2])
-			continue
-		}
-
-		res := Max(maxLs[i-1], maxRs[i+1])
+		res := Max(maxLs[i], maxRs[i+1])
 		io.Println(res)
 	}
 }
