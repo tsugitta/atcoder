@@ -1,5 +1,6 @@
 mod main;
 use std::fs::File;
+#[cfg(test)]
 use std::io;
 use std::io::Read;
 extern crate serde_yaml;

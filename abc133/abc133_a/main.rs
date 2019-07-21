@@ -1,7 +1,7 @@
 #[allow(unused)]
 use std::cmp::{max, min};
-use std::collections::HashSet;
-use std::collections::VecDeque;
+#[allow(unused)]
+use std::collections::{HashSet, VecDeque};
 use std::io;
 use std::io::{BufRead, Read, Write};
 use std::str::FromStr;
