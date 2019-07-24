@@ -2,6 +2,10 @@
 
 members = [
   "snippets",
+  "abc106/abc106_a",
+  "abc106/abc106_b",
+  "abc106/abc106_c",
+  "abc106/abc106_d",
   "abc107/abc107_a",
   "abc107/abc107_b",
   "abc107/arc101_a",
