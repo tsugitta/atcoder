@@ -1,6 +1,5 @@
 // https://atcoder.jp/contests/abc116/tasks/abc116_d
 
-use std::cell::RefCell;
 #[allow(unused)]
 use std::cmp::{max, min, Ord, Ordering, PartialOrd};
 #[allow(unused)]
@@ -45,13 +44,13 @@ pub fn solve<R: BufRead, W: Write>(mut io: Io<R, W>) {
 
     // 各種類の最大のものは必ず選ばれ、以降取り出される必要はないから、そのタイプを Set で持つ。
     // 最大以外のものについては、最小のものが取り出されていくから、それらのみを含んだ priority queue で持つ。
-    let mut added_types = RefCell::new(HashSet::new());
+    let mut added_types = HashSet::new();
     let mut sum: usize = 0;
     let mut heap = BinaryHeap::new();
 
     for sushi in &sushis[0..K] {
-        if !added_types.borrow().contains(&sushi.t) {
-            added_types.borrow_mut().insert(&sushi.t);
+        if !added_types.contains(&sushi.t) {
+            added_types.insert(&sushi.t);
         } else {
             heap.push(Reverse(sushi.d));
         }
@@ -59,10 +58,10 @@ pub fn solve<R: BufRead, W: Write>(mut io: Io<R, W>) {
         sum += sushi.d;
     }
 
-    let mut res = calc(sum, added_types.borrow().len());
+    let mut res = calc(sum, added_types.len());
 
-    for sushi in &sushis[K..N]{
-        if added_types.borrow().contains(&sushi.t) {
+    for sushi in &sushis[K..N] {
+        if added_types.contains(&sushi.t) {
             continue;
         }
 
@@ -72,8 +71,8 @@ pub fn solve<R: BufRead, W: Write>(mut io: Io<R, W>) {
         };
 
         sum = sum - min + sushi.d;
-        added_types.borrow_mut().insert(&sushi.t);
-        res = max(res, calc(sum, added_types.borrow().len()));
+        added_types.insert(&sushi.t);
+        res = max(res, calc(sum, added_types.len()));
     }
 
     io.println(res);
