@@ -1,0 +1,12 @@
+- in: |
+    11
+  out: |
+    Yes
+- in: |
+    40
+  out: |
+    Yes
+- in: |
+    3
+  out: |
+    No
