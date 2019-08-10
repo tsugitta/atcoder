@@ -1,0 +1,22 @@
+- in: |
+    3
+    acornistnt
+    peanutbomb
+    constraint
+  out: |
+    1
+- in: |
+    2
+    oneplustwo
+    ninemodsix
+  out: |
+    0
+- in: |
+    5
+    abaaaaaaaa
+    oneplustwo
+    aaaaaaaaba
+    twoplusone
+    aaaabaaaaa
+  out: |
+    4
