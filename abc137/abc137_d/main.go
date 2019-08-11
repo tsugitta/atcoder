@@ -15,36 +15,20 @@ import (
 
 type jobs [][]int
 
-func (jb jobs) Len() int {
-	return len(jb)
-}
+func (jb jobs) Len() int      { return len(jb) }
+func (jb jobs) Swap(i, j int) { jb[i], jb[j] = jb[j], jb[i] }
 
-func (jb jobs) Swap(i, j int) {
-	jb[i], jb[j] = jb[j], jb[i]
-}
-
-func (jb jobs) Less(i, j int) bool {
-	// A 昇順ソート
-	return jb[i][0] < jb[j][0]
-}
+// A 昇順ソート
+func (jb jobs) Less(i, j int) bool { return jb[i][0] < jb[j][0] }
 
 type priorityQueue []int
 
-func (pq *priorityQueue) Len() int {
-	return len(*pq)
-}
+func (pq *priorityQueue) Len() int { return len(*pq) }
 
-func (pq *priorityQueue) Less(i, j int) bool {
-	return (*pq)[i] > (*pq)[j]
-}
-
-func (pq *priorityQueue) Swap(i, j int) {
-	(*pq)[i], (*pq)[j] = (*pq)[j], (*pq)[i]
-}
-
-func (pq *priorityQueue) Push(item interface{}) {
-	*pq = append(*pq, item.(int))
-}
+// less なものから pop される
+func (pq *priorityQueue) Less(i, j int) bool    { return (*pq)[i] > (*pq)[j] }
+func (pq *priorityQueue) Swap(i, j int)         { (*pq)[i], (*pq)[j] = (*pq)[j], (*pq)[i] }
+func (pq *priorityQueue) Push(item interface{}) { *pq = append(*pq, item.(int)) }
 
 func (pq *priorityQueue) Pop() interface{} {
 	old := *pq
@@ -67,18 +51,22 @@ func solve(io *Io, d *Io) {
 		jobs[i] = []int{A, B}
 	}
 
-	// A の昇順ソート
-	sort.Sort(jobs)
-
 	// M 日含むまで受け取れる
 	// 今日 (0 日後) やる job は M 以下であれば ok
 	// i 日目に取り組む job は M-i 以下であれば ok
 	// M-1 日後から 0 日後まで順番に見ていき、 A が M-i 以下であるもののうち最大のものを貪欲すれば良い
+	// pq push は N 要素あれば O(log (N)) 取得は O(1) で取得回数は M 回だから
+	// O(M +N log (N))
 
 	res := 0
 
 	pq := &priorityQueue{}
 	heap.Init(pq)
+
+	// A の昇順ソート N log(N)。各 A 毎の jobs を hash に追加しておけば O(N) で準備ができる?
+	// 実際は157ms -> 186 ms で遅く、 hash 作成のコストが高い
+	// → solve2
+	sort.Sort(jobs)
 
 	nextIndexToPushToPq := 0
 
@@ -110,10 +98,100 @@ func solve(io *Io, d *Io) {
 	io.Println(res)
 }
 
+// d: debug IO. it can print debug in test.
+func solve2(io *Io, d *Io) {
+	N := io.NextInt()
+	M := io.NextInt()
+
+	jobs := make(jobs, N)
+
+	for i := 0; i < N; i++ {
+		A := io.NextInt()
+		B := io.NextInt()
+		jobs[i] = []int{A, B}
+	}
+
+	// map より array が適している → solve3
+	// 186ms -> 149ms と速くなる
+	aJobMap := map[int][]int{}
+
+	for _, j := range jobs {
+		aJobMap[j[0]] = append(aJobMap[j[0]], j[1])
+	}
+
+	res := 0
+
+	pq := &priorityQueue{}
+	heap.Init(pq)
+
+	for d := M - 1; d >= 0; d-- {
+		can := M - d
+
+		for _, jB := range aJobMap[can] {
+			heap.Push(pq, jB)
+		}
+
+		if pq.Len() == 0 {
+			continue
+		}
+
+		jA := heap.Pop(pq)
+		res += jA.(int)
+	}
+
+	io.Println(res)
+}
+
+// d: debug IO. it can print debug in test.
+func solve3(io *Io, d *Io) {
+	N := io.NextInt()
+	M := io.NextInt()
+
+	jobs := make(jobs, N)
+
+	for i := 0; i < N; i++ {
+		A := io.NextInt()
+		B := io.NextInt()
+		jobs[i] = []int{A, B}
+	}
+
+	aJobMap := make([][]int, M+1)
+
+	for _, j := range jobs {
+		if j[0] > M {
+			continue
+		}
+
+		aJobMap[j[0]] = append(aJobMap[j[0]], j[1])
+	}
+
+	res := 0
+
+	pq := &priorityQueue{}
+	heap.Init(pq)
+
+	for d := M - 1; d >= 0; d-- {
+		can := M - d
+
+		for _, jB := range aJobMap[can] {
+			heap.Push(pq, jB)
+		}
+
+		if pq.Len() == 0 {
+			continue
+		}
+
+		jA := heap.Pop(pq)
+		res += jA.(int)
+	}
+
+	io.Println(res)
+}
+
 func main() {
 	io := NewIo()
 	defer io.Flush()
-	solve(io, nil)
+	solve3(io, nil)
 }
 
 /* IO Helpers */

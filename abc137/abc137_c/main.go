@@ -14,17 +14,9 @@ import (
 
 type runes []rune
 
-func (r runes) Len() int {
-	return len(r)
-}
-
-func (r runes) Swap(i, j int) {
-	r[i], r[j] = r[j], r[i]
-}
-
-func (r runes) Less(i, j int) bool {
-	return r[i] < r[j]
-}
+func (r runes) Len() int           { return len(r) }
+func (r runes) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+func (r runes) Less(i, j int) bool { return r[i] < r[j] }
 
 // d: debug IO. it can print debug in test.
 func solve(io *Io, d *Io) {
@@ -46,6 +38,7 @@ func solve(io *Io, d *Io) {
 	res := 0
 
 	// 重複要素を調べるためにソートすると O(N log N) になってしまう。 hash を使えば O(N) -> solve2
+	// ただ実際文字列の長さ L として O(N * L log L) の効果が大きくほぼ変わらない
 	for j < len(sorted) {
 		if sorted[i] == sorted[j] {
 			j++
