@@ -12,56 +12,6 @@ import (
 	"strings"
 )
 
-func addGoalReachableNodes(currentNode int, currentReachableNodes map[int]bool, toFromEdges [][][]int) {
-	// already added
-	if currentReachableNodes[currentNode] {
-		return
-	}
-
-	currentReachableNodes[currentNode] = true
-
-	edges := toFromEdges[currentNode]
-	for _, edge := range edges {
-		addGoalReachableNodes(edge[0], currentReachableNodes, toFromEdges)
-	}
-}
-
-func dfs(node int, score int, P int, scoreMap map[int]int, reachableNodes map[int]bool, fromToEdges [][][]int, visited int) bool {
-	_, included := scoreMap[node]
-
-	if included {
-		if score > scoreMap[node] {
-			if visited > len(fromToEdges) {
-				return true
-			}
-
-			scoreMap[node] = score
-		} else {
-			return false
-		}
-	}
-
-	visited++
-	scoreMap[node] = score
-
-	edges := fromToEdges[node]
-
-	for _, edge := range edges {
-		nextScore := score + edge[1] - P
-		nextNode := edge[0]
-
-		if !reachableNodes[nextNode] {
-			continue
-		}
-
-		if dfs(nextNode, nextScore, P, scoreMap, reachableNodes, fromToEdges, visited) {
-			return true
-		}
-	}
-
-	return false
-}
-
 // d: debug IO. it can print debug in test.
 func solve(io *Io, d *Io) {
 	N := io.NextInt()
@@ -98,11 +48,65 @@ func solve(io *Io, d *Io) {
 	}
 
 	goalReachableNodes := map[int]bool{}
-	addGoalReachableNodes(N, goalReachableNodes, toFromEdges)
+
+	var addGoalReachableNodes func(currentNode int)
+	addGoalReachableNodes = func(currentNode int) {
+		// already added
+		if goalReachableNodes[currentNode] {
+			return
+		}
+
+		goalReachableNodes[currentNode] = true
+
+		edges := toFromEdges[currentNode]
+		for _, edge := range edges {
+			addGoalReachableNodes(edge[0])
+		}
+	}
+
+	addGoalReachableNodes(N)
 
 	// 各 node へのスコアの最大値
 	scoreMap := map[int]int{}
-	infinity := dfs(1, 0, P, scoreMap, goalReachableNodes, fromToEdges, 0)
+
+	var dfs func(node, score, visited int) bool
+	dfs = func(node int, score int, visited int) bool {
+		_, included := scoreMap[node]
+
+		if included {
+			if score > scoreMap[node] {
+				if visited > len(fromToEdges) {
+					return true
+				}
+
+				scoreMap[node] = score
+			} else {
+				return false
+			}
+		}
+
+		visited++
+		scoreMap[node] = score
+
+		edges := fromToEdges[node]
+
+		for _, edge := range edges {
+			nextScore := score + edge[1] - P
+			nextNode := edge[0]
+
+			if !goalReachableNodes[nextNode] {
+				continue
+			}
+
+			if dfs(nextNode, nextScore, visited) {
+				return true
+			}
+		}
+
+		return false
+	}
+
+	infinity := dfs(1, 0, 0)
 
 	if infinity {
 		io.Println(-1)
@@ -112,10 +116,104 @@ func solve(io *Io, d *Io) {
 	io.Println(Max(scoreMap[N], 0))
 }
 
+// ベルマンフォードに帰着
+func solve2(io *Io, d *Io) {
+	N := io.NextInt()
+	M := io.NextInt()
+	P := io.NextInt()
+
+	type Edge struct {
+		from int
+		to   int
+		cost int
+	}
+
+	edges := make([]Edge, M)
+
+	for i := 0; i < M; i++ {
+		A := io.NextInt()
+		B := io.NextInt()
+		C := io.NextInt()
+
+		edges[i] = Edge{
+			from: A,
+			to:   B,
+			cost: -(C - P), // 最短経路問題にするためマイナスをかける
+		}
+	}
+
+	fromToEdges := make([][]int, N+1)
+	toFromEdges := make([][]int, N+1)
+
+	for _, e := range edges {
+		fromToEdges[e.from] = append(fromToEdges[e.from], e.to)
+		toFromEdges[e.to] = append(toFromEdges[e.to], e.from)
+	}
+
+	var addReachableNodes func(node int, edges [][]int, reachableMap map[int]bool)
+	addReachableNodes = func(node int, edges [][]int, reachableMap map[int]bool) {
+		if reachableMap[node] {
+			return
+		}
+
+		reachableMap[node] = true
+
+		for _, to := range edges[node] {
+			addReachableNodes(to, edges, reachableMap)
+		}
+	}
+
+	startReachableNodes := map[int]bool{}
+	addReachableNodes(1, fromToEdges, startReachableNodes)
+	goalReachableNodes := map[int]bool{}
+	addReachableNodes(N, toFromEdges, goalReachableNodes)
+	reachableNodes := map[int]bool{}
+
+	for node, startReachable := range startReachableNodes {
+		if startReachable && goalReachableNodes[node] {
+			reachableNodes[node] = true
+		}
+	}
+
+	INF := int(1e18)
+	costs := make([]int, N+1)
+	for i := range costs {
+		costs[i] = INF
+	}
+	costs[1] = 0
+
+	for i := 1; i <= N; i++ {
+		updated := false
+
+		for _, e := range edges {
+			if !reachableNodes[e.to] || !reachableNodes[e.from] {
+				continue
+			}
+
+			if costs[e.from]+e.cost < costs[e.to] {
+				costs[e.to] = costs[e.from] + e.cost
+				updated = true
+
+				// 負の閉路が無ければ高々 N-1 回 しか更新されない
+				if i == N {
+					io.Println(-1)
+					return
+				}
+			}
+		}
+
+		if !updated {
+			break
+		}
+	}
+
+	io.Println(Max(-costs[N], 0))
+}
+
 func main() {
 	io := NewIo()
 	defer io.Flush()
-	solve(io, nil)
+	solve2(io, nil)
 }
 
 /* IO Helpers */
