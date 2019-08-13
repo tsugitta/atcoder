@@ -1,0 +1,8 @@
+- in: |
+    5
+  out: |
+    YES
+- in: |
+    6
+  out: |
+    NO
