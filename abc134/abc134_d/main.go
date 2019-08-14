@@ -17,7 +17,7 @@ func solve(io *Io, d *Io) {
 	N := io.NextInt()
 	as := io.NextInts(N)
 
-	bs := make([]bool, N)
+	bTrueMap := make([]bool, N)
 
 	for i := N - 1; i >= 0; i-- {
 		// 箱に書かれている数
@@ -27,43 +27,26 @@ func solve(io *Io, d *Io) {
 
 		for j := 2; i1*j <= N; j++ {
 			ji := i1*j - 1
-			if bs[ji] {
+			if bTrueMap[ji] {
 				ballCt++
 			}
 		}
 
 		if ballCt%2 != as[i] {
-			bs[i] = true
+			bTrueMap[i] = true
 		}
 	}
 
-	M := 0
-	for i := 0; i < N; i++ {
-		if bs[i] {
-			M++
-		}
-	}
-
-	io.Println(M)
-
-	if M == 0 {
-		return
-	}
-
-	alreadyAdded := false
+	bs := []int{}
 
 	for i := 0; i < N; i++ {
-		if bs[i] {
-			if alreadyAdded {
-				io.Print(" ")
-			}
-
-			io.Print(i + 1)
-			alreadyAdded = true
+		if bTrueMap[i] {
+			bs = append(bs, i+1)
 		}
 	}
 
-	io.Println("")
+	io.Println(len(bs))
+	io.PrintInts(bs)
 }
 
 func main() {
@@ -201,6 +184,19 @@ func (io *Io) Print(a interface{}) {
 // Printfln calls Fprint to the writer
 func (io *Io) Printfln(format string, a ...interface{}) {
 	fmt.Fprintf(io.writer, format+"\n", a...)
+}
+
+// PrintInts prints ints with space and new line at the end
+func (io *Io) PrintInts(ints []int) {
+	for i, e := range ints {
+		io.Print(e)
+
+		if i == len(ints)-1 {
+			io.Println()
+		} else {
+			io.Print(" ")
+		}
+	}
 }
 
 // Debug calls Println and Flush immediately

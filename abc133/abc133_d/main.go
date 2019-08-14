@@ -33,12 +33,7 @@ func solve(io *Io, d *Io) {
 		res[i] = as[i-1]*2 - res[i-1]
 	}
 
-	for i := 0; i < N-1; i++ {
-		io.Print(res[i])
-		io.Print(" ")
-	}
-
-	io.Println(res[N-1])
+	io.PrintInts(res)
 }
 
 func main() {
@@ -176,6 +171,19 @@ func (io *Io) Print(a interface{}) {
 // Printfln calls Fprint to the writer
 func (io *Io) Printfln(format string, a ...interface{}) {
 	fmt.Fprintf(io.writer, format+"\n", a...)
+}
+
+// PrintInts prints ints with space and new line at the end
+func (io *Io) PrintInts(ints []int) {
+	for i, e := range ints {
+		io.Print(e)
+
+		if i == len(ints)-1 {
+			io.Println()
+		} else {
+			io.Print(" ")
+		}
+	}
 }
 
 // Debug calls Println and Flush immediately
