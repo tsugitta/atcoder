@@ -1,0 +1,15 @@
+- in: |
+    azzel
+    apple
+  out: |
+    Yes
+- in: |
+    chokudai
+    redcoder
+  out: |
+    No
+- in: |
+    abcdefghijklmnopqrstuvwxyz
+    ibyhqfrekavclxjstdwgpzmonu
+  out: |
+    Yes
