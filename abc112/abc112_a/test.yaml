@@ -1,0 +1,10 @@
+- in: |
+    1
+  out: |
+    Hello World
+- in: |
+    2
+    3
+    5
+  out: |
+    8
