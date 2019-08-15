@@ -1,0 +1,40 @@
+- in: |
+    4
+    hoge
+    english
+    hoge
+    enigma
+  out: |
+    No
+- in: |
+    9
+    basic
+    c
+    cpp
+    php
+    python
+    nadesico
+    ocaml
+    lua
+    assembly
+  out: |
+    Yes
+- in: |
+    8
+    a
+    aa
+    aaa
+    aaaa
+    aaaaa
+    aaaaaa
+    aaa
+    aaaaaaa
+  out: |
+    No
+- in: |
+    3
+    abc
+    arc
+    agc
+  out: |
+    No
