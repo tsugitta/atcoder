@@ -1,0 +1,28 @@
+- in: |
+    ABC
+  out: |
+    1
+- in: |
+    A?C
+  out: |
+    1
+- in: |
+    ???
+  out: |
+    1
+- in: |
+    ABCBC
+  out: |
+    3
+- in: |
+    A??C
+  out: |
+    8
+- in: |
+    ABCBC
+  out: |
+    3
+- in: |
+    ????C?????B??????A???????
+  out: |
+    979596887

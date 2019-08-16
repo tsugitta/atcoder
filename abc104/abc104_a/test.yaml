@@ -1,0 +1,12 @@
+- in: |
+    1199
+  out: |
+    ABC
+- in: |
+    1200
+  out: |
+    ARC
+- in: |
+    4208
+  out: |
+    AGC

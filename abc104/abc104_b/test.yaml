@@ -1,0 +1,20 @@
+- in: |
+    AtCoder
+  out: |
+    AC
+- in: |
+    ACoder
+  out: |
+    WA
+- in: |
+    AcycliC
+  out: |
+    WA
+- in: |
+    AtCoCo
+  out: |
+    WA
+- in: |
+    Atcoder
+  out: |
+    WA
