@@ -1,5 +1,5 @@
 [package]
-name = "snippets"
+name = "rs-snippets"
 version = "0.1.0"
 authors = ["Toshinori Tsugita <tsugita.dev@gmail.com>"]
 edition = "2018"
