@@ -1,0 +1,15 @@
+- in: |
+    abcabab
+    ab
+  out: |
+    3
+- in: |
+    aa
+    aaaaaaa
+  out: |
+    -1
+- in: |
+    aba
+    baaab
+  out: |
+    0
