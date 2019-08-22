@@ -1,0 +1,40 @@
+- in: |
+    contest
+    son
+  out: |
+    10
+- in: |
+    contest
+    programming
+  out: |
+    -1
+- in: |
+    contest
+    sentence
+  out: |
+    33
+- in: |
+    aaaaaaaaaa
+    aaaaaaaaaa
+  out: |
+    10
+- in: |
+    aaaaaaaaaa
+    aaaaaaaaaaa
+  out: |
+    11
+- in: |
+    aaaaaaaaaa
+    a
+  out: |
+    1
+- in: |
+    contest
+    sonsonson
+  out: |
+    24
+- in: |
+    abbacca
+    aca
+  out: |
+    7

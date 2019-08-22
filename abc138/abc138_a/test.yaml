@@ -1,0 +1,15 @@
+- in: |
+    3200
+    pink
+  out: |
+    pink
+- in: |
+    3199
+    pink
+  out: |
+    red
+- in: |
+    4049
+    red
+  out: |
+    red
