@@ -2,27 +2,11 @@ package go_snippets
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTopologicalSort(t *testing.T) {
-	assert := func(actual interface{}, expected interface{}) {
-		if actual != expected {
-			t.Fatalf("expected: %#v, actual: %#v", expected, actual)
-		}
-	}
-
-	equal := func(a, b []int) bool {
-		if len(a) != len(b) {
-			return false
-		}
-		for i, v := range a {
-			if v != b[i] {
-				return false
-			}
-		}
-		return true
-	}
-
 	ts := TopologicalSort{}
 
 	ts.init(5)
@@ -32,7 +16,7 @@ func TestTopologicalSort(t *testing.T) {
 	ts.add(0, 3)
 
 	res, _ := ts.sort()
-	assert(equal(res, []int{4, 0, 3, 2, 1}), true)
+	assert.Equal(t, res, []int{4, 0, 3, 2, 1})
 
 	ts = TopologicalSort{}
 	ts.init(3)
@@ -41,5 +25,5 @@ func TestTopologicalSort(t *testing.T) {
 	ts.add(2, 0)
 
 	_, loop := ts.sort()
-	assert(loop, true)
+	assert.Equal(t, loop, true)
 }
