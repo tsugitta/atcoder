@@ -1,0 +1,15 @@
+- in: |
+    2
+    BWWB
+  out: |
+    4
+- in: |
+    4
+    BWBBWWWB
+  out: |
+    288
+- in: |
+    5
+    WWWWWWWWWW
+  out: |
+    0
