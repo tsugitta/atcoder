@@ -203,32 +203,16 @@ func Max(numbers ...int) int {
 
 // Min of the ints
 func Min(numbers ...int) int {
-	max := numbers[0]
+	min := numbers[0]
 	for i, number := range numbers {
 		if i == 0 {
 			continue
 		}
-		if max > number {
-			max = number
+		if min > number {
+			min = number
 		}
 	}
-	return max
-}
-
-// DigitSum returns sum of the int's digits
-func DigitSum(n int) int {
-	if n < 0 {
-		return -1
-	}
-
-	res := 0
-
-	for n > 0 {
-		res += n % 10
-		n /= 10
-	}
-
-	return res
+	return min
 }
 
 // Sum of the ints
