@@ -1,0 +1,8 @@
+- in: |
+    oxoxoxoxoxoxox
+  out: |
+    YES
+- in: |
+    xxxxxxxx
+  out: |
+    NO
