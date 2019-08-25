@@ -1,0 +1,16 @@
+- in: |
+    aabbaa
+  out: |
+    4
+- in: |
+    aaaccacabaababc
+  out: |
+    12
+- in: |
+    a
+  out: |
+    1
+- in: |
+    aaaaa
+  out: |
+    3
