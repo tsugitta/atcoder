@@ -16,7 +16,7 @@ func TestTopologicalSort(t *testing.T) {
 	ts.add(0, 3)
 
 	res, _ := ts.sort()
-	assert.Equal(t, res, []int{4, 0, 3, 2, 1})
+	assert.Equal(t, []int{4, 0, 3, 2, 1}, res)
 
 	ts = TopologicalSort{}
 	ts.init(3)
@@ -25,5 +25,5 @@ func TestTopologicalSort(t *testing.T) {
 	ts.add(2, 0)
 
 	_, loop := ts.sort()
-	assert.Equal(t, loop, true)
+	assert.Equal(t, true, loop)
 }

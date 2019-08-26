@@ -13,8 +13,8 @@ func TestPQ(t *testing.T) {
 
 	heap.Push(&pq, 3)
 	heap.Push(&pq, 1)
-	assert.Equal(t, pq[0], 1)
-	assert.Equal(t, heap.Pop(&pq), 1)
-	assert.Equal(t, pq[0], 3)
-	assert.Equal(t, heap.Pop(&pq), 3)
+	assert.Equal(t, 1, pq[0])
+	assert.Equal(t, 1, heap.Pop(&pq))
+	assert.Equal(t, 3, pq[0])
+	assert.Equal(t, 3, heap.Pop(&pq))
 }
