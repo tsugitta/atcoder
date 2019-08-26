@@ -99,6 +99,11 @@ func (io *Io) NextStrings(n int) []string {
 	return res
 }
 
+// NextRunes returns next string as []rune
+func (io *Io) NextRunes() []rune {
+	return []rune(io.Next())
+}
+
 // NextInt returns the int from the next token
 func (io *Io) NextInt() int {
 	res, err := strconv.Atoi(io.Next())
