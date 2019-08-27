@@ -22,6 +22,7 @@ func TestMain(m *testing.M) {
 		// Add solve functions here to test another solution
 		"solve":  solve,
 		"solve2": solve2,
+		"solve3": solve3,
 	}
 
 	exit := m.Run()
