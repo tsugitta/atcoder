@@ -1,19 +1,43 @@
 package go_snippets
 
-type PQ []int
+import "container/heap"
 
-func (pq *PQ) Len() int { return len(*pq) }
+type PQ struct {
+	values PQValues
+}
+
+func NewPQ() *PQ {
+	pq := PQ{}
+	heap.Init(&pq.values)
+	return &pq
+}
+
+func (pq *PQ) Len() int {
+	return len(pq.values)
+}
+
+func (pq *PQ) Push(v int) {
+	heap.Push(&pq.values, v)
+}
+
+func (pq *PQ) Pop() int {
+	return heap.Pop(&pq.values).(int)
+}
+
+type PQValues []int
+
+func (vs *PQValues) Len() int { return len(*vs) }
 
 // less なものから pop される
-func (pq *PQ) Less(i, j int) bool    { return (*pq)[i] < (*pq)[j] }
-func (pq *PQ) Swap(i, j int)         { (*pq)[i], (*pq)[j] = (*pq)[j], (*pq)[i] }
-func (pq *PQ) Push(item interface{}) { *pq = append(*pq, item.(int)) }
+func (vs *PQValues) Less(i, j int) bool    { return (*vs)[i] < (*vs)[j] }
+func (vs *PQValues) Swap(i, j int)         { (*vs)[i], (*vs)[j] = (*vs)[j], (*vs)[i] }
+func (vs *PQValues) Push(item interface{}) { *vs = append(*vs, item.(int)) }
 
-func (pq *PQ) Pop() interface{} {
-	old := *pq
+func (vs *PQValues) Pop() interface{} {
+	old := *vs
 	n := len(old)
 	item := old[n-1]
 	// heap.Pop 直前に取り出されるべき要素が先頭から末尾に移動する
-	*pq = old[0 : n-1]
+	*vs = old[0 : n-1]
 	return item
 }
