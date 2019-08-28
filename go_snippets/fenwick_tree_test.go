@@ -2,6 +2,8 @@ package go_snippets
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBit(t *testing.T) {
@@ -22,8 +24,6 @@ func TestBit(t *testing.T) {
 		{in: 3, out: 6},
 		{in: 4, out: 10},
 	} {
-		if bit.Sum(pair.in) != pair.out {
-			t.Errorf("in: %d, expected: %d, actual: %d", pair.in, pair.out, bit.Sum(pair.in))
-		}
+		assert.Equal(t, pair.out, bit.Sum(pair.in))
 	}
 }

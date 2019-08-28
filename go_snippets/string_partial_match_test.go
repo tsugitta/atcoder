@@ -2,6 +2,8 @@ package go_snippets
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetPatternIndices(t *testing.T) {
@@ -11,26 +13,11 @@ func TestGetPatternIndices(t *testing.T) {
 		expected []int
 	}{
 		{s: "abcab", p: "ab", expected: []int{0, 3}},
-		{s: "abcabcd", p: "xxx", expected: []int{}},
+		{s: "abcabcd", p: "xxx", expected: nil},
 		{s: "abcde", p: "abcde", expected: []int{0}},
 		{s: "aaaaa", p: "a", expected: []int{0, 1, 2, 3, 4}},
 	} {
 		res := getPatternIndices(pair.s, pair.p)
-
-		equal := func(a, b []int) bool {
-			if len(a) != len(b) {
-				return false
-			}
-			for i, v := range a {
-				if v != b[i] {
-					return false
-				}
-			}
-			return true
-		}
-
-		if !equal(res, pair.expected) {
-			t.Errorf("in: %s, expected: %v, actual: %v", pair.s, pair.expected, res)
-		}
+		assert.Equal(t, pair.expected, res)
 	}
 }
