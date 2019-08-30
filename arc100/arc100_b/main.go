@@ -22,7 +22,7 @@ func solve(io *Io, d *Io) {
 	// 最大値になり得るものはより小さく、最小値になり得るものはより大きくなるべきで、つまり 2 配列の和の差が最小であるのが最善。
 	// 累積和を求めておけば、二分探索で境界が特定できるから O(N log N) で全通り試せる。 尺取法なら O(N) となる。
 
-	// B: [0, cL), C: [cL, dL), D: [dL, eL): E: [eL, len)
+	// B: [0, cL), C: [cL, dL), D: [dL, eL), E: [eL, len)
 
 	// sums[i]: [0, i)
 	sums := make([]int, N+1)
@@ -71,10 +71,72 @@ func solve(io *Io, d *Io) {
 	io.Println(res)
 }
 
+// 尺取法
+func solve2(io *Io, d *Io) {
+	N := io.NextInt()
+	as := io.NextInts(N)
+
+	// B: [0, cL), C: [cL, dL), D: [dL, eL), E: [eL, len)
+
+	// sums[i]: [0, i)
+	sums := make([]int, N+1)
+	for i, a := range as {
+		sums[i+1] = sums[i] + a
+	}
+
+	res := int(1e18)
+
+	cL := 0
+	B := 0
+	eL := 2
+	D := 0
+
+	for dL := 2; dL+1 < N; dL++ {
+		lSum := sums[dL]
+		rSum := sums[N] - lSum
+
+		for cL < dL-1 {
+			C := lSum - B
+			nB := B + as[cL]
+			nC := C - as[cL]
+			if Abs(B-C) > Abs(nB-nC) {
+				B += as[cL]
+				cL++
+			} else {
+				break
+			}
+		}
+
+		for eL < N-1 {
+			E := rSum - D
+			nD := D + as[eL]
+			nE := E - as[eL]
+			if Abs(D-E) > Abs(nD-nE) {
+				D += as[eL]
+				eL++
+			} else {
+				break
+			}
+		}
+
+		C := lSum - B
+		E := rSum - D
+
+		res = Min(
+			res,
+			Max(B, C, D, E)-Min(B, C, D, E),
+		)
+
+		D -= as[dL]
+	}
+
+	io.Println(res)
+}
+
 func main() {
 	io := NewIo()
 	defer io.Flush()
-	solve(io, nil)
+	solve2(io, nil)
 }
 
 /* IO Helpers */
