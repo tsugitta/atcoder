@@ -1,0 +1,15 @@
+- in: |
+    5
+    WEEWW
+  out: |
+    1
+- in: |
+    12
+    WEWEWEEEWWWE
+  out: |
+    4
+- in: |
+    8
+    WWWWWEEE
+  out: |
+    3
