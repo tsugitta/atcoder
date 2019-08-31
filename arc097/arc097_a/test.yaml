@@ -1,0 +1,15 @@
+- in: |
+    aba
+    4
+  out: |
+    b
+- in: |
+    atcoderandatcodeer
+    5
+  out: |
+    andat
+- in: |
+    z
+    1
+  out: |
+    z
