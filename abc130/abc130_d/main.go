@@ -16,23 +16,26 @@ func solve(io *Io, d *Io) {
 	K := io.NextInt()
 	as := io.NextInts(N)
 
-	sum := 0
-	res := 0
-	from := 0
-	to := 0
+	r := 0
+	sum := 0 // [l, r)
 
-	for from < N && to <= N {
-		if sum >= K {
-			res += N - to + 1
-			sum -= as[from]
-			from++
-		} else if to < N {
-			sum += as[to]
-			to++
-		} else {
-			sum -= as[from]
-			from++
+	res := 0
+
+	for l := 0; l < N; l++ {
+		for r < N && sum < K {
+			sum += as[r]
+			r++
 		}
+
+		if sum >= K {
+			res += N - r + 1
+		}
+
+		if l == r {
+			r++
+		}
+
+		sum -= as[l]
 	}
 
 	io.Println(res)
