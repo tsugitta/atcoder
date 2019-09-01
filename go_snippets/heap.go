@@ -24,6 +24,10 @@ func (pq *PQ) Pop() int {
 	return heap.Pop(&pq.values).(int)
 }
 
+func (pq *PQ) Next() int {
+	return pq.values[0]
+}
+
 type PQValues []int
 
 func (vs *PQValues) Len() int { return len(*vs) }
