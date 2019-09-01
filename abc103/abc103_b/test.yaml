@@ -1,0 +1,15 @@
+- in: |
+    kyoto
+    tokyo
+  out: |
+    Yes
+- in: |
+    abc
+    arc
+  out: |
+    No
+- in: |
+    aaaaaaaaaaaaaaab
+    aaaaaaaaaaaaaaab
+  out: |
+    Yes
