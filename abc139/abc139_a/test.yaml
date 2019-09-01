@@ -1,0 +1,15 @@
+- in: |
+    CSS
+    CSR
+  out: |
+    2
+- in: |
+    SSR
+    SSR
+  out: |
+    3
+- in: |
+    RRR
+    SSS
+  out: |
+    0

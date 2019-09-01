@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 )
 
@@ -20,6 +23,7 @@ var solveFuncMap map[string]SolveFunction
 func TestMain(m *testing.M) {
 	solveFuncMap = map[string]SolveFunction{
 		// Add solve functions here to test another solution
+		"naive": naive,
 		"solve": solve,
 	}
 
@@ -83,24 +87,64 @@ func TestSolve(t *testing.T) {
 	}
 }
 
-func floatEqual(a, b float64, digit int) bool {
-	var diff float64
+func TestRandom(t *testing.T) {
+	TIMES := 100
 
-	if a > b {
-		diff = a - b
-	} else {
-		diff = b - a
+	ct := 0
+
+	for i := 0; i < TIMES; i++ {
+		N := 5
+
+		buffer := bytes.Buffer{}
+		io := NewMockIo("", &buffer)
+		io.Println(N)
+
+		for i := 1; i <= N; i++ {
+			arr := []int{}
+			for j := 1; j <= N; j++ {
+				if i != j {
+					arr = append(arr, j)
+				}
+			}
+			rand.Seed(time.Now().UnixNano())
+			rand.Shuffle(len(arr), func(i, j int) { arr[i], arr[j] = arr[j], arr[i] })
+
+			io.PrintInts(arr)
+		}
+
+		io.Flush()
+		in := buffer.String()
+
+		var naiveRes string
+		var solveRes string
+
+		{
+			buffer = bytes.Buffer{}
+			io = NewMockIo(in, &buffer)
+
+			naive(io, nil)
+			io.Flush()
+
+			naiveRes = buffer.String()
+		}
+
+		if naiveRes == "-1\n" {
+			continue
+		}
+
+		ct++
+		{
+			buffer = bytes.Buffer{}
+			io = NewMockIo(in, &buffer)
+
+			solve(io, nil)
+			io.Flush()
+
+			solveRes = buffer.String()
+		}
+
+		assert.Equal(t, naiveRes, solveRes)
 	}
 
-	threshold := 1.0
-	for i := 0; i < digit; i++ {
-		threshold /= 10
-	}
-
-	return diff <= threshold
-}
-
-func stringToFloat(v string) float64 {
-	res, _ := strconv.ParseFloat(strings.Trim(v, "\n"), 64)
-	return res
+	fmt.Println(ct)
 }

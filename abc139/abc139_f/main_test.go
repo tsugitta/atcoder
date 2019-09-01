@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -75,7 +76,11 @@ func TestSolve(t *testing.T) {
 				io.Flush()
 
 				output := buffer.String()
-				if output != c.Out {
+
+				expectedF := stringToFloat(c.Out)
+				outputF := stringToFloat(output)
+
+				if !floatEqual(expectedF, outputF, 10) {
 					t.Fatalf("expected: %#v, actual: %#v", c.Out, output)
 				}
 			})
