@@ -7,6 +7,8 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"reflect"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -185,6 +187,18 @@ func (io *Io) Debug(a ...interface{}) {
 
 	io.Println(a...)
 	io.Flush()
+}
+
+// Assert checks the value equality for debug
+func (io *Io) Assert(a, b interface{}) {
+	if io == nil {
+		return
+	}
+
+	if !reflect.DeepEqual(a, b) {
+		_, _, line, _ := runtime.Caller(1)
+		io.Debug("Diff:", line, "\na:", a, "\nb:", b)
+	}
 }
 
 /* Math Helpers */
