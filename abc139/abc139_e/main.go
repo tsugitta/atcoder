@@ -132,10 +132,131 @@ func solve(io *Io, d *Io) {
 	io.Println(res)
 }
 
+type TopologicalSort struct {
+	edges   [][]int
+	inCount []int
+	sorted  []int
+	length  []int // 入次数 0 のノードからそのノードまでの長さ
+}
+
+func (t *TopologicalSort) init(n int) {
+	t.edges = make([][]int, n)
+	t.inCount = make([]int, n)
+	t.length = make([]int, n)
+}
+
+func (t *TopologicalSort) add(from, to int) {
+	t.edges[from] = append(t.edges[from], to)
+}
+
+func (t *TopologicalSort) sort() (res []int, isLoop bool) {
+	// 全ての nodes の入次数をカウント O(E)
+	for _, edgesForNode := range t.edges {
+		for _, to := range edgesForNode {
+			t.inCount[to]++
+		}
+	}
+
+	// inCount が 0 のものの集合
+	s := []int{}
+
+	for node, in := range t.inCount {
+		if in == 0 {
+			s = append(s, node)
+		}
+	}
+
+	for i := range t.length {
+		t.length[i] = 1
+	}
+
+	for len(s) > 0 {
+		popped := s[0]
+		res = append(res, popped)
+		s = s[1:len(s)]
+
+		for _, to := range t.edges[popped] {
+			if t.length[popped]+1 > t.length[to] {
+				t.length[to] = t.length[popped] + 1
+			}
+
+			t.inCount[to]--
+
+			if t.inCount[to] == 0 {
+				s = append(s, to)
+			}
+		}
+	}
+
+	if len(res) != len(t.edges) {
+		isLoop = true
+		return
+	}
+
+	t.sorted = res
+
+	return
+}
+
+// 試合を頂点として試合順で有向辺を貼りトポロジカルソート。最長パスが答え
+func solve2(io *Io, d *Io) {
+	N := io.NextInt()
+
+	as := make([][]int, N)
+	for i := range as {
+		as[i] = make([]int, N-1)
+
+		for j := range as[i] {
+			as[i][j] = io.NextInt() - 1 // 0-based
+		}
+	}
+
+	pairToNodeID := make([][]int, N)
+	for i := range pairToNodeID {
+		pairToNodeID[i] = make([]int, N)
+	}
+
+	nodeCt := 0
+
+	for i := 0; i < N; i++ {
+		for j := i + 1; j < N; j++ {
+			pairToNodeID[i][j] = nodeCt
+			pairToNodeID[j][i] = nodeCt
+			nodeCt++
+		}
+	}
+
+	tp := TopologicalSort{}
+	tp.init(nodeCt)
+
+	for p := range as {
+		for i := 0; i+1 < len(as[p]); i++ {
+			// トポロジカルソートは入力の無いエッジから取り除いていくため、それに合わせて
+			// 先に終わっていないといけない試合から辺を張る
+			firstOp := as[p][i]
+			secondOp := as[p][i+1]
+			first := pairToNodeID[p][firstOp]
+			next := pairToNodeID[p][secondOp]
+			tp.add(first, next)
+		}
+	}
+
+	_, isLoop := tp.sort()
+
+	if isLoop {
+		io.Println(-1)
+		return
+	}
+
+	res := Max(tp.length...)
+
+	io.Println(res)
+}
+
 func main() {
 	io := NewIo()
 	defer io.Flush()
-	solve(io, nil)
+	solve2(io, nil)
 }
 
 /* IO Helpers */

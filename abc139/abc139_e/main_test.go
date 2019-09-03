@@ -23,8 +23,9 @@ var solveFuncMap map[string]SolveFunction
 func TestMain(m *testing.M) {
 	solveFuncMap = map[string]SolveFunction{
 		// Add solve functions here to test another solution
-		"naive": naive,
-		"solve": solve,
+		// "naive":  naive,
+		"solve":  solve,
+		"solve2": solve2,
 	}
 
 	exit := m.Run()
@@ -90,8 +91,6 @@ func TestSolve(t *testing.T) {
 func TestRandom(t *testing.T) {
 	TIMES := 100
 
-	ct := 0
-
 	for i := 0; i < TIMES; i++ {
 		N := 5
 
@@ -132,12 +131,11 @@ func TestRandom(t *testing.T) {
 			continue
 		}
 
-		ct++
 		{
 			buffer = bytes.Buffer{}
 			io = NewMockIo(in, &buffer)
 
-			solve(io, nil)
+			solve2(io, nil)
 			io.Flush()
 
 			solveRes = buffer.String()
@@ -145,6 +143,4 @@ func TestRandom(t *testing.T) {
 
 		assert.Equal(t, naiveRes, solveRes)
 	}
-
-	fmt.Println(ct)
 }
