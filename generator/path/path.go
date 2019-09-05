@@ -25,5 +25,5 @@ func GetPath(URL string) (string, error) {
 		return "", errors.WithStack(err)
 	}
 
-	return "./" + contest + "/" + problem, nil
+	return "./contests/" + contest + "/" + problem, nil
 }

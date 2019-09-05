@@ -3,14 +3,15 @@ AtCoder challenge. mainly with Go (& Rust).
 ## Structure
 
 ```
-└── contest_name
-    └── problem_id
-        ├── main.go
-        ├── main_test.go
-        ├── Cargo.toml
-        ├── main.rs
-        ├── main_test.rs
-        └── test.yaml
+└── contests
+    └── contest_name
+        └── problem_id
+            ├── main.go
+            ├── main_test.go
+            ├── Cargo.toml
+            ├── main.rs
+            ├── main_test.rs
+            └── test.yaml
 ```
 
 - main.go is the problem to submit
