@@ -51,34 +51,41 @@ func getPatternIndices(s, pat string) (res []int) {
 }
 
 type TopologicalSort struct {
-	edges   [][]int
-	inCount []int
+	edges  [][]int
+	sorted []int
+	length []int // 入次数 0 のノードからそのノードまでの長さ
 }
 
 func (t *TopologicalSort) init(n int) {
 	t.edges = make([][]int, n)
-	t.inCount = make([]int, n)
+	t.length = make([]int, n)
 }
 
 func (t *TopologicalSort) add(from, to int) {
 	t.edges[from] = append(t.edges[from], to)
 }
 
+// O(V + E)
 func (t *TopologicalSort) sort() (res []int, isLoop bool) {
-	// 全ての nodes の入次数をカウント O(E)
+	inCount := make([]int, len(t.edges))
+
 	for _, edgesForNode := range t.edges {
 		for _, to := range edgesForNode {
-			t.inCount[to]++
+			inCount[to]++
 		}
 	}
 
 	// inCount が 0 のものの集合
 	s := []int{}
 
-	for node, in := range t.inCount {
+	for node, in := range inCount {
 		if in == 0 {
 			s = append(s, node)
 		}
+	}
+
+	for i := range t.length {
+		t.length[i] = 1
 	}
 
 	for len(s) > 0 {
@@ -87,9 +94,13 @@ func (t *TopologicalSort) sort() (res []int, isLoop bool) {
 		s = s[1:len(s)]
 
 		for _, to := range t.edges[popped] {
-			t.inCount[to]--
+			if t.length[popped]+1 > t.length[to] {
+				t.length[to] = t.length[popped] + 1
+			}
 
-			if t.inCount[to] == 0 {
+			inCount[to]--
+
+			if inCount[to] == 0 {
 				s = append(s, to)
 			}
 		}
@@ -99,6 +110,8 @@ func (t *TopologicalSort) sort() (res []int, isLoop bool) {
 		isLoop = true
 		return
 	}
+
+	t.sorted = res
 
 	return
 }
@@ -120,15 +133,10 @@ func solve(io *Io, d *Io) {
 
 	// offsets のうち |s|-1 以下のもののみが重要
 	// その index から |s| 進んだ点が index に含まれている限り進めることとすると、
-	// 進められた回数の最大値が答えとなる。
+	// 進められた回数の最大値が答えとなる。これは最長路の長さ - 1
 	// グラフを作り、各 index についてそれを求める。同じ index に訪れたら無限に含まれるということなので -1
 	// ただ実際はグラフを作るまでもなく offsets と visited map で十分そう.. → O(VE) になってしまい TLE
 	// グラフを作りトポロジカルソートすることで全体で同じ辺を見ずに済むため O(V + E) にできる
-
-	nextOffset := make([]int, len(s))
-	for i := range nextOffset {
-		nextOffset[i] = -1
-	}
 
 	ts := &TopologicalSort{}
 	ts.init(len(s))
@@ -139,46 +147,17 @@ func solve(io *Io, d *Io) {
 		}
 
 		next := (offset + len(t)) % len(s)
-		nextOffset[offset] = next
 		ts.add(offset, next)
 	}
 
-	sorted, loop := ts.sort()
+	_, loop := ts.sort()
 
 	if loop {
 		io.Println(-1)
 		return
 	}
 
-	res := 0
-	visited := make([]bool, len(s))
-
-	for _, node := range sorted {
-		if visited[node] {
-			continue
-		}
-
-		curr := node
-		ct := 0
-
-		// next にいける → 今の node が match している
-		// よって next にいけた回数が match の数
-
-		for {
-			visited[curr] = true
-			next := nextOffset[curr]
-
-			if next == -1 {
-				break
-			}
-
-			curr = next
-			ct++
-		}
-
-		res = Max(res, ct)
-	}
-
+	res := Max(ts.length...) - 1
 	io.Println(res)
 }
 
@@ -281,7 +260,7 @@ func solve2(io *Io, d *Io) {
 func main() {
 	io := NewIo()
 	defer io.Flush()
-	solve2(io, nil)
+	solve(io, nil)
 }
 
 /* IO Helpers */
