@@ -1,0 +1,20 @@
+- in: |
+    6 1
+    LRLRRL
+  out: |
+    3
+- in: |
+    13 3
+    LRRLRLRRLRLLR
+  out: |
+    9
+- in: |
+    10 1
+    LLLLLRRRRR
+  out: |
+    9
+- in: |
+    9 2
+    RRRLRLRLL
+  out: |
+    7
