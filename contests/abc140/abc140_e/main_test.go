@@ -7,11 +7,10 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 	"testing"
 
-	"gopkg.in/yaml.v2"
+	"github.com/tsugitta/atcoder/testutil"
 )
 
 func naive(io *Io, d *Io) {
@@ -59,23 +58,6 @@ func TestMain(m *testing.M) {
 	}
 }
 
-type TestCase struct {
-	In  string
-	Out string
-}
-
-func YamlBufToTestCases(buf []byte) ([]TestCase, error) {
-	cases := make([]TestCase, 10)
-	err := yaml.Unmarshal(buf, &cases)
-
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-
-	return cases, nil
-}
-
 func NewMockIo(input string, outputBuffer *bytes.Buffer) *Io {
 	return &Io{
 		reader: bufio.NewReader(strings.NewReader(input)),
@@ -90,7 +72,7 @@ func TestSolve(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	cases, err := YamlBufToTestCases(yamlBuf)
+	cases, err := testutil.YamlBufToTestCases(yamlBuf)
 
 	for funcName, solveFunc := range solveFuncMap {
 		for idx, c := range cases {
@@ -110,26 +92,4 @@ func TestSolve(t *testing.T) {
 			})
 		}
 	}
-}
-
-func floatEqual(a, b float64, digit int) bool {
-	var diff float64
-
-	if a > b {
-		diff = a - b
-	} else {
-		diff = b - a
-	}
-
-	threshold := 1.0
-	for i := 0; i < digit; i++ {
-		threshold /= 10
-	}
-
-	return diff <= threshold
-}
-
-func stringToFloat(v string) float64 {
-	res, _ := strconv.ParseFloat(strings.Trim(v, "\n"), 64)
-	return res
 }
