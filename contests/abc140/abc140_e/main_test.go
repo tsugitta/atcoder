@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tsugitta/atcoder/testutil"
 )
 
@@ -47,8 +48,9 @@ var solveFuncMap map[string]SolveFunction
 func TestMain(m *testing.M) {
 	solveFuncMap = map[string]SolveFunction{
 		// Add solve functions here to test another solution
-		"solve": solve,
-		"naive": naive,
+		"solve":  solve,
+		"solve2": solve2,
+		"naive":  naive,
 	}
 
 	exit := m.Run()
@@ -90,6 +92,61 @@ func TestSolve(t *testing.T) {
 					t.Fatalf("expected: %#v, actual: %#v", c.Out, output)
 				}
 			})
+		}
+	}
+}
+
+func TestRandom(t *testing.T) {
+	TIMES := 200
+
+	for i := 0; i < TIMES; i++ {
+		buffer := bytes.Buffer{}
+
+		N := 20
+		arr := make([]int, N)
+
+		{
+			io := NewMockIo("", &buffer)
+
+			io.Println(N)
+
+			for i := 0; i < N; i++ {
+				arr[i] = i + 1
+			}
+
+			testutil.Shuffle(arr)
+			io.PrintInts(arr)
+
+			io.Flush()
+		}
+
+		in := buffer.String()
+
+		var naiveRes string
+		var solveRes string
+
+		{
+			buffer = bytes.Buffer{}
+			io := NewMockIo(in, &buffer)
+
+			naive(io, nil)
+			io.Flush()
+
+			naiveRes = buffer.String()
+		}
+
+		{
+			buffer = bytes.Buffer{}
+			io := NewMockIo(in, &buffer)
+
+			solve(io, nil)
+			io.Flush()
+
+			solveRes = buffer.String()
+		}
+
+		if ok := assert.Equal(t, naiveRes, solveRes); !ok {
+			fmt.Println(arr)
 		}
 	}
 }

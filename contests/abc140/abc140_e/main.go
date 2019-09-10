@@ -12,11 +12,111 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-
-	rbt "github.com/emirpasic/gods/trees/redblacktree"
 )
 
-// d: debug IO. it can print debug in test.
+type Fenwick struct {
+	tree []int
+}
+
+func NewFenwick(n int) *Fenwick {
+	return &Fenwick{
+		tree: make([]int, n),
+	}
+}
+
+// sum of [0, i)
+func (f *Fenwick) Sum(i int) (sum int) {
+	for i--; i >= 0; i = (i & (i + 1)) - 1 {
+		sum += f.tree[i]
+	}
+
+	return
+}
+
+func (f *Fenwick) Add(i, n int) {
+	for l := len(f.tree); i < l; i |= i + 1 {
+		f.tree[i] += n
+	}
+}
+
+type OrderedSet struct {
+	tree *Fenwick
+	max  int
+}
+
+func NewOrderedSet(max int) *OrderedSet {
+	s := &OrderedSet{}
+	s.tree = NewFenwick(max + 1)
+	s.max = max
+	return s
+}
+
+// n 以下の最大の要素 O(log^2 N)
+func (s *OrderedSet) Left(n int) (res int, found bool) {
+	nCt := s.tree.Sum(n + 1)
+
+	if nCt == 0 {
+		return
+	}
+
+	// 0 ~ n で nCt となる最大が求めるもの
+
+	// (l, r] に答えがあるとする
+	// mid が条件を満たす → r を置き換えることとなる
+	l := -1
+	r := n
+
+	for r-l > 1 {
+		mid := (l + r) / 2
+
+		midCt := s.tree.Sum(mid + 1)
+
+		if midCt == nCt {
+			r = mid
+		} else {
+			l = mid
+		}
+	}
+
+	res = r
+	found = true
+	return
+}
+
+// n 以上の最小の要素 O(log^2 N)
+func (s *OrderedSet) Right(n int) (res int, found bool) {
+	nCt := s.tree.Sum(n) // n-1 以下の個数であることに注意
+
+	if nCt == s.tree.Sum(s.max+1) {
+		return
+	}
+
+	// n ~ max で > nCt となる最小が求めるもの
+
+	// (l, r] に答えがあるとする
+	// mid が条件を満たす → r を置き換えることとなる
+	l := n - 1
+	r := s.max
+
+	for r-l > 1 {
+		mid := (l + r) / 2
+
+		midCt := s.tree.Sum(mid + 1)
+
+		if midCt > nCt {
+			r = mid
+		} else {
+			l = mid
+		}
+	}
+
+	return r, true
+}
+
+func (s *OrderedSet) Add(n int) {
+	s.tree.Add(n, 1)
+}
+
 func solve(io *Io, d *Io) {
 	N := io.NextInt()
 	ps := io.NextInts(N)
@@ -27,8 +127,8 @@ func solve(io *Io, d *Io) {
 		numToIndex[p] = i
 	}
 
-	largeIndices := rbt.NewWithIntComparator()
-	largeIndices.Put(numToIndex[N], numToIndex[N])
+	largeIndices := NewOrderedSet(N)
+	largeIndices.Add(numToIndex[N])
 
 	res := 0
 
@@ -41,27 +141,27 @@ func solve(io *Io, d *Io) {
 		si2 := -1
 
 		// その i より大きい index
-		biCand, biFound := largeIndices.Ceiling(i + 1)
+		biCand, biFound := largeIndices.Right(i + 1)
 
 		if biFound {
-			bi = biCand.Value.(int)
+			bi = biCand
 
-			bi2Cand, bi2Found := largeIndices.Ceiling(bi + 1)
+			bi2Cand, bi2Found := largeIndices.Right(bi + 1)
 
 			if bi2Found {
-				bi2 = bi2Cand.Value.(int)
+				bi2 = bi2Cand
 			}
 		}
 
-		siCand, siFound := largeIndices.Floor(i - 1)
+		siCand, siFound := largeIndices.Left(i - 1)
 
 		if siFound {
-			si = siCand.Value.(int)
+			si = siCand
 
-			si2Cand, si2Found := largeIndices.Floor(si - 1)
+			si2Cand, si2Found := largeIndices.Left(si - 1)
 
 			if si2Found {
-				si2 = si2Cand.Value.(int)
+				si2 = si2Cand
 			}
 		}
 
@@ -70,7 +170,7 @@ func solve(io *Io, d *Io) {
 		// b ..
 		res += (bi2 - bi) * (i - si) * num
 
-		largeIndices.Put(i, i)
+		largeIndices.Add(i)
 	}
 
 	io.Println(res)

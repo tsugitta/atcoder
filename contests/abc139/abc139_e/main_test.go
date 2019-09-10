@@ -6,13 +6,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"os"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/tsugitta/atcoder/testutil"
 	"gopkg.in/yaml.v2"
 )
 
@@ -100,13 +99,14 @@ func TestRandom(t *testing.T) {
 
 		for i := 1; i <= N; i++ {
 			arr := []int{}
+
 			for j := 1; j <= N; j++ {
 				if i != j {
 					arr = append(arr, j)
 				}
 			}
-			rand.Seed(time.Now().UnixNano())
-			rand.Shuffle(len(arr), func(i, j int) { arr[i], arr[j] = arr[j], arr[i] })
+
+			testutil.Shuffle(arr)
 
 			io.PrintInts(arr)
 		}

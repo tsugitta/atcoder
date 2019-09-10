@@ -2,6 +2,8 @@ package testutil
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 
 	"strconv"
 	"strings"
@@ -46,4 +48,9 @@ func FloatEqual(a, b float64, digit int) bool {
 func StringToFloat(v string) float64 {
 	res, _ := strconv.ParseFloat(strings.Trim(v, "\n"), 64)
 	return res
+}
+
+func Shuffle(arr []int) {
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(arr), func(i, j int) { arr[i], arr[j] = arr[j], arr[i] })
 }
