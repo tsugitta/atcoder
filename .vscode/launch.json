@@ -1,19 +1,18 @@
 {
 	"version": "0.2.0",
 	"configurations": [
+
 		{
-			"type": "lldb",
 			"request": "launch",
-			"name": "Cargo test",
-			"cargo": {
-				"args": [
-					"test",
-					"--bin",
-					"main"
-				]
-			},
-			"preLaunchTask": "cargo build",
-			"program": "${workspaceRoot}/target/debug/test",
+			"type": "lldb",
+			"name": "Debug",
+			"sourceLanguages": [
+					"rust"
+			],
+			// "preLaunchTask": "cargo test",
+			"internalConsoleOptions": "openOnSessionStart",
+			"program": "${workspaceRoot}/target/debug/abc140_e_test-9fb5b1cad3b095d1",
+			"cwd": "${fileDirname}",
 			"args": []
 		},
 		{
