@@ -1,14 +1,14 @@
 package testutil
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
 	"strconv"
 	"strings"
 
-	"gopkg.in/yaml.v2"
+	"github.com/pkg/errors"
+	"gopkg.in/yaml.v3"
 )
 
 type TestCase struct {
@@ -16,13 +16,30 @@ type TestCase struct {
 	Out string
 }
 
+func AppendTestCases(buf []byte, cases []TestCase) ([]byte, error) {
+	alreadyAdded, err := YamlBufToTestCases(buf)
+
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	toBeWritten := append(alreadyAdded, cases...)
+
+	res, err := yaml.Marshal(toBeWritten)
+
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return res, nil
+}
+
 func YamlBufToTestCases(buf []byte) ([]TestCase, error) {
-	cases := make([]TestCase, 10)
+	cases := make([]TestCase, 0)
 	err := yaml.Unmarshal(buf, &cases)
 
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	return cases, nil

@@ -5,9 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
-	"strconv"
 	"strings"
 	"testing"
 
@@ -39,13 +37,8 @@ func NewMockIo(input string, outputBuffer *bytes.Buffer) *Io {
 }
 
 func TestSolve(t *testing.T) {
-	yamlBuf, err := ioutil.ReadFile("./test.yaml")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	cases, err := testutil.YamlBufToTestCases(yamlBuf)
+	yamlBuf, _ := ioutil.ReadFile("./test.yaml")
+	cases, _ := testutil.YamlBufToTestCases(yamlBuf)
 
 	for funcName, solveFunc := range solveFuncMap {
 		for idx, c := range cases {

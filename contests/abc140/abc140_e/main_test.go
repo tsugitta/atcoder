@@ -68,13 +68,12 @@ func NewMockIo(input string, outputBuffer *bytes.Buffer) *Io {
 }
 
 func TestSolve(t *testing.T) {
-	yamlBuf, err := ioutil.ReadFile("./test.yaml")
+	yamlBuf, _ := ioutil.ReadFile("./test.yaml")
+	cases, _ := testutil.YamlBufToTestCases(yamlBuf)
+	yamlBufRandom, _ := ioutil.ReadFile("./test_random.yaml")
+	randomCases, _ := testutil.YamlBufToTestCases(yamlBufRandom)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	cases, err := testutil.YamlBufToTestCases(yamlBuf)
+	cases = append(cases, randomCases...)
 
 	for funcName, solveFunc := range solveFuncMap {
 		for idx, c := range cases {
@@ -96,6 +95,62 @@ func TestSolve(t *testing.T) {
 	}
 }
 
+func AddRandom(t *testing.T) {
+	TIMES := 20
+
+	cases := make([]testutil.TestCase, 0)
+
+	for i := 0; i < TIMES; i++ {
+		buffer := bytes.Buffer{}
+
+		N := 20
+		arr := make([]int, N)
+
+		{
+			io := NewMockIo("", &buffer)
+
+			io.Println(N)
+
+			for i := 0; i < N; i++ {
+				arr[i] = i + 1
+			}
+
+			testutil.Shuffle(arr)
+			io.PrintInts(arr)
+
+			io.Flush()
+		}
+
+		in := buffer.String()
+
+		var naiveRes string
+
+		{
+			buffer = bytes.Buffer{}
+			io := NewMockIo(in, &buffer)
+
+			naive(io, nil)
+			io.Flush()
+
+			naiveRes = buffer.String()
+		}
+
+		c := testutil.TestCase{
+			In:  in,
+			Out: naiveRes,
+		}
+
+		cases = append(cases, c)
+	}
+
+	buf, err := testutil.AppendTestCases([]byte{}, cases)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ioutil.WriteFile("./test_random.yaml", buf, 0644)
+}
 func TestRandom(t *testing.T) {
 	TIMES := 200
 
