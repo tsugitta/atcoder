@@ -5,12 +5,16 @@ type UnionFind struct {
 	parents []int
 }
 
-func (uf *UnionFind) init(n int) {
+func NewUnionFind(n int) *UnionFind {
+	uf := &UnionFind{}
+
 	uf.parents = make([]int, n)
 
 	for i := range uf.parents {
 		uf.parents[i] = -1
 	}
+
+	return uf
 }
 
 func (uf *UnionFind) root(x int) int {

@@ -7,9 +7,7 @@ import (
 )
 
 func TestUnionFind(t *testing.T) {
-	uf := &UnionFind{}
-
-	uf.init(5)
+	uf := NewUnionFind(5)
 
 	uf.merge(0, 1)
 	assert.Equal(t, true, uf.same(0, 1))
