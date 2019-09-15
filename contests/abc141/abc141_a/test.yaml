@@ -1,0 +1,8 @@
+- in: |
+    Sunny
+  out: |
+    Cloudy
+- in: |
+    Rainy
+  out: |
+    Sunny

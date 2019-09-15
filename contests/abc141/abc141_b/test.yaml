@@ -1,0 +1,20 @@
+- in: |
+    RUDLUDR
+  out: |
+    Yes
+- in: |
+    DULL
+  out: |
+    No
+- in: |
+    UUUUUUUUUUUUUUU
+  out: |
+    Yes
+- in: |
+    ULURU
+  out: |
+    No
+- in: |
+    RDULULDURURLRDULRLR
+  out: |
+    Yes
