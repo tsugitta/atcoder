@@ -15,6 +15,7 @@ func validateLanguage(lang string) error {
 	for _, available := range []string{
 		"go",
 		"rust",
+		"cpp",
 	} {
 		if lang == available {
 			return nil
@@ -52,7 +53,7 @@ func main() {
 		cli.StringFlag{
 			Name:  "lang, l",
 			Value: "go",
-			Usage: "Language to use. go or rust.",
+			Usage: "Language to use. go, rust, or cpp.",
 		},
 	}
 
