@@ -1,4 +1,4 @@
-AtCoder challenge. mainly with Go (& Rust).
+AtCoder challenge. mainly with Go, C++, & Rust.
 
 ## Structure
 
@@ -6,17 +6,24 @@ AtCoder challenge. mainly with Go (& Rust).
 └── contests
     └── contest_name
         └── problem_id
+            ├── // common
+            ├── test.yaml
+            ├── // for C++
+            ├── main.cpp
+            ├── main.h
+            ├── test.cpp
+            ├── // for Go
             ├── main.go
             ├── main_test.go
+            ├── // for Rust
             ├── Cargo.toml
             ├── main.rs
-            ├── main_test.rs
-            └── test.yaml
+            └── main_test.rs
 ```
 
-- main.go is the problem to submit
+- main.cpp, main.go, main.rs are the codes to submit
 - test.yaml is test cases of stdin / stdout of the proglam
-- main_test.go is to test the result is same as test.yaml
+- others are for the test which validates the stdin / stdout with the test case
 
 ## Generator
 
