@@ -10,17 +10,10 @@
 		},
 		{
 			"name": "(lldb) Test",
-			"type": "cppdbg",
+			"type": "lldb",
 			"request": "launch",
       "program": "${fileDirname}/test.out",
-			"args": [
-
-			],
-			"stopAtEntry": false,
 			"cwd": "${fileDirname}",
-			"environment": [],
-			"externalConsole": false,
-			"MIMode": "lldb",
 			"preLaunchTask": "Build with g++"
 		},
 		{
