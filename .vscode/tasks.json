@@ -14,25 +14,29 @@
       },
       "problemMatcher": "$rustc"
     },
-    {
-      "label": "cargo test",
-      "type": "cargo",
-      "subcommand": "test",
-      "problemMatcher": [
-        "$rustc"
-      ],
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      }
-    },
+    // {
+    //   "label": "cargo test",
+    //   "type": "cargo",
+    //   "subcommand": "test",
+    //   "problemMatcher": [
+    //     "$rustc"
+    //   ],
+    //   "group": {
+    //     "kind": "test",
+    //     "isDefault": true
+    //   }
+    // },
     {
       "label": "Build with g++",
       "type": "shell",
       "command": "g++",
+      "presentation": {
+        "reveal": "silent",
+      },
       "args": [
         "${fileDirname}/main.cpp",
         "${fileDirname}/test.cpp",
+        "-std=c++11",
         "-I/usr/local/include",
         "-L/usr/local/lib",
         "-lyaml-cpp",

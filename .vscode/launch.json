@@ -9,7 +9,7 @@
 			"program": "${file}"
 		},
 		{
-			"name": "(gdb) Launch",
+			"name": "(lldb) Test",
 			"type": "cppdbg",
 			"request": "launch",
       "program": "${fileDirname}/test.out",
@@ -20,7 +20,7 @@
 			"cwd": "${fileDirname}",
 			"environment": [],
 			"externalConsole": false,
-			"MIMode": "gdb",
+			"MIMode": "lldb",
 			"preLaunchTask": "Build with g++"
 		},
 		{

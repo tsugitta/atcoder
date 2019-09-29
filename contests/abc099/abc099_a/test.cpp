@@ -1,5 +1,5 @@
-#include <bits/stdc++.h>
 #include <yaml-cpp/yaml.h>
+#include "iostream"
 #include "main.h"
 using namespace std;
 
@@ -16,11 +16,7 @@ vector<test_case> load_cases() {
 
     for (size_t i = 0; i < yaml_cases.size(); i++) {
       YAML::Node c = yaml_cases[i];
-
-      // for (YAML::const_iterator it = c.begin(); it != c.end(); ++it) {
-      // cases.push_back({it->first.as<string>(), it->second.as<string>()});
       cases.push_back({c["in"].as<string>(), c["out"].as<string>()});
-      // }
     }
   } catch (YAML::Exception &e) {
     cerr << "YAML load error: " << e.what() << endl;
