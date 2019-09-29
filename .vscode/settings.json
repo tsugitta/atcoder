@@ -5,5 +5,14 @@
   "[rust]": {
     "editor.tabSize": 4,
     "editor.formatOnSave": true
+  },
+  "C_Cpp.clang_format_style": "Google",
+  "[cpp]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true
+  },
+  "files.associations": {
+    "iostream": "cpp",
+    "iosfwd": "cpp"
   }
 }

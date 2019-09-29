@@ -1,7 +1,28 @@
 {
 	"version": "0.2.0",
 	"configurations": [
+		{
+			"name": "Go Test",
+			"type": "go",
+			"request": "launch",
+			"mode": "test",
+			"program": "${file}"
+		},
+		{
+			"name": "(gdb) Launch",
+			"type": "cppdbg",
+			"request": "launch",
+      "program": "${fileDirname}/test.out",
+			"args": [
 
+			],
+			"stopAtEntry": false,
+			"cwd": "${fileDirname}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"preLaunchTask": "Build with g++"
+		},
 		{
 			"request": "launch",
 			"type": "lldb",
@@ -15,12 +36,5 @@
 			"cwd": "${fileDirname}",
 			"args": []
 		},
-		{
-			"name": "Go Test",
-			"type": "go",
-			"request": "launch",
-			"mode": "test",
-			"program": "${file}"
-		}
 	]
 }

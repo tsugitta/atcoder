@@ -1,6 +1,4 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
     {
@@ -17,6 +15,7 @@
       "problemMatcher": "$rustc"
     },
     {
+      "label": "cargo test",
       "type": "cargo",
       "subcommand": "test",
       "problemMatcher": [
@@ -26,6 +25,26 @@
         "kind": "test",
         "isDefault": true
       }
-    }
+    },
+    {
+      "label": "Build with g++",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "${fileDirname}/main.cpp",
+        "${fileDirname}/test.cpp",
+        "-I/usr/local/include",
+        "-L/usr/local/lib",
+        "-lyaml-cpp",
+        "-o",
+        "${fileDirname}/test.out",
+        "-DTEST",
+        "--debug"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
   ]
 }

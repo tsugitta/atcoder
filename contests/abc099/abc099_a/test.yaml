@@ -1,0 +1,12 @@
+- in: |
+    999
+  out: |
+    ABC
+- in: |
+    1000
+  out: |
+    ABD
+- in: |
+    1481
+  out: |
+    ABD
