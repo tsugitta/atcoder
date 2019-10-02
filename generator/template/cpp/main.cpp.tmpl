@@ -7,11 +7,11 @@
 #define rep(i, from, to) for (ll i = from; i < (to); ++i)
 using namespace std;
 typedef long long ll;
-
 template <class T>
 inline bool chmax(T& a, T b);
 template <class T>
 inline bool chmin(T& a, T b);
+void print_ints(vector<ll> v);
 
 void solve() {
 }
@@ -41,4 +41,16 @@ inline bool chmin(T& a, T b) {
     return 1;
   }
   return 0;
+}
+
+void print_ints(vector<ll> v) {
+  rep(i, 0, v.size()) {
+    if (i > 0) {
+      cout << " ";
+    }
+
+    cout << v[i];
+  }
+
+  cout << endl;
 }
