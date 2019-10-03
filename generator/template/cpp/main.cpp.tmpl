@@ -7,14 +7,22 @@
 #define rep(i, from, to) for (ll i = from; i < (to); ++i)
 using namespace std;
 typedef long long ll;
-template <class T>
+template <typename T>
+using V = vector<T>;
+template <typename T>
 inline bool chmax(T& a, T b);
-template <class T>
+template <typename T>
 inline bool chmin(T& a, T b);
 void print_ints(vector<ll> v);
+template <typename T>
+void drop(T a);
 
 void solve() {
 }
+
+struct exit_exception : public std::exception {
+  const char* what() const throw() { return "Exited"; }
+};
 
 #ifndef TEST
 int main() {
@@ -25,7 +33,7 @@ int main() {
 }
 #endif
 
-template <class T>
+template <typename T>
 inline bool chmax(T& a, T b) {
   if (a < b) {
     a = b;
@@ -34,7 +42,7 @@ inline bool chmax(T& a, T b) {
   return 0;
 }
 
-template <class T>
+template <typename T>
 inline bool chmin(T& a, T b) {
   if (a > b) {
     a = b;
@@ -53,4 +61,10 @@ void print_ints(vector<ll> v) {
   }
 
   cout << endl;
+}
+
+template <typename T>
+void drop(T res) {
+  cout << res << endl;
+  throw exit_exception();
 }

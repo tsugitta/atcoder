@@ -42,7 +42,11 @@ int main() {
     streambuf *coutbuf = cout.rdbuf();
     cout.rdbuf(&out);
 
-    solve();
+    try {
+      solve();
+    } catch (exit_exception &e) {
+    }
+
 
     cin.rdbuf(cinbuf);
     cout.rdbuf(coutbuf);
