@@ -1,12 +1,21 @@
+// https://atcoder.jp/contests/abc133/tasks/abc133_e
+
 #include "algorithm"
 #include "iostream"
-#include "map"
+#include "set"
 #include "vector"
 #define rep(i, from, to) for (ll i = from; i < (to); ++i)
 using namespace std;
+typedef long long ll;
 template <typename T>
 using V = vector<T>;
-typedef long long ll;
+template <typename T>
+inline bool chmax(T& a, T b);
+template <typename T>
+inline bool chmin(T& a, T b);
+void print_ints(vector<ll> v);
+template <typename T>
+void drop(T a);
 
 template <int MOD>
 class Fp {
@@ -85,6 +94,8 @@ struct combination_table {
 };
 
 // ref: http://drken1215.hatenablog.com/entry/2018/06/08/210000
+// combination_table を受け取る関数は参照受け取りにしないと vector
+// のコピーが走る
 combination_table prepare_combination(ll max, ll mod) {
   V<ll> fact(max + 1);
   V<ll> finv(max + 1);
@@ -121,4 +132,93 @@ ll c_m(ll n, ll k, combination_table& ct) {
 
 ll p_m(ll n, ll k, combination_table& ct) {
   return c_m(n, k, ct) * ct.fact[k] % ct.mod;
+}
+
+ll N, K;
+V<V<ll>> G;
+combination_table t;
+
+mint rec(ll v, ll p) {
+  mint r = 1;
+  ll ch_ct = 0;
+
+  for (auto ch : G[v]) {
+    if (ch == p) continue;
+    ch_ct++;
+    r *= rec(ch, v);
+  }
+
+  ll colors = p == -1 ? K - 1 : K - 2;
+  r *= p_m(colors, ch_ct, t);
+
+  return r;
+}
+
+void solve() {
+  cin >> N >> K;
+  G.assign(N, V<ll>());
+
+  rep(i, 0, N - 1) {
+    ll a, b;
+    cin >> a >> b;
+    --a;
+    --b;
+    G[a].push_back(b);
+    G[b].push_back(a);
+  }
+
+  t = prepare_combination(K + 1, MOD);
+
+  mint res = rec(0, -1) * K;
+
+  cout << res << endl;
+}
+
+struct exit_exception : public std::exception {
+  const char* what() const throw() { return "Exited"; }
+};
+
+#ifndef TEST
+int main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+  solve();
+  return 0;
+}
+#endif
+
+template <typename T>
+inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+
+template <typename T>
+inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+
+void print_ints(vector<ll> v) {
+  rep(i, 0, v.size()) {
+    if (i > 0) {
+      cout << " ";
+    }
+
+    cout << v[i];
+  }
+
+  cout << endl;
+}
+
+template <typename T>
+void drop(T res) {
+  cout << res << endl;
+  throw exit_exception();
 }
