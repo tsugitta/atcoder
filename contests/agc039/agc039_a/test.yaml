@@ -1,0 +1,25 @@
+- in: |
+    issii
+    2
+  out: |
+    4
+- in: |
+    qq
+    81
+  out: |
+    81
+- in: |
+    cooooooooonteeeeeeeeeest
+    999993333
+  out: |
+    8999939997
+- in: |
+    aaa
+    3
+  out: |
+    4
+- in: |
+    aaa
+    4
+  out: |
+    6
