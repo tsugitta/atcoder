@@ -38,7 +38,7 @@ int main() {
 
   for (auto it = function_map.begin(); it != function_map.end(); it++) {
     auto func_name = it->first;
-    cout << func_name << endl;
+    cout << "----- " << func_name << " -----" << endl;
 
     for (size_t i = 0; i < cases.size(); i++) {
       auto c = cases[i];
@@ -60,8 +60,12 @@ int main() {
       cout.rdbuf(coutbuf);
 
       if (c.out != out.str()) {
-        cout << "case " << i << "\nexpected: " << c.out
-             << "actual: " << out.str() << endl;
+        cout << "--- CASE " << i << " ---" << endl;
+
+        cout << "[EXP] \n"
+             << c.out << "\n[ACT] \n"
+             << out.str() << "\n"
+             << endl;
         failed = 1;
       }
     }
