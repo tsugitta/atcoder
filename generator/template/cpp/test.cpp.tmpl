@@ -1,6 +1,7 @@
-#include "iostream"
 #include <yaml-cpp/yaml.h>
+#include "iostream"
 #include "main.h"
+#include "map"
 using namespace std;
 
 struct test_case {
@@ -31,35 +32,43 @@ int main() {
 
   int failed = 0;
 
-  for (size_t i = 0; i < cases.size(); i++) {
-    auto c = cases[i];
+  map<string, function<void(void)>> function_map = {
+      {"solve", solve},
+  };
 
-    stringbuf in = stringbuf(c.in);
-    streambuf *cinbuf = cin.rdbuf();
-    cin.rdbuf(&in);
+  for (auto it = function_map.begin(); it != function_map.end(); it++) {
+    auto func_name = it->first;
+    cout << func_name << endl;
 
-    stringbuf out;
-    streambuf *coutbuf = cout.rdbuf();
-    cout.rdbuf(&out);
+    for (size_t i = 0; i < cases.size(); i++) {
+      auto c = cases[i];
 
-    try {
-      solve();
-    } catch (exit_exception &e) {
+      stringbuf in = stringbuf(c.in);
+      streambuf *cinbuf = cin.rdbuf();
+      cin.rdbuf(&in);
+
+      stringbuf out;
+      streambuf *coutbuf = cout.rdbuf();
+      cout.rdbuf(&out);
+
+      try {
+        it->second();
+      } catch (exit_exception &e) {
+      }
+
+      cin.rdbuf(cinbuf);
+      cout.rdbuf(coutbuf);
+
+      if (c.out != out.str()) {
+        cout << "case " << i << "\nexpected: " << c.out
+             << "actual: " << out.str() << endl;
+        failed = 1;
+      }
     }
 
-
-    cin.rdbuf(cinbuf);
-    cout.rdbuf(coutbuf);
-
-    if (c.out != out.str()) {
-      cout << "case " << i << "\nexpected: " << c.out << "actual: " << out.str()
-           << endl;
-      failed = 1;
+    if (!failed) {
+      cout << " PASS" << endl;
     }
-  }
-
-  if (!failed) {
-    cout << "PASS" << endl;
   }
 
   return 0;
