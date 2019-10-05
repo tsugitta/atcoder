@@ -28,7 +28,12 @@ struct exit_exception : public std::exception {
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  solve();
+
+  try {
+    solve();
+  } catch (exit_exception& e) {
+  }
+
   return 0;
 }
 #endif
