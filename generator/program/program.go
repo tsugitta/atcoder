@@ -71,6 +71,10 @@ func copyTemplates(dirPath, lang, URL string) error {
 	_, taskName, _ := path.GetProblemIdentifiers(URL)
 
 	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
 		filePath := fmt.Sprintf("%s/%s", dirPath, file.Name())
 		if err := fillTemplate(filePath, URL, taskName); err != nil {
 			return errors.WithStack(err)
