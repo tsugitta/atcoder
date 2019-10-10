@@ -22,7 +22,7 @@ AtCoder challenge. mainly with Go, C++, & Rust.
 ```
 
 - main.cpp, main.go, main.rs are the codes to submit
-- test.yaml is test cases of stdin / stdout of the proglam
+- test.yaml is test cases of stdin / stdout of the problem
 - others are for the test which validates the stdin / stdout with the test case
 
 ## Generator
