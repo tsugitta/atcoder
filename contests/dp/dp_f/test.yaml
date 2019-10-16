@@ -1,0 +1,20 @@
+- in: |
+    axyb
+    abyxb
+  out: |
+    axb
+- in: |
+    aa
+    xayaz
+  out: |
+    aa
+- in: |
+    a
+    z
+  out: "\n"
+
+- in: |
+    abracadabra
+    avadakedavra
+  out: |
+    aaadara
