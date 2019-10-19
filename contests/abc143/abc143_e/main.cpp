@@ -2,6 +2,7 @@
 
 #include "algorithm"
 #include "iostream"
+#include "queue"
 #include "set"
 #include "vector"
 #define rep(i, to) for (ll i = 0; i < (to); ++i)
@@ -12,6 +13,7 @@ template <typename T>
 using V = vector<T>;
 using VL = V<ll>;
 using VVL = V<VL>;
+using PL = pair<ll, ll>;
 template <typename T>
 inline bool chmax(T& a, T b);
 template <typename T>
@@ -20,6 +22,7 @@ void print_ints(vector<ll> v);
 template <typename T>
 void drop(T a);
 
+// ワーシャルフロイド２回 O(N^3)
 void solve() {
   ll N, M, L;
   cin >> N >> M >> L;
@@ -72,6 +75,163 @@ void solve() {
   }
 }
 
+// priority_queue ダイクストラ N 回 O (N * (E+V) log N) = O(N^3 log N)?
+void solve2() {
+  ll N, M, L;
+  cin >> N >> M >> L;
+
+  ll INF = 1 << 30;
+
+  auto G = VVL(N, VL(N, INF));
+  rep(i, N) G[i][i] = 0;
+
+  rep(i, M) {
+    ll a, b, c;
+    cin >> a >> b >> c;
+    a--, b--;
+
+    if (c > L) continue;
+
+    G[a][b] = G[b][a] = c;
+  }
+
+  // first: times, second: used としてこれの最小値をダイクストラで得る
+  V<V<PL>> dist(N, V<PL>(N, {INF, INF}));
+  rep(i, N) dist[i][i] = {0, 0};
+
+  rep(s, N) {
+    // デフォルトでは大きい値から取り出されることに注意
+    // priority_queue<pair<PL, ll>> q;
+    priority_queue<pair<PL, ll>, V<pair<PL, ll>>, greater<pair<PL, ll>>> q;
+
+    q.push({PL(0, 0), s});
+
+    while (!q.empty()) {
+      auto p = q.top();
+      q.pop();
+
+      ll v = p.second;
+      ll times = p.first.first;
+      ll used = p.first.second;
+
+      if (p.first > dist[s][v]) continue;
+
+      rep(nv, N) {
+        if (nv == v) continue;
+        if (G[v][nv] > L) continue;
+        ll n_used = used + G[v][nv];
+
+        auto np = n_used > L ? PL(times + 1, G[v][nv]) : PL(times, n_used);
+
+        if (chmin(dist[s][nv], np)) {
+          q.push({np, nv});
+        }
+      }
+    }
+  }
+
+  ll Q;
+  cin >> Q;
+
+  rep(i, Q) {
+    ll s, t;
+    cin >> s >> t;
+    s--, t--;
+
+    ll res = dist[s][t].first == INF ? -1 : dist[s][t].first;
+    cout << res << endl;
+  }
+}
+
+// original ダイクストラ N 回 O (N * N^2) = O(N^3)
+void solve3() {
+  ll N, M, L;
+  cin >> N >> M >> L;
+
+  ll INF = 1 << 30;
+
+  auto G = VVL(N, VL(N, INF));
+  rep(i, N) G[i][i] = 0;
+
+  rep(i, M) {
+    ll a, b, c;
+    cin >> a >> b >> c;
+    a--, b--;
+
+    if (c > L) continue;
+
+    G[a][b] = G[b][a] = c;
+  }
+
+  // first: times, second: used としてこれの最小値をダイクストラで得る
+  V<V<PL>> dist(N, V<PL>(N, {INF, INF}));
+  rep(i, N) dist[i][i] = {0, 0};
+
+  rep(s, N) {
+    // １ステップで、全頂点を確認し、それが配られていて、かつその点は配っていない点で最小のものを得る。そしてその点から配る。
+    // これを頂点の数だけ繰り返せば、全頂点への最小パスが得られる。
+
+    V<bool> fixed(N);
+    V<PL> mins(N, {INF, INF});
+
+    mins[s] = {0, 0};
+
+    rep(_, N) {
+      // second: 頂点
+      pair<PL, ll> min = {{INF, INF}, -1};
+
+      rep(u, N) {
+        if (fixed[u]) continue;
+        if (mins[u] == PL(INF, INF)) continue;
+
+        chmin(min, make_pair(mins[u], u));
+      }
+
+      ll u = min.second;
+
+      if (u == -1) {
+        break;
+      }
+
+      rep(v, N) {
+        if (u == v) continue;
+        if (fixed[v]) continue;
+
+        ll cost = G[u][v];
+        if (cost > L) continue;
+
+        ll times = min.first.first;
+        ll used = min.first.second;
+
+        ll n_times = times;
+        ll n_used = cost + used;
+
+        if (n_used > L) {
+          n_times++;
+          n_used = cost;
+        }
+
+        chmin(mins[v], {n_times, n_used});
+      }
+
+      fixed[u] = true;
+      dist[s][u] = min.first;
+    }
+  }
+
+  ll Q;
+  cin >> Q;
+
+  rep(i, Q) {
+    ll s, t;
+    cin >> s >> t;
+    s--, t--;
+
+    ll res = dist[s][t].first == INF ? -1 : dist[s][t].first;
+    cout << res << endl;
+  }
+}
+
 struct exit_exception : public std::exception {
   const char* what() const throw() { return "Exited"; }
 };
@@ -82,7 +242,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve3();
   } catch (exit_exception& e) {
   }
 
