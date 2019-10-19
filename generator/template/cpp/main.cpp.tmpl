@@ -4,7 +4,8 @@
 #include "iostream"
 #include "set"
 #include "vector"
-#define rep(i, from, to) for (ll i = from; i < (to); ++i)
+#define rep(i, to) for (ll i = 0; i < (to); ++i)
+#define repf(i, from, to) for (ll i = from; i < (to); ++i)
 using namespace std;
 typedef long long ll;
 template <typename T>
@@ -59,7 +60,7 @@ inline bool chmin(T& a, T b) {
 }
 
 void print_ints(vector<ll> v) {
-  rep(i, 0, v.size()) {
+  rep(i, v.size()) {
     if (i > 0) {
       cout << " ";
     }
