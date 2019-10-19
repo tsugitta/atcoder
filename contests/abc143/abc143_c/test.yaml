@@ -1,0 +1,15 @@
+- in: |
+    10
+    aabbbbaaca
+  out: |
+    5
+- in: |
+    5
+    aaaaa
+  out: |
+    1
+- in: |
+    20
+    xxzaffeeeeddfkkkkllq
+  out: |
+    10
