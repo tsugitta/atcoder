@@ -40,6 +40,36 @@ void solve() {
   cout << res << endl;
 }
 
+// 尺取り
+void solve2() {
+  ll N;
+  cin >> N;
+
+  VL ls(N);
+
+  rep(i, 0, N) { cin >> ls[i]; }
+
+  sort(ls.begin(), ls.end());
+
+  ll res = 0;
+
+  rep(b, 0, N) {
+    ll c_r = b + 1;
+    ll c_l = b + 1;
+
+    rep(a, 0, b) {
+      ll m = ls[a] + ls[b];
+
+      // c: [c_l, c_r)
+      while (c_r < N && ls[c_r] < m) c_r++;
+
+      res += c_r - c_l;
+    }
+  }
+
+  cout << res << endl;
+}
+
 struct exit_exception : public std::exception {
   const char* what() const throw() { return "Exited"; }
 };
