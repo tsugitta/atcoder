@@ -1,0 +1,12 @@
+- in: |
+    10
+  out: |
+    Yes
+- in: |
+    50
+  out: |
+    No
+- in: |
+    81
+  out: |
+    Yes
