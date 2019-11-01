@@ -2,14 +2,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Go Test",
-			"type": "go",
-			"request": "launch",
-			"mode": "test",
-			"program": "${file}"
-		},
-		{
-			"name": "(lldb) Test",
+			"name": "(lldb) C++ Test",
 			"type": "lldb",
 			"request": "launch",
       "program": "${fileDirname}/test.out",
@@ -17,9 +10,16 @@
 			"preLaunchTask": "Build with g++"
 		},
 		{
+			"name": "Go Test",
+			"type": "go",
+			"request": "launch",
+			"mode": "test",
+			"program": "${file}"
+		},
+		{
 			"request": "launch",
 			"type": "lldb",
-			"name": "Debug",
+			"name": "Rust Debug",
 			"sourceLanguages": [
 					"rust"
 			],
