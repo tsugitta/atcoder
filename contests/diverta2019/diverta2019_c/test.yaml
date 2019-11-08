@@ -1,0 +1,31 @@
+- in: |
+    3
+    ABCA
+    XBAZ
+    BAD
+  out: |
+    2
+- in: |
+    9
+    BEWPVCRWH
+    ZZNQYIJX
+    BAVREA
+    PA
+    HJMYITEOX
+    BCJHMRMNK
+    BP
+    QVFABZ
+    PRGKSPUNA
+  out: |
+    4
+- in: |
+    7
+    RABYBBE
+    JOZ
+    BMHQUVA
+    BPA
+    ISU
+    MCMABAOBHZ
+    SZMEHMA
+  out: |
+    4
