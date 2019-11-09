@@ -203,6 +203,52 @@ void solve2() {
   cout << res << endl;
 }
 
+// イベントソートのようなイメージ
+void solve3() {
+  ll N, M;
+  cin >> N >> M;
+
+  struct E {
+    ll l, r, c;
+  };
+
+  V<V<E>> ls(N);  // ls[i]: i を左端
+  V<V<E>> rs(N);  // rs[i]: i を右端
+
+  rep(i, M) {
+    ll l, r, c;
+    cin >> l >> r >> c;
+    l--, r--;
+    ls[l].push_back({l, r, c});
+    rs[r].push_back({l, r, c});
+  }
+
+  VL dist(N, INF);
+  dist[0] = 0;
+  multiset<ll> costs;
+
+  rep(i, N) {
+    if (!costs.empty()) {
+      dist[i] = *costs.cbegin();
+    }
+
+    if (dist[i] != INF) {
+      for (auto e : ls[i]) {
+        costs.insert(dist[i] + e.c);
+      }
+    }
+
+    for (auto e : rs[i]) {
+      if (dist[e.l] + e.c < INF) {
+        costs.erase(costs.find(dist[e.l] + e.c));
+      }
+    }
+  }
+
+  ll res = dist[N - 1] == INF ? -1 : dist[N - 1];
+  cout << res << endl;
+}
+
 struct exit_exception : public std::exception {
   const char *what() const throw() { return "Exited"; }
 };
@@ -213,7 +259,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve2();
+    solve3();
   } catch (exit_exception &e) {
   }
 
