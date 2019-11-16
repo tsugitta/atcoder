@@ -1,0 +1,15 @@
+- in: |
+    6
+    abcabc
+  out: |
+    Yes
+- in: |
+    6
+    abcadc
+  out: |
+    No
+- in: |
+    1
+    z
+  out: |
+    No
