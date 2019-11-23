@@ -1,0 +1,114 @@
+// https://atcoder.jp/contests/ddcc2020-qual/tasks/ddcc2020_qual_d
+
+#include "algorithm"
+#include "cmath"
+#include "functional"
+#include "iostream"
+#include "numeric"
+#include "queue"
+#include "set"
+#include "vector"
+#define rep(i, to) for (ll i = 0; i < (to); ++i)
+#define repf(i, from, to) for (ll i = from; i < (to); ++i)
+#define repr(i, from) for (ll i = from - 1; i >= 0; --i)
+#define all(vec) vec.begin(), vec.end()
+#define fi first
+#define se second
+using namespace std;
+typedef long long ll;
+template <typename T>
+using V = vector<T>;
+using VL = V<ll>;
+using VVL = V<VL>;
+template <typename T, typename U>
+using P = pair<T, U>;
+using PL = P<ll, ll>;
+using VPL = V<PL>;
+template <typename T>
+inline bool chmax(T& a, T b);
+template <typename T>
+inline bool chmin(T& a, T b);
+void print_ints(vector<ll> v);
+template <typename T>
+void drop(T a);
+
+const ll INF = 1e18;
+
+void solve() {
+  ll M;
+  cin >> M;
+
+  // 操作を行うと、
+  // 1. 繰り上がりがある時： 桁数はそのままに、 digitSum が 9 減る
+  // 2. 繰り上がりが無い時： 桁数が 1 減り、 digitSum はそのまま
+  // よって、ある数に行える操作の回数は （桁数 - 1） + (digitSum-1) / 9
+
+  ll digit = 0;
+  ll digitSum = 0;
+
+  rep(i, M) {
+    ll d, c;
+    cin >> d >> c;
+
+    digit += c;
+    digitSum += c * d;
+  }
+
+  ll res = (digit - 1) + (digitSum - 1) / 9;
+
+  cout << res << endl;
+}
+
+struct exit_exception : public std::exception {
+  const char* what() const throw() { return "Exited"; }
+};
+
+#ifndef TEST
+int main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  try {
+    solve();
+  } catch (exit_exception& e) {
+  }
+
+  return 0;
+}
+#endif
+
+template <typename T>
+inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+
+template <typename T>
+inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+
+void print_ints(vector<ll> v) {
+  rep(i, v.size()) {
+    if (i > 0) {
+      cout << " ";
+    }
+
+    cout << v[i];
+  }
+
+  cout << endl;
+}
+
+template <typename T>
+void drop(T res) {
+  cout << res << endl;
+  throw exit_exception();
+}
