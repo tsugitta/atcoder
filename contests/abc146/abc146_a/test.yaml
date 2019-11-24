@@ -1,0 +1,8 @@
+- in: |
+    SAT
+  out: |
+    1
+- in: |
+    SUN
+  out: |
+    7
