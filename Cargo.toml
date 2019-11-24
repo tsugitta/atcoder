@@ -1,7 +1,7 @@
 [workspace]
 
 members = [
-  "rs_snippets",
+  "snippets/rs",
   "contests/abc114/abc114_a",
   "contests/abc105/abc105_a",
   "contests/abc105/abc105_b",
