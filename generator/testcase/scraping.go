@@ -64,9 +64,6 @@ func getAuthedCookies(cred *AuthCredential) ([]*http.Cookie, error) {
 	c.SetCookies(loginURL, cookies)
 
 	c.RedirectHandler = func(req *http.Request, via []*http.Request) error {
-		// NOTE: 認証成功時は 302 が返ってくる。その response の set-cookie に認証情報が含まれるため、それにより cookie を更新した上で return しないといけない。
-		// ここで以下のように req.Response.Header にアクセスしないとそれが無視されてしまい、適切な cookie が返らなくなってしまう不具合があるように思われる。
-		_ = req.Response.Header
 		return nil
 	}
 
