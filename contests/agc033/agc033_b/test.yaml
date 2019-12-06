@@ -1,0 +1,21 @@
+- in: |
+    2 3 3
+    2 2
+    RRL
+    LUD
+  out: |
+    YES
+- in: |
+    4 3 5
+    2 2
+    UDRRR
+    LLDUD
+  out: |
+    NO
+- in: |
+    5 6 11
+    2 1
+    RLDRRUDDLRL
+    URRDRLLDLRD
+  out: |
+    NO
