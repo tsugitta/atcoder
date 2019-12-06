@@ -52,7 +52,7 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "lang, l",
-			Value: "go",
+			Value: "cpp",
 			Usage: "Language to use. go, rust, or cpp.",
 		},
 	}
