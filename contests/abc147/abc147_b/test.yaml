@@ -1,0 +1,12 @@
+- in: |
+    redcoder
+  out: |
+    1
+- in: |
+    vvvvvv
+  out: |
+    0
+- in: |
+    abcdabc
+  out: |
+    2

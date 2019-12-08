@@ -1,0 +1,8 @@
+- in: |
+    5 7 9
+  out: |
+    win
+- in: |
+    13 7 2
+  out: |
+    bust
