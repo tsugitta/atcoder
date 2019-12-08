@@ -1,6 +1,7 @@
 // https://atcoder.jp/contests/abc147/tasks/abc147_e
 
 #include "algorithm"
+#include "bitset"
 #include "cmath"
 #include "functional"
 #include "iomanip"
@@ -80,6 +81,91 @@ void solve() {
   rep(k, abs_sum_max + 1) if (dp[H - 1][W - 1][abs_sum_max + k]) drop(k);
 }
 
+// bitset
+void solve2() {
+  ll H, W;
+  cin >> H >> W;
+
+  // abs
+  VVL as(H, VL(W));
+  rep(h, H) rep(w, W) cin >> as[h][w];
+
+  rep(h, H) rep(w, W) {
+    ll b;
+    cin >> b;
+    as[h][w] = abs(as[h][w] - b);
+  }
+
+  ll res = INF;
+
+  // dp[h][w][k]: h, w までの経路で偏りが k となるか
+  const ll base = (80 + 80 - 1) * 80;
+  using bits = bitset<2 * base + 1>;
+  V<V<bits>> dp(H, V<bits>(W, bits()));
+
+  dp[0][0].set(base);
+  dp[0][0] = dp[0][0] << as[0][0] | dp[0][0] >> as[0][0];
+
+  // 配る DP
+  rep(h, H) rep(w, W) {
+    rep(h_diff, 2) rep(w_diff, 2) {
+      if (h_diff == w_diff) continue;
+      if (h + h_diff >= H || w + w_diff >= W) continue;
+
+      ll a = as[h + h_diff][w + w_diff];
+
+      dp[h + h_diff][w + w_diff] |= dp[h][w] << a | dp[h][w] >> a;
+    }
+  }
+
+  rep(k, base + 1) if (dp[H - 1][W - 1][base + k]) drop(k);
+}
+
+// bitset + 空間計算量を落とす
+void solve3() {
+  ll H, W;
+  cin >> H >> W;
+
+  // abs
+  VVL as(H, VL(W));
+  rep(h, H) rep(w, W) cin >> as[h][w];
+
+  rep(h, H) rep(w, W) {
+    ll b;
+    cin >> b;
+    as[h][w] = abs(as[h][w] - b);
+  }
+
+  ll res = INF;
+
+  // dp[h % 2][w][k]: h, w までの経路で偏りが k となるか
+  const ll base = (80 + 80 - 1) * 80;
+  using bits = bitset<2 * base + 1>;
+  V<V<bits>> dp(2, V<bits>(W, bits()));
+
+  dp[0][0].set(base);
+  dp[0][0] = dp[0][0] << as[0][0] | dp[0][0] >> as[0][0];
+
+  // 配る DP
+  rep(h, H) {
+    rep(w, W) {
+      rep(h_diff, 2) rep(w_diff, 2) {
+        if (h_diff == w_diff) continue;
+        if (h + h_diff >= H || w + w_diff >= W) continue;
+
+        ll a = as[h + h_diff][w + w_diff];
+
+        dp[(h + h_diff) % 2][w + w_diff] |=
+            dp[h % 2][w] << a | dp[h % 2][w] >> a;
+      }
+    }
+
+    if (h != H - 1) rep(w, W) dp[h % 2][w].reset();
+  }
+
+  rep(k, base + 1) if (dp[(H - 1) % 2][W - 1][base + k]) drop(k);
+}
+
 struct exit_exception : public std::exception {
   const char* what() const throw() { return "Exited"; }
 };
@@ -90,7 +176,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve3();
   } catch (exit_exception& e) {
   }
 
