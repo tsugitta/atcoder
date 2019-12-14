@@ -114,7 +114,7 @@ func scrapeTestCases(URL string) ([]*TestCase, error) {
 		}
 	})
 
-	c.OnHTML("#task-statement .lang-ja div.part", func(e *colly.HTMLElement) {
+	c.OnHTML("#task-statement div.part", func(e *colly.HTMLElement) {
 		isInputExample := false
 		isOutputExample := false
 
