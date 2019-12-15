@@ -1,0 +1,16 @@
+- in: |
+    6
+  out: |
+    Perfect
+- in: |
+    24
+  out: |
+    Abundant
+- in: |
+    27
+  out: |
+    Deficient
+- in: |
+    945
+  out: |
+    Abundant
