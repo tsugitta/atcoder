@@ -1,0 +1,30 @@
+- in: |
+    FTFFTFFF
+    4 2
+  out: |
+    Yes
+- in: |
+    FTFFTFFF
+    -2 -2
+  out: |
+    Yes
+- in: |
+    FF
+    1 0
+  out: |
+    No
+- in: |
+    TF
+    1 0
+  out: |
+    No
+- in: |
+    FFTTFF
+    0 0
+  out: |
+    Yes
+- in: |
+    TTTT
+    1 0
+  out: |
+    No
