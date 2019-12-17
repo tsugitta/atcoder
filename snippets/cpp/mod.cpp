@@ -13,7 +13,7 @@ class Fp {
  public:
   long long val;
   constexpr Fp(long long v = 0) noexcept : val(v % MOD) {
-    if (val < 0) v += MOD;
+    if (val < 0) val += MOD;
   }
   constexpr int getmod() { return MOD; }
   constexpr Fp operator-() const noexcept { return val ? MOD - val : 0; }
@@ -56,9 +56,6 @@ class Fp {
   }
   friend constexpr ostream& operator<<(ostream& os, const Fp<MOD>& x) noexcept {
     return os << x.val;
-  }
-  friend constexpr istream& operator>>(istream& is, Fp<MOD>& x) noexcept {
-    return is >> x.val;
   }
   friend constexpr Fp<MOD> modpow(const Fp<MOD>& a, long long n) noexcept {
     if (n == 0) return 1;
