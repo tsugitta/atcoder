@@ -1,0 +1,29 @@
+- in: |
+    3 50
+    30 20 10
+  out: |
+    Possible
+    2
+    1
+- in: |
+    2 21
+    10 10
+  out: |
+    Impossible
+- in: |
+    5 50
+    10 20 30 40 50
+  out: |
+    Possible
+    1
+    2
+    3
+    4
+- in: |
+    4 5
+    2 3 1 3
+  out: |
+    Possible
+    3
+    2
+    1
