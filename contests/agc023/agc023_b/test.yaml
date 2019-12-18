@@ -1,0 +1,23 @@
+- in: |
+    2
+    ab
+    ca
+  out: |
+    2
+- in: |
+    4
+    aaaa
+    aaaa
+    aaaa
+    aaaa
+  out: |
+    16
+- in: |
+    5
+    abcde
+    fghij
+    klmno
+    pqrst
+    uvwxy
+  out: |
+    0
