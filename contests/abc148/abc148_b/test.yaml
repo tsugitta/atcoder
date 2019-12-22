@@ -1,0 +1,15 @@
+- in: |
+    2
+    ip cc
+  out: |
+    icpc
+- in: |
+    8
+    hmhmnknk uuuuuuuu
+  out: |
+    humuhumunukunuku
+- in: |
+    5
+    aaaaa aaaaa
+  out: |
+    aaaaaaaaaa
