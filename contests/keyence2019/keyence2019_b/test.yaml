@@ -1,0 +1,16 @@
+- in: |
+    keyofscience
+  out: |
+    YES
+- in: |
+    mpyszsbznf
+  out: |
+    NO
+- in: |
+    ashlfyha
+  out: |
+    NO
+- in: |
+    keyence
+  out: |
+    YES
