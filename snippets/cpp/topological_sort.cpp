@@ -26,7 +26,7 @@ struct TopologicalSort {
     VL in_count(n);
 
     rep(i, n) {
-      for (auto to : edges[n]) in_count[to]++;
+      for (auto to : edges[i]) in_count[to]++;
     }
 
     set<ll> in_count_zeros;
