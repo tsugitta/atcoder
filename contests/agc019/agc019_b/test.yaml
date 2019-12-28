@@ -1,0 +1,12 @@
+- in: |
+    aatt
+  out: |
+    5
+- in: |
+    xxxxxxxxxx
+  out: |
+    1
+- in: |
+    abracadabra
+  out: |
+    44
