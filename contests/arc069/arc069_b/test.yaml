@@ -1,0 +1,15 @@
+- in: |
+    6
+    ooxoox
+  out: |
+    SSSWWS
+- in: |
+    3
+    oox
+  out: |
+    -1
+- in: |
+    10
+    oxooxoxoox
+  out: |
+    SSWWSSSWWS
