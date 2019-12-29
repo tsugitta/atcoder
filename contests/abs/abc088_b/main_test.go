@@ -1,43 +1,61 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
-	"reflect"
+	"io/ioutil"
+	"os"
+	"strings"
 	"testing"
+
+	"github.com/tsugitta/atcoder/testutil"
 )
 
-func TestSortDesc(t *testing.T) {
-	tests := []struct {
-		numbers  []int
-		expected []int
-	}{
-		{numbers: []int{2, 1, 9, 5, 3}, expected: []int{1, 2, 3, 5, 9}},
+type SolveFunction = func(io, debugIo *Io)
+
+var solveFuncMap map[string]SolveFunction
+
+func TestMain(m *testing.M) {
+	solveFuncMap = map[string]SolveFunction{
+		// Add solve functions here to test another solution
+		"solve": solve,
 	}
 
-	for idx, test := range tests {
-		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
-			if actual := sortDesc(test.numbers); reflect.DeepEqual(actual, test.expected) {
-				t.Fatalf("expexted: %#v, actual: %#v", test.expected, actual)
-			}
-		})
+	exit := m.Run()
+
+	if exit != 0 {
+		os.Exit(exit)
+	}
+}
+
+func NewMockIo(input string, outputBuffer *bytes.Buffer) *Io {
+	return &Io{
+		reader: bufio.NewReader(strings.NewReader(input)),
+		writer: bufio.NewWriter(outputBuffer),
 	}
 }
 
 func TestSolve(t *testing.T) {
-	tests := []struct {
-		as       []int
-		expected int
-	}{
-		{as: []int{3, 1}, expected: 2},
-		{as: []int{2, 7, 4}, expected: 5},
-		{as: []int{20, 18, 2, 18}, expected: 18},
-	}
+	yamlBuf, _ := ioutil.ReadFile("./test.yaml")
+	cases, _ := testutil.YamlBufToTestCases(yamlBuf)
 
-	for idx, test := range tests {
-		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
-			if actual := solve(test.as); actual != test.expected {
-				t.Fatalf("expexted: %#v, actual: %#v", test.expected, actual)
-			}
-		})
+	for funcName, solveFunc := range solveFuncMap {
+		for idx, c := range cases {
+			t.Run(fmt.Sprintf("%s %d", funcName, idx), func(t *testing.T) {
+				buffer := bytes.Buffer{}
+
+				io := NewMockIo(c.In, &buffer)
+				debugIo := NewIo()
+				debugIo.Printfln("--- Func: %s, TestCase: %d ---", funcName, idx)
+				solveFunc(io, debugIo)
+				io.Flush()
+
+				output := buffer.String()
+				if output != c.Out {
+					t.Fatalf("expected: %#v, actual: %#v", c.Out, output)
+				}
+			})
+		}
 	}
 }

@@ -1,0 +1,12 @@
+# - in: |
+#     erasedream
+#   out: |
+#     YES
+- in: |
+    dreameraser
+  out: |
+    YES
+- in: |
+    dreamerer
+  out: |
+    NO

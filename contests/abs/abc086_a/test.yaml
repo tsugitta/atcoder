@@ -1,0 +1,8 @@
+- in: |
+    3 4
+  out: |
+    Even
+- in: |
+    1 21
+  out: |
+    Odd
