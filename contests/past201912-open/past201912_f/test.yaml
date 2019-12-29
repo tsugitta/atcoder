@@ -1,0 +1,8 @@
+- in: |
+    FisHDoGCaTAAAaAAbCAC
+  out: |
+    AAAaAAbCACCaTDoGFisH
+- in: |
+    AAAAAjhfgaBCsahdfakGZsZGdEAA
+  out: |
+    AAAAAAAjhfgaBCsahdfakGGdEZsZ

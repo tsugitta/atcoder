@@ -1,0 +1,16 @@
+- in: |
+    678
+  out: |
+    1356
+- in: |
+    abc
+  out: |
+    error
+- in: |
+    0x8
+  out: |
+    error
+- in: |
+    012
+  out: |
+    24
