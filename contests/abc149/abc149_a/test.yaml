@@ -1,0 +1,8 @@
+- in: |
+    oder atc
+  out: |
+    atcoder
+- in: |
+    humu humu
+  out: |
+    humuhumu
