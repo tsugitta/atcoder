@@ -3,6 +3,7 @@
 #include "algorithm"
 #include "bitset"
 #include "cmath"
+#include "complex"
 #include "functional"
 #include "iomanip"
 #include "iostream"
@@ -155,7 +156,85 @@ void solve2() {
   cout << res << endl;
 }
 
-// TODO: FFT を使った解法
+// FFT borrowed from tsutaj-san
+using Complex = complex<double>;
+vector<Complex> dft(vector<Complex> A, int N, int sgn = 1) {
+  if (N == 1) return A;
+
+  vector<Complex> F(N / 2), G(N / 2);
+  for (int i = 0; i < N / 2; i++) {
+    F[i] = A[2 * i + 0];
+    G[i] = A[2 * i + 1];
+  }
+
+  F = dft(F, N / 2, sgn);
+  G = dft(G, N / 2, sgn);
+
+  Complex zeta(cos(2.0 * M_PI / N), sin(2.0 * M_PI / N) * sgn);
+  Complex pow_zeta = 1;
+
+  for (int i = 0; i < N; i++) {
+    A[i] = F[i % (N / 2)] + pow_zeta * G[i % (N / 2)];
+    pow_zeta *= zeta;
+  }
+  return A;
+}
+
+vector<Complex> inv_dft(vector<Complex> A, int N) {
+  A = dft(A, N, -1);
+  for (int i = 0; i < N; i++) {
+    A[i] /= N;
+  }
+  return A;
+}
+
+vector<Complex> multiply(vector<Complex> A, vector<Complex> B) {
+  int sz = A.size() + B.size() + 1;
+  int N = 1;
+  while (N < sz) N *= 2;
+
+  A.resize(N), B.resize(N);
+  A = dft(A, N);
+  B = dft(B, N);
+
+  vector<Complex> F(N);
+  for (int i = 0; i < N; i++) {
+    F[i] = A[i] * B[i];
+  }
+  return inv_dft(F, N);
+}
+
+void solve3() {
+  ll N, M;
+  cin >> N >> M;
+
+  V<Complex> vs(1e5 + 1);
+
+  rep(i, N) {
+    ll a;
+    cin >> a;
+    vs[a] += 1;
+  }
+
+  V<Complex> m = multiply(vs, vs);
+
+  ll rest = M;
+  ll res = 0;
+
+  repr(num, m.size()) {
+    ll ct = m[num].real() + 0.5;
+
+    if (ct > 0) {
+      ll can = min(ct, rest);
+      res += num * can;
+      rest -= can;
+    }
+
+    if (rest == 0) break;
+  }
+
+  cout << res << endl;
+}
 
 struct exit_exception : public std::exception {
   const char* what() const throw() { return "Exited"; }
@@ -167,7 +246,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve2();
+    solve3();
   } catch (exit_exception& e) {
   }
 
