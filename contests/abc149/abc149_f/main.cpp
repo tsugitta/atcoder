@@ -169,6 +169,91 @@ void solve() {
   cout << res << endl;
 }
 
+void solve2() {
+  cin >> N;
+
+  edge_list = VVL(N, VL(0));
+  ct_memo = V<map<ll, ll>>(N, map<ll, ll>());
+
+  rep(i, N - 1) {
+    ll a, b;
+    cin >> a >> b;
+    a--, b--;
+
+    edge_list[a].push_back(b);
+    edge_list[b].push_back(a);
+  }
+
+  // 全 S の頂点数の期待値 - 全木の黒頂点の数の期待値
+
+  // 全 S の頂点数の期待値 = \sum 各頂点が S に含まれる確率 * 1
+  mint node_ct_e = 0;
+
+  rep(u, N) {
+    // u が黒の場合、 u は S に含まれる。
+    // u が白の場合、 u に接続される部分木について、そのうち 2
+    // つ以上に黒が含まれると u は S に含まれる。
+    // 全体の通り 2^(N-1) から一つも黒が無い通り 1
+    // と一つしか黒を含むものが無い通り \sum (2^Ct - 1) を引けば良い
+    mint black_node_e = mint(1);
+    mint white_node_e = modpow(mint(2), N - 1) - 1;
+
+    for (ll v : edge_list[u]) {
+      ll ct_v = get_node_ct(v, u);
+      white_node_e -= modpow(mint(2), ct_v) - 1;
+    }
+
+    white_node_e /= modpow(mint(2), N - 1);
+
+    mint node_e = (black_node_e + white_node_e) / 2;
+    node_ct_e += node_e;
+  }
+
+  mint res = node_ct_e;
+
+  // 全木の黒頂点の数の期待値
+  res -= mint(N) / 2;
+
+  cout << res << endl;
+}
+
+void solve3() {
+  cin >> N;
+
+  edge_list = VVL(N, VL(0));
+  ct_memo = V<map<ll, ll>>(N, map<ll, ll>());
+
+  rep(i, N - 1) {
+    ll a, b;
+    cin >> a >> b;
+    a--, b--;
+
+    edge_list[a].push_back(b);
+    edge_list[b].push_back(a);
+  }
+
+  mint res = 0;
+
+  rep(u, N) {
+    // u が白かつ u に接続される部分木について、そのうち 2
+    // つ以上に黒が含まれると u は「穴あき」にカウントされる
+    // 全体の通り 2^(N-1) から一つも黒が無い通り 1
+    // と一つしか黒を含むものが無い通り \sum (2^Ct - 1) を引けば良い
+    mint u_e = modpow(mint(2), N - 1) - 1;
+
+    for (ll v : edge_list[u]) {
+      ll ct_v = get_node_ct(v, u);
+      u_e -= modpow(mint(2), ct_v) - 1;
+    }
+
+    u_e /= modpow(mint(2), N);
+
+    res += u_e;
+  }
+
+  cout << res << endl;
+}
+
 struct exit_exception : public std::exception {
   const char* what() const throw() { return "Exited"; }
 };
@@ -179,7 +264,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve3();
   } catch (exit_exception& e) {
   }
 
