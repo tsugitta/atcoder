@@ -1,4 +1,6 @@
-AtCoder challenge. mainly with Go, C++, & Rust.
+AtCoder challenge. mainly with C++, Go, & Rust.
+
+https://atcoder.jp/users/tsugitta
 
 ## Structure
 
