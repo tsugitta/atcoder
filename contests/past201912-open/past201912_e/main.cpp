@@ -103,6 +103,66 @@ void solve() {
   }
 }
 
+// bitset
+void solve2() {
+  ll N, Q;
+  cin >> N >> Q;
+
+  V<bitset<100>> edge_mat(N);
+
+  rep(i, Q) {
+    ll type;
+    cin >> type;
+
+    if (type == 1) {
+      ll a, b;
+      cin >> a >> b;
+      a--, b--;
+      edge_mat[a][b] = true;
+
+    } else if (type == 2) {
+      ll a;
+      cin >> a;
+      a--;
+
+      rep(i, N) {
+        if (edge_mat[i][a]) edge_mat[a][i] = true;
+      }
+    } else if (type == 3) {
+      ll a;
+      cin >> a;
+      a--;
+
+      queue<ll> q;
+      rep(i, N) {
+        if (edge_mat[a][i]) q.push(i);
+      }
+
+      while (!q.empty()) {
+        ll i = q.front();
+        q.pop();
+
+        edge_mat[a] |= edge_mat[i];
+      }
+    }
+  }
+
+  rep(i, N) {
+    string res = "";
+
+    rep(j, N) {
+      if (i == j) {
+        res.push_back('N');
+        continue;
+      }
+
+      res.push_back(edge_mat[i][j] ? 'Y' : 'N');
+    }
+
+    cout << res << endl;
+  }
+}
+
 struct exit_exception : public std::exception {
   const char* what() const throw() { return "Exited"; }
 };
@@ -113,7 +173,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve2();
   } catch (exit_exception& e) {
   }
 
