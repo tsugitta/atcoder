@@ -1,0 +1,15 @@
+- in: |
+    10
+    ZABCDBABCQ
+  out: |
+    2
+- in: |
+    19
+    THREEONEFOURONEFIVE
+  out: |
+    0
+- in: |
+    33
+    ABCCABCBABCCABACBCBBABCBCBCBCABCB
+  out: |
+    5
