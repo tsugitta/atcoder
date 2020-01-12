@@ -1,0 +1,8 @@
+- in: |
+    a
+  out: |
+    b
+- in: |
+    y
+  out: |
+    z
