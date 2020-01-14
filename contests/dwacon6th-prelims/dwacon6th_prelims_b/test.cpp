@@ -34,6 +34,7 @@ int main() {
 
   map<string, function<void(void)>> function_map = {
       {"solve", solve},
+      {"solve2", solve2},
   };
 
   for (auto it = function_map.begin(); it != function_map.end(); it++) {

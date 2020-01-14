@@ -128,6 +128,47 @@ void solve() {
   cout << res << endl;
 }
 
+void solve2() {
+  ll N;
+  cin >> N;
+
+  VL xs(N);
+  rep(i, N) cin >> xs[i];
+
+  mint res = 0;
+
+  // i から j に行く通りは (1-indexed)
+  // j == N : (N-1)! / (N-i)
+  // j < N  : (N-1)! / ((j-i+1)(j-i))
+
+  // j == N
+  rep(i, N - 1) { res += mint(xs[N - 1] - xs[i]) / (N - 1 - i); }
+
+  V<mint> ds(N);  // ds[i]: 距離が i のものの総距離。 右端が N-1 のものを除く
+
+  {
+    mint acc = 0;
+
+    for (ll d = 1; d <= N - 2; d++) {
+      unless(d <= N - 1 - d) break;
+      mint new_diff = (xs[N - 1 - d] - xs[d - 1]);
+      ds[d] = acc + new_diff;
+      ds[N - 1 - d] = acc + new_diff;
+      acc += new_diff;
+    }
+  }
+
+  // j < N
+  rep1(d, N - 2) {
+    // d = j - i とすると通りは (N-1)! / (d*(d+1))
+    res += ds[d] / (d * (d + 1));
+  }
+
+  rep1(i, N - 1) { res *= i; }
+
+  cout << res << endl;
+}
+
 struct exit_exception : public std::exception {
   const char* what() const throw() { return "Exited"; }
 };
@@ -138,7 +179,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve2();
   } catch (exit_exception& e) {
   }
 
