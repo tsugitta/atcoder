@@ -208,6 +208,87 @@ void solve2() {
   cout << res << endl;
 }
 
+void solve3() {
+  ll N, D, A;
+  cin >> N >> D >> A;
+
+  VPL ms(N);
+  VL xs(N);
+
+  rep(i, N) {
+    cin >> ms[i].fi >> ms[i].se;
+    ms[i].se = (ms[i].se + A - 1) / A;
+    xs[i] = ms[i].fi;
+  }
+
+  sort(all(ms));
+  sort(all(xs));
+
+  ll res = 0;
+
+  // いもす法で、各要素にその直前の要素を加算しておく
+  // そうすることで、各要素について、その時点でいくつ足されているかがわかる
+  VL imos(N + 1);
+
+  rep(i, N) {
+    auto m = ms[i];
+
+    ll rest = m.se - imos[i];
+
+    if (rest > 0) {
+      ll non_reach_idx = upper_bound(all(xs), m.fi + 2 * D) - xs.begin();
+
+      res += rest;
+      imos[i] += rest;
+      imos[non_reach_idx] -= rest;
+    }
+
+    imos[i + 1] += imos[i];
+  }
+
+  cout << res << endl;
+}
+
+void solve4() {
+  ll N, D, A;
+  cin >> N >> D >> A;
+
+  VPL ms(N);
+  VL xs(N);
+
+  rep(i, N) {
+    cin >> ms[i].fi >> ms[i].se;
+    ms[i].se = (ms[i].se + A - 1) / A;
+    xs[i] = ms[i].fi;
+  }
+
+  sort(all(ms));
+  sort(all(xs));
+
+  ll res = 0;
+
+  // 累積和と、後で加算すべき数を持った配列を持てば十分。いもす法に寄せる必要はない
+  VL to_be_added(N + 1);
+  ll cur_sum = 0;
+
+  rep(i, N) {
+    auto m = ms[i];
+
+    cur_sum += to_be_added[i];
+    ll rest = m.se - cur_sum;
+
+    if (rest <= 0) continue;
+
+    ll non_reach_idx = upper_bound(all(xs), m.fi + 2 * D) - xs.begin();
+
+    res += rest;
+    cur_sum += rest;
+    to_be_added[non_reach_idx] -= rest;
+  }
+
+  cout << res << endl;
+}
+
 struct exit_exception : public std::exception {
   const char *what() const throw() { return "Exited"; }
 };
@@ -218,7 +299,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve2();
+    solve4();
   } catch (exit_exception &e) {
   }
 
