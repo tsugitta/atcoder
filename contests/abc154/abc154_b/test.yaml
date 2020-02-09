@@ -1,0 +1,12 @@
+- in: |
+    sardine
+  out: |
+    xxxxxxx
+- in: |
+    xxxx
+  out: |
+    xxxx
+- in: |
+    gone
+  out: |
+    xxxx

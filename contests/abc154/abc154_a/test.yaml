@@ -1,0 +1,12 @@
+- in: |
+    red blue
+    3 4
+    red
+  out: |
+    2 4
+- in: |
+    red blue
+    5 5
+    blue
+  out: |
+    5 4
