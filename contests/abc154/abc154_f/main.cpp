@@ -153,10 +153,29 @@ void solve() {
   ll r1, c1, r2, c2;
   cin >> r1 >> c1 >> r2 >> c2;
 
-  auto ct = prepare_combination(3 * 1e6, MOD);
+  auto ct = prepare_combination(2 * 1e6 + 2, MOD);
 
   auto part = [&](ll x, ll y) -> mint {
     return (mint(x + 2) * c_m(x + y + 2, x + 2, ct) - y - 1) / (y + 1);
+  };
+
+  mint res =
+      part(r2, c2) - part(r1 - 1, c2) - part(r2, c1 - 1) + part(r1 - 1, c1 - 1);
+  cout << res << endl;
+}
+
+void solve2() {
+  ll r1, c1, r2, c2;
+  cin >> r1 >> c1 >> r2 >> c2;
+
+  auto ct = prepare_combination(2 * 1e6 + 2, MOD);
+
+  auto part = [&](ll x, ll y) -> mint {
+    mint _res = 0;
+
+    rep(_x, x + 1) { _res += mint(c_m(_x + 1 + y, y, ct)); }
+
+    return _res;
   };
 
   mint res =
@@ -174,7 +193,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve2();
   } catch (exit_exception& e) {
   }
 
