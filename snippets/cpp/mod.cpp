@@ -77,12 +77,12 @@ struct combination_table {
   V<ll> finv;
   // i^(-1) MOD M
   V<ll> inv;
-
-  ll mod;
 };
 
+combination_table ct;
+
 // ref: http://drken1215.hatenablog.com/entry/2018/06/08/210000
-combination_table prepare_combination(ll max, ll mod) {
+void prepare_combination(ll max) {
   V<ll> fact(max + 1);
   V<ll> finv(max + 1);
   V<ll> inv(max + 1);
@@ -94,28 +94,26 @@ combination_table prepare_combination(ll max, ll mod) {
   inv[1] = 1;
 
   for (ll i = 2; i <= max; i++) {
-    fact[i] = fact[i - 1] * i % mod;
-    inv[i] = mod - inv[mod % i] * (mod / i) %
-                       mod;  // a^(-1) ≡ -(p % a)^(-1) * (p/a) MOD p
-    finv[i] = finv[i - 1] * inv[i] % mod;
+    fact[i] = fact[i - 1] * i % MOD;
+    inv[i] = MOD - inv[MOD % i] * (MOD / i) %
+                       MOD;  // a^(-1) ≡ -(p % a)^(-1) * (p/a) MOD p
+    finv[i] = finv[i - 1] * inv[i] % MOD;
   }
 
-  combination_table res = {
+  ct = {
       fact,
       finv,
       inv,
-      mod,
   };
-
-  return res;
 }
 
-ll c_m(ll n, ll k, combination_table& ct) {
+mint c_m(ll n, ll k) {
   if (n < k) return 0;
   if (n < 0 || k < 0) return 0;
-  return ct.fact[n] * (ct.finv[k] * ct.finv[n - k] % ct.mod) % ct.mod;
+  return mint(ct.fact[n]) * ct.finv[k] * ct.finv[n - k];
 }
 
-ll p_m(ll n, ll k, combination_table& ct) {
-  return c_m(n, k, ct) * ct.fact[k] % ct.mod;
-}
+// 重複組合せ n 種類から k 個重複を許して取る通り
+mint h_m(ll n, ll k) { return c_m((n - 1) + k, k); }
+
+mint p_m(ll n, ll k, combination_table& ct) { return c_m(n, k) * ct.fact[k]; }
