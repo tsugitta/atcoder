@@ -1,0 +1,8 @@
+- in: |
+    gpg
+  out: |
+    0
+- in: |
+    ggppgggpgg
+  out: |
+    2
