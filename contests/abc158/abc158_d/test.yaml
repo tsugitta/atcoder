@@ -1,0 +1,26 @@
+- in: |
+    a
+    4
+    2 1 p
+    1
+    2 2 c
+    1
+  out: |
+    cpa
+- in: |
+    a
+    6
+    2 2 a
+    2 1 b
+    1
+    2 2 c
+    1
+    1
+  out: |
+    aabc
+- in: |
+    y
+    1
+    2 1 x
+  out: |
+    xy

@@ -1,0 +1,12 @@
+- in: |
+    ABA
+  out: |
+    Yes
+- in: |
+    BBA
+  out: |
+    Yes
+- in: |
+    BBB
+  out: |
+    No
