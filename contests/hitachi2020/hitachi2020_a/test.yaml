@@ -1,0 +1,16 @@
+- in: |
+    hihi
+  out: |
+    Yes
+- in: |
+    hihih
+  out: |
+    No
+- in: |
+    hi
+  out: |
+    Yes
+- in: |
+    ha
+  out: |
+    No
