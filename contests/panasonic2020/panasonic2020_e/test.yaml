@@ -1,0 +1,12 @@
+- in: |
+    a?c
+    der
+    cod
+  out: |
+    7
+- in: |
+    atcoder
+    atcoder
+    ???????
+  out: |
+    7
