@@ -1,0 +1,12 @@
+- in: |
+    akasaka
+  out: |
+    Yes
+- in: |
+    level
+  out: |
+    No
+- in: |
+    atcoder
+  out: |
+    No
