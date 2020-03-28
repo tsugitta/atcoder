@@ -1,0 +1,12 @@
+- in: |
+    sippuu
+  out: |
+    Yes
+- in: |
+    iphone
+  out: |
+    No
+- in: |
+    coffee
+  out: |
+    Yes
