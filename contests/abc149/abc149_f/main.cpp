@@ -254,6 +254,78 @@ void solve3() {
   cout << res << endl;
 }
 
+VVL dp;
+VL dp_sum;
+
+ll dfs(ll u, ll p = -1) {
+  dp[u] = VL(edge_list[u].size());
+
+  rep(i, edge_list[u].size()) {
+    ll v = edge_list[u][i];
+    if (v == p) continue;
+
+    dp[u][i] = dfs(v, u);
+    dp_sum[u] += dp[u][i];
+  }
+
+  return dp_sum[u] + 1;
+}
+
+ll dfs2(ll u, ll p_ct = -1, ll p = -1) {
+  if (p != -1) dp_sum[u] += p_ct;
+
+  rep(i, edge_list[u].size()) {
+    ll v = edge_list[u][i];
+
+    if (v == p) {
+      dp[u][i] = p_ct;
+      continue;
+    }
+
+    ll reverse_ct = dp_sum[u] - dp[u][i] + 1;
+    dfs2(v, reverse_ct, u);
+  }
+}
+
+// solve 3 の方法 + 全方位木 DP で個数を求める
+void solve4() {
+  cin >> N;
+
+  edge_list = VVL(N, VL(0));
+  dp = VVL(N, VL(0));
+  dp_sum = VL(N);
+
+  rep(i, N - 1) {
+    ll a, b;
+    cin >> a >> b;
+    a--, b--;
+
+    edge_list[a].push_back(b);
+    edge_list[b].push_back(a);
+  }
+
+  dfs(0);
+  dfs2(0);
+
+  mint res = 0;
+
+  rep(u, N) {
+    mint u_e = modpow(mint(2), N - 1) - 1;
+
+    rep(i, edge_list[u].size()) {
+      ll v = edge_list[u][i];
+      ll ct_v = dp[u][i];
+      u_e -= modpow(mint(2), ct_v) - 1;
+    }
+
+    u_e /= modpow(mint(2), N);
+
+    res += u_e;
+  }
+
+  cout << res << endl;
+}
+
 struct exit_exception : public std::exception {
   const char* what() const throw() { return "Exited"; }
 };
@@ -264,7 +336,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve3();
+    solve4();
   } catch (exit_exception& e) {
   }
 
