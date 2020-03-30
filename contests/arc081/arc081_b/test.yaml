@@ -1,0 +1,18 @@
+- in: |
+    3
+    aab
+    ccb
+  out: |
+    6
+- in: |
+    1
+    Z
+    Z
+  out: |
+    3
+- in: |
+    52
+    RvvttdWIyyPPQFFZZssffEEkkaSSDKqcibbeYrhAljCCGGJppHHn
+    RLLwwdWIxxNNQUUXXVVMMooBBaggDKqcimmeYrhAljOOTTJuuzzn
+  out: |
+    958681902
