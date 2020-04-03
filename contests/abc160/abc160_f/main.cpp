@@ -147,81 +147,60 @@ mint c_m(ll n, ll k) {
   return mint(ct.fact[n]) * ct.finv[k] * ct.finv[n - k];
 }
 
-// 部分木のサイズと答えを持つ
-struct Val {
-  mint res;
-  ll size;
+template <typename F>
+class
+#if defined(__has_cpp_attribute) && __has_cpp_attribute(nodiscard)
+    [[nodiscard]]
+#elif defined(__GNUC__) && \
+    (__GNUC__ > 3 || __GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+    __attribute__((warn_unused_result))
+#endif
+    FixPoint : private F {
+ public:
+  explicit constexpr FixPoint(F && f) noexcept : F(std::forward<F>(f)) {}
 
-  Val(mint res = 1, ll size = 0) : res(res), size(size) {}
-
-  Val operator+(const Val& a) {
-    return Val(res * a.res * c_m(size + a.size, a.size), size + a.size);
-  }
-
-  Val add_self() {
-    Val r(*this);
-    ++r.size;
-    return r;
+  template <typename... Args>
+  constexpr decltype(auto) operator()(Args&&... args) const
+#if !defined(__GNUC__) || defined(__clang__) || __GNUC__ >= 9
+      noexcept(noexcept(
+          F::operator()(std::declval<FixPoint>(), std::declval<Args>()...)))
+#endif
+  {
+    return F::operator()(*this, std::forward<Args>(args)...);
   }
 };
 
-ll N;
-VVL edge_list;
-V<V<Val>> dp;
-V<Val> dp_sum;
-
-// dp: 根から向いた全辺についての埋まる。
-// dp_sum: 根は埋まり、それ以外の点については根方向への辺以外の合計が埋まる。
-Val dfs(ll u, ll p = -1) {
-  dp[u] = V<Val>(edge_list[u].size());
-
-  rep(i, edge_list[u].size()) {
-    ll v = edge_list[u][i];
-    if (v == p) continue;
-
-    dp[u][i] = dfs(v, u);
-    dp_sum[u] = dp_sum[u] + dp[u][i];
-  }
-
-  return dp_sum[u].add_self();
-}
-
-// 根以外の点についての dp_sum を埋めるのが目的
-// 根から「根方向への Val」を渡して降りていくことで、根方向への dp と dp_sum
-// を埋めることができる
-void dfs2(ll u, const Val& p_v = Val(), ll p = -1) {
-  if (p != -1) dp_sum[u] = dp_sum[u] + p_v;
-
-  ll deg = edge_list[u].size();
-
-  rep(i, deg) if (edge_list[u][i] == p) dp[u][i] = p_v;
-
-  V<Val> left_sum(deg + 1);
-  rep(i, deg) left_sum[i + 1] = left_sum[i] + dp[u][i];
-
-  V<Val> right_sum(deg + 1);
-  repr(i, deg) right_sum[i] = right_sum[i + 1] + dp[u][i];
-
-  rep(i, deg) {
-    ll v = edge_list[u][i];
-
-    if (v == p) {
-      dp[u][i] = p_v;
-      continue;
-    }
-
-    Val d = left_sum[i] + right_sum[i + 1];
-    dfs2(v, d.add_self(), u);
-  }
+template <typename F>
+static inline constexpr decltype(auto) makeFixPoint(F&& f) noexcept {
+  return FixPoint<F>{std::forward<F>(f)};
 }
 
 // 全方位木 DP
 void solve() {
+  // 部分木のサイズと答えを持つ
+  struct Val {
+    mint res;
+    ll size;
+
+    Val(mint res = 1, ll size = 0) : res(res), size(size) {}
+
+    Val operator+(const Val& a) {
+      return Val(res * a.res * c_m(size + a.size, a.size), size + a.size);
+    }
+
+    Val add_self() {
+      Val r(*this);
+      ++r.size;
+      return r;
+    }
+  };
+
+  ll N;
   cin >> N;
 
-  edge_list = VVL(N, VL(0));
-  dp = V<V<Val>>(N, V<Val>(0));
-  dp_sum = V<Val>(N);
+  VVL edge_list(N, VL(0));
+  V<V<Val>> dp(N, V<Val>(0));
+  V<Val> dp_sum(N);
 
   prepare_combination(N);
 
@@ -233,6 +212,52 @@ void solve() {
     edge_list[a].emplace_back(b);
     edge_list[b].emplace_back(a);
   }
+
+  // dp: 根から向いた全辺について埋まる。
+  // dp_sum: 根は埋まり、それ以外の点については根方向への辺以外の合計が埋まる。
+  auto dfs = makeFixPoint([&](auto f, ll u, ll p = -1) -> Val {
+    dp[u] = V<Val>(edge_list[u].size());
+
+    rep(i, edge_list[u].size()) {
+      ll v = edge_list[u][i];
+      if (v == p) continue;
+
+      dp[u][i] = f(v, u);
+      dp_sum[u] = dp_sum[u] + dp[u][i];
+    }
+
+    return dp_sum[u].add_self();
+  });
+
+  // 根以外の点についての dp_sum を埋めるのが目的
+  // 根から「根方向への Val」を渡して降りていくことで、根方向への dp と dp_sum
+  // を埋めることができる
+  auto dfs2 = makeFixPoint(
+      [&](auto f, ll u, const Val& p_v = Val(), ll p = -1) -> void {
+        if (p != -1) dp_sum[u] = dp_sum[u] + p_v;
+
+        ll deg = edge_list[u].size();
+
+        rep(i, deg) if (edge_list[u][i] == p) dp[u][i] = p_v;
+
+        V<Val> left_sum(deg + 1);
+        rep(i, deg) left_sum[i + 1] = left_sum[i] + dp[u][i];
+
+        V<Val> right_sum(deg + 1);
+        repr(i, deg) right_sum[i] = right_sum[i + 1] + dp[u][i];
+
+        rep(i, deg) {
+          ll v = edge_list[u][i];
+
+          if (v == p) {
+            dp[u][i] = p_v;
+            continue;
+          }
+
+          Val d = left_sum[i] + right_sum[i + 1];
+          f(v, d.add_self(), u);
+        }
+      });
 
   dfs(0);
   dfs2(0);

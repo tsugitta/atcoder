@@ -102,16 +102,32 @@ class Fp {
 const ll MOD = 998244353;
 using mint = Fp<MOD>;
 
-// 部分木の白黒の塗り分けの個数であって、一度黒を塗った場合はその先は全て黒とした場合の個数
-mint dfs(ll u, VVL& edge_list) {
-  mint black = 1;
-  mint white = 1;
+template <typename F>
+class
+#if defined(__has_cpp_attribute) && __has_cpp_attribute(nodiscard)
+    [[nodiscard]]
+#elif defined(__GNUC__) && \
+    (__GNUC__ > 3 || __GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+    __attribute__((warn_unused_result))
+#endif
+    FixPoint : private F {
+ public:
+  explicit constexpr FixPoint(F && f) noexcept : F(std::forward<F>(f)) {}
 
-  for (auto v : edge_list[u]) {
-    white *= dfs(v, edge_list);
+  template <typename... Args>
+  constexpr decltype(auto) operator()(Args&&... args) const
+#if !defined(__GNUC__) || defined(__clang__) || __GNUC__ >= 9
+      noexcept(noexcept(
+          F::operator()(std::declval<FixPoint>(), std::declval<Args>()...)))
+#endif
+  {
+    return F::operator()(*this, std::forward<Args>(args)...);
   }
+};
 
-  return black + white;
+template <typename F>
+static inline constexpr decltype(auto) makeFixPoint(F&& f) noexcept {
+  return FixPoint<F>{std::forward<F>(f)};
 }
 
 void solve() {
@@ -142,8 +158,20 @@ void solve() {
 
   mint res = 1;
 
+  // 部分木の白黒の塗り分けの個数であって、一度黒を塗った場合はその先は全て黒とした場合の個数
+  auto dfs = makeFixPoint([&](auto f, ll u) -> mint {
+    mint black = 1;
+    mint white = 1;
+
+    for (auto v : edge_list[u]) {
+      white *= f(v);
+    }
+
+    return black + white;
+  });
+
   for (auto p : s) {
-    res *= dfs(p.se, edge_list);
+    res *= dfs(p.se);
   }
 
   cout << res << endl;

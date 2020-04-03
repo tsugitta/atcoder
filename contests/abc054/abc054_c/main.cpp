@@ -71,20 +71,32 @@ void solve() {
   cout << res << endl;
 }
 
-ll dfs(ll u, V<bool>& visited, VVL& edge_list) {
-  if (all_of(all(visited), [](ll v) { return v; })) return 1;
+template <typename F>
+class
+#if defined(__has_cpp_attribute) && __has_cpp_attribute(nodiscard)
+    [[nodiscard]]
+#elif defined(__GNUC__) && \
+    (__GNUC__ > 3 || __GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+    __attribute__((warn_unused_result))
+#endif
+    FixPoint : private F {
+ public:
+  explicit constexpr FixPoint(F && f) noexcept : F(std::forward<F>(f)) {}
 
-  ll res = 0;
-
-  for (auto v : edge_list[u]) {
-    if (visited[v]) continue;
-    visited[v] = true;
-
-    res += dfs(v, visited, edge_list);
-    visited[v] = false;
+  template <typename... Args>
+  constexpr decltype(auto) operator()(Args&&... args) const
+#if !defined(__GNUC__) || defined(__clang__) || __GNUC__ >= 9
+      noexcept(noexcept(
+          F::operator()(std::declval<FixPoint>(), std::declval<Args>()...)))
+#endif
+  {
+    return F::operator()(*this, std::forward<Args>(args)...);
   }
+};
 
-  return res;
+template <typename F>
+static inline constexpr decltype(auto) makeFixPoint(F&& f) noexcept {
+  return FixPoint<F>{std::forward<F>(f)};
 }
 
 void solve2() {
@@ -103,7 +115,23 @@ void solve2() {
   V<bool> visited(N);
   visited[0] = true;
 
-  ll res = dfs(0, visited, edge_list);
+  auto dfs = makeFixPoint([&](auto f, ll u) -> ll {
+    if (all_of(all(visited), [](ll v) { return v; })) return 1;
+
+    ll res = 0;
+
+    for (auto v : edge_list[u]) {
+      if (visited[v]) continue;
+      visited[v] = true;
+
+      res += f(v);
+      visited[v] = false;
+    }
+
+    return res;
+  });
+
+  ll res = dfs(0);
 
   cout << res << endl;
 }
