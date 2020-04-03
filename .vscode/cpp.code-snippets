@@ -322,5 +322,17 @@
     ],
     "description": "def-rec",
     "scope": "cpp"
+  },
+  "print_vector": {
+    "prefix": "print-vector",
+    "body": [
+      "rep(i, $1.size()) {",
+      "  if (i > 0) cout << \" \";",
+      "  cout << $1[i];",
+      "}",
+      "cout << \"\\n\";"
+    ],
+    "description": "print_vec",
+    "scope": "cpp"
   }
 }

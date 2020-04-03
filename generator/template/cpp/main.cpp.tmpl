@@ -31,36 +31,6 @@ template <typename T, typename U>
 using P = pair<T, U>;
 using PL = P<ll, ll>;
 using VPL = V<PL>;
-template <typename T>
-inline bool chmax(T& a, T b);
-template <typename T>
-inline bool chmin(T& a, T b);
-void print_ints(vector<ll> v);
-template <typename T>
-void drop(T a);
-
-const ll INF = 1e18;
-
-void solve() {
-}
-
-struct exit_exception : public std::exception {
-  const char* what() const throw() { return "Exited"; }
-};
-
-#ifndef TEST
-int main() {
-  cin.tie(0);
-  ios::sync_with_stdio(false);
-
-  try {
-    solve();
-  } catch (exit_exception& e) {
-  }
-
-  return 0;
-}
-#endif
 
 template <typename T>
 inline bool chmax(T& a, T b) {
@@ -80,20 +50,32 @@ inline bool chmin(T& a, T b) {
   return 0;
 }
 
-void print_ints(vector<ll> v) {
-  rep(i, v.size()) {
-    if (i > 0) {
-      cout << " ";
-    }
-
-    cout << v[i];
-  }
-
-  cout << endl;
-}
+struct exit_exception : public std::exception {
+  const char* what() const throw() { return "Exited"; }
+};
 
 template <typename T>
 void drop(T res) {
   cout << res << endl;
   throw exit_exception();
 }
+
+
+const ll INF = 1e18;
+
+void solve() {
+}
+
+#ifndef TEST
+int main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  try {
+    solve();
+  } catch (exit_exception& e) {
+  }
+
+  return 0;
+}
+#endif
