@@ -107,13 +107,67 @@ void solve2() {
   cout << res << "\n";
 }
 
+template <typename F>
+class
+#if defined(__has_cpp_attribute) && __has_cpp_attribute(nodiscard)
+    [[nodiscard]]
+#elif defined(__GNUC__) && \
+    (__GNUC__ > 3 || __GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+    __attribute__((warn_unused_result))
+#endif
+    FixPoint : private F {
+ public:
+  explicit constexpr FixPoint(F && f) noexcept : F(std::forward<F>(f)) {}
+
+  template <typename... Args>
+  constexpr decltype(auto) operator()(Args&&... args) const
+#if !defined(__GNUC__) || defined(__clang__) || __GNUC__ >= 9
+      noexcept(noexcept(
+          F::operator()(std::declval<FixPoint>(), std::declval<Args>()...)))
+#endif
+  {
+    return F::operator()(*this, std::forward<Args>(args)...);
+  }
+};
+
+template <typename F>
+static inline constexpr decltype(auto) makeFixPoint(F&& f) noexcept {
+  return FixPoint<F>{std::forward<F>(f)};
+}
+
+void solve3() {
+  ll K;
+  cin >> K;
+
+  ll MAX_DIGIT = 11;
+
+  VL res(0);
+
+  auto dfs = makeFixPoint([&](auto f, ll num) -> void {
+    res.push_back(num);
+    if (to_string(num).size() >= MAX_DIGIT) return;
+
+    for (ll i = -1; i <= 1; ++i) {
+      ll last = (num % 10) + i;
+      unless(0 <= last && last <= 9) continue;
+      f(10 * num + last);
+    }
+  });
+
+  rep1(num, 9) dfs(num);
+
+  sort(all(res));
+
+  cout << res[K - 1] << "\n";
+}
+
 #ifndef TEST
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
 
   try {
-    solve2();
+    solve3();
   } catch (exit_exception& e) {
   }
 
