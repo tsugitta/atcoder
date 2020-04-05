@@ -1,0 +1,21 @@
+- in: |
+    11 3 2
+    ooxxxoxxxoo
+  out: |
+    6
+- in: |
+    5 2 3
+    ooxoo
+  out: |
+    1
+    5
+- in: |
+    5 1 0
+    ooooo
+  out: ""
+- in: |
+    16 4 3
+    ooxxoxoxxxoxoxxo
+  out: |
+    11
+    16
