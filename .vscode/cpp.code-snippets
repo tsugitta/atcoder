@@ -1,23 +1,17 @@
 {
   "cout": {
     "prefix": "oo",
-    "body": [
-      "cout << $1 << \"\\n\";",
-    ],
+    "body": ["cout << $1 << \"\\n\";"],
     "scope": "cpp"
   },
   "cout double": {
     "prefix": "doo",
-    "body": [
-      "cout << fixed << setprecision(10) << $1 << endl;",
-    ],
+    "body": ["cout << fixed << setprecision(10) << $1 << endl;"],
     "scope": "cpp"
   },
   "priority_queue_asc": {
     "prefix": "priority_queue_asc",
-    "body": [
-      "priority_queue<$1, V<$1>, greater<$1>> $2;",
-    ],
+    "body": ["priority_queue<$1, V<$1>, greater<$1>> $2;"],
     "scope": "cpp",
     "description": "昇順に並べた先頭から取り出される"
   },
@@ -271,7 +265,7 @@
       "  auto fa = [](ll &a, ll b) { a = min(a, b); };",
       "  auto fl = [](ll &a, ll b) { a = min(a, b); };",
       "  LazySegTree<ll, ll> st(N, fm, fa, fl, INF, INF);",
-      "  // st.set() で初期配列を埋められる。その場合 st.build() をその後に呼ぶ",
+      "  // st.set() で初期配列を埋められる。その場合 st.build() をその後に呼ぶ"
     ],
     "description": "use_lazy_seg_tree_min",
     "scope": "cpp"
@@ -333,6 +327,35 @@
       "cout << \"\\n\";"
     ],
     "description": "print_vec",
+    "scope": "cpp"
+  },
+  "factorize": {
+    "prefix": "template_factorize",
+    "body": [
+      "VPL factorize(ll n) {",
+      "  VPL res;",
+      "",
+      "  for (ll i = 2; i * i <= n; i++) {",
+      "    if (n % i != 0) continue;",
+      "",
+      "    auto r = PL(i, 0);",
+      "",
+      "    while (n % i == 0) {",
+      "      n /= i;",
+      "      r.second++;",
+      "    }",
+      "",
+      "    res.push_back(r);",
+      "  }",
+      "",
+      "  // sqrt(n) 以上の素因数は高々一つ",
+      "  if (n != 1) res.emplace_back(n, 1);",
+      "",
+      "  return res;",
+      "}",
+      ""
+    ],
+    "description": "factorize",
     "scope": "cpp"
   }
 }
