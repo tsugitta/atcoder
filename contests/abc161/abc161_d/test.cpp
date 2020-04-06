@@ -37,6 +37,7 @@ int main() {
       {"solve", solve},
       {"solve2", solve2},
       {"solve3", solve3},
+      {"solve4", solve4},
   };
 
   for (auto it = function_map.begin(); it != function_map.end(); it++) {

@@ -84,7 +84,7 @@ void solve() {
 }
 
 // priority_queue なら順番を気にせずに済む
-// ただし、桁数が小さいものの方が先に取り出されることには依存している
+// ただし、自身から生成されるのは自身より大きい値だけであることに依存している
 void solve2() {
   ll K;
   cin >> K;
@@ -139,7 +139,7 @@ void solve3() {
   ll K;
   cin >> K;
 
-  ll MAX_DIGIT = 11;
+  ll MAX_DIGIT = 10;
 
   VL res(0);
 
@@ -161,13 +161,88 @@ void solve3() {
   cout << res[K - 1] << "\n";
 }
 
+void solve4() {
+  ll K;
+  cin >> K;
+
+  ll MAX_DIGIT = 10;
+
+  VVL dp(10, VL(MAX_DIGIT + 1));
+
+  rep(num, 10) dp[num][1] = 1;
+
+  repf(digit, 2, MAX_DIGIT + 1) rep(num, 10) {
+    for (auto diff : {-1, 0, 1}) {
+      unless(0 <= num + diff && num + diff <= 9) continue;
+      dp[num][digit] += dp[num + diff][digit - 1];
+    }
+  }
+
+  ll res_digit = 0;
+  ll ct_less_digit = 0;
+
+  {
+    ll ct = 0;
+
+    rep1(d, MAX_DIGIT) {
+      ll d_ct = 0;
+
+      rep1(num, 9) d_ct += dp[num][d];
+
+      if (ct + d_ct >= K) {
+        res_digit = d;
+        break;
+      } else {
+        ct += d_ct;
+      }
+    }
+
+    ct_less_digit = ct;
+  }
+
+  VL res(res_digit, -1);
+
+  {
+    ll target_on_digit = K - ct_less_digit;
+    ll ct = 0;
+
+    rep1(num, 9) {
+      if (ct + dp[num][res_digit] < target_on_digit) {
+        ct += dp[num][res_digit];
+      } else {
+        res[0] = num;
+        break;
+      }
+    }
+
+    rep(i, res_digit) {
+      if (i == 0) continue;
+
+      for (auto diff : {-1, 0, 1}) {
+        ll val = res[i - 1] + diff;
+        unless(0 <= val && val <= 9) continue;
+
+        if (ct + dp[val][res_digit - i] < target_on_digit) {
+          ct += dp[val][res_digit - i];
+        } else {
+          res[i] = val;
+          break;
+        }
+      }
+    }
+  }
+
+  for (auto v : res) cout << v;
+  cout << "\n";
+}
+
 #ifndef TEST
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
 
   try {
-    solve3();
+    solve4();
   } catch (exit_exception& e) {
   }
 
