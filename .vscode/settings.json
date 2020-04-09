@@ -1,4 +1,5 @@
 {
+  "editor.scrollBeyondLastLine": true,
   "[go]": {
     "editor.formatOnSave": true
   },
