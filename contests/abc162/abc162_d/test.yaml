@@ -1,0 +1,10 @@
+- in: |
+    4
+    RRGB
+  out: |
+    1
+- in: |
+    39
+    RBRBGRBGGBBRRGBBRRRBGGBRBGBRBGBRBBBGBBB
+  out: |
+    1800

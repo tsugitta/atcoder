@@ -1,0 +1,12 @@
+- in: |
+    117
+  out: |
+    Yes
+- in: |
+    123
+  out: |
+    No
+- in: |
+    777
+  out: |
+    Yes
