@@ -65,6 +65,8 @@ const ll INF = 1e18;
 
 void solve();
 void solve2();
+void solve3();
+void solve4();
 
 #ifndef TEST
 int main() {
@@ -72,7 +74,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve2();
+    solve4();
   } catch (exit_exception& e) {
   }
 
@@ -209,6 +211,88 @@ void solve2() {
   });
 
   ll res = dfs(0, 0);
+
+  cout << res << "\n";
+}
+
+void solve3() {
+  ll N;
+  cin >> N;
+
+  struct Val {
+    ll i, a;
+  };
+
+  V<Val> as(N);
+  rep(i, N) {
+    ll a;
+    cin >> a;
+
+    as[i] = {i, a};
+  }
+
+  sort(all(as), [](Val a, Val b) { return a.a > b.a; });
+
+  // dp[i][l]: i 人目まで見た時、左から l 個は埋めている場合の最大値
+  VVL dp(N + 1, VL(N + 1));
+
+  rep1(i, N) {
+    Val a = as[i - 1];
+
+    // i-1 人目までを考えると左から 0 ~ i-1 個が埋まっている
+    rep(l, i) {
+      // a を左に置いた場合
+      chmax(dp[i][l + 1], dp[i - 1][l] + a.a * abs(a.i - l));
+
+      // 右
+      ll r = i - 1 - l;
+      chmax(dp[i][l], dp[i - 1][l] + a.a * abs(a.i - (N - 1 - r)));
+    }
+  }
+
+  ll res = 0;
+  rep(i, N + 1) chmax(res, dp[N][i]);
+
+  cout << res << "\n";
+}
+
+void solve4() {
+  ll N;
+  cin >> N;
+
+  struct Val {
+    ll i, a;
+  };
+
+  V<Val> as(N);
+  rep(i, N) {
+    ll a;
+    cin >> a;
+
+    as[i] = {i, a};
+  }
+
+  sort(all(as), [](Val a, Val b) { return a.a > b.a; });
+
+  // dp[l][r]: l+r 人目まで見た時、左から l 個、右から r 個
+  // 埋まっている場合の最大値
+  VVL dp(N + 1, VL(N + 1));
+
+  // 配る DP
+  rep(l, N) rep(r, N) {
+    unless(l + r <= N - 1) continue;
+
+    Val a = as[l + r];
+
+    // a を左に置いた場合
+    chmax(dp[l + 1][r], dp[l][r] + a.a * abs(a.i - l));
+
+    // 右
+    chmax(dp[l][r + 1], dp[l][r] + a.a * abs(a.i - (N - 1 - r)));
+  }
+
+  ll res = 0;
+  rep(i, N + 1) chmax(res, dp[i][N - i]);
 
   cout << res << "\n";
 }
