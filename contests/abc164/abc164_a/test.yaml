@@ -1,0 +1,12 @@
+- in: |
+    4 5
+  out: |
+    unsafe
+- in: |
+    100 2
+  out: |
+    safe
+- in: |
+    10 10
+  out: |
+    unsafe

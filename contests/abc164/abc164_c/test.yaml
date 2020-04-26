@@ -1,0 +1,24 @@
+- in: |
+    3
+    apple
+    orange
+    apple
+  out: |
+    2
+- in: |
+    5
+    grape
+    grape
+    grape
+    grape
+    grape
+  out: |
+    1
+- in: |
+    4
+    aaaa
+    a
+    aaa
+    aa
+  out: |
+    4
