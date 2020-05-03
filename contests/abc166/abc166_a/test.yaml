@@ -1,0 +1,4 @@
+- in: |
+    ABC
+  out: |
+    ARC
