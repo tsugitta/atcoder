@@ -1,0 +1,16 @@
+- in: |
+    abbc
+  out: |
+    b
+- in: |
+    cacca
+  out: |
+    c
+- in: |
+    b
+  out: |
+    b
+- in: |
+    babababacaca
+  out: |
+    a

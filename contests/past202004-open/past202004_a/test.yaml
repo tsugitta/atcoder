@@ -1,0 +1,16 @@
+- in: |
+    1F 5F
+  out: |
+    4
+- in: |
+    B1 B7
+  out: |
+    6
+- in: |
+    1F B1
+  out: |
+    1
+- in: |
+    B9 9F
+  out: |
+    17
