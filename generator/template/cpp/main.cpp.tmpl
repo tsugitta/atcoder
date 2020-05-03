@@ -50,6 +50,11 @@ inline bool chmin(T& a, T b) {
   return 0;
 }
 
+template <typename T>
+inline ll len(V<T> arr) {
+  return arr.size();
+}
+
 struct exit_exception : public std::exception {
   const char* what() const throw() { return "Exited"; }
 };
@@ -59,7 +64,6 @@ void drop(T res) {
   cout << res << endl;
   throw exit_exception();
 }
-
 
 const ll INF = 1e18;
 
