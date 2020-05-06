@@ -1,0 +1,12 @@
+- in: |
+    ab
+  out: |
+    7
+- in: |
+    aa
+  out: |
+    6
+- in: |
+    aabbaabb
+  out: |
+    33
