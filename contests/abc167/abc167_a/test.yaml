@@ -1,0 +1,15 @@
+- in: |
+    chokudai
+    chokudaiz
+  out: |
+    Yes
+- in: |
+    snuke
+    snekee
+  out: |
+    No
+- in: |
+    a
+    aa
+  out: |
+    Yes
