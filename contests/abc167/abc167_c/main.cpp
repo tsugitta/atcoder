@@ -68,6 +68,7 @@ void drop(T res) {
 const ll INF = 1e18;
 
 void solve();
+void solve2();
 
 #ifndef TEST
 int main() {
@@ -75,7 +76,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve2();
   } catch (exit_exception& e) {
   }
 
@@ -117,6 +118,89 @@ void solve() {
       chmin(res, sum_cost);
     }
   }
+
+  if (res == INF) drop(-1);
+
+  cout << res << "\n";
+}
+
+template <typename F>
+class
+#if defined(__has_cpp_attribute) && __has_cpp_attribute(nodiscard)
+    [[nodiscard]]
+#elif defined(__GNUC__) && \
+    (__GNUC__ > 3 || __GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+    __attribute__((warn_unused_result))
+#endif
+    FixPoint : private F {
+ public:
+  explicit constexpr FixPoint(F && f) noexcept : F(std::forward<F>(f)) {}
+
+  template <typename... Args>
+  constexpr decltype(auto) operator()(Args&&... args) const
+#if !defined(__GNUC__) || defined(__clang__) || __GNUC__ >= 9
+      noexcept(noexcept(
+          F::operator()(std::declval<FixPoint>(), std::declval<Args>()...)))
+#endif
+  {
+    return F::operator()(*this, std::forward<Args>(args)...);
+  }
+};
+
+template <typename F>
+static inline constexpr decltype(auto) makeFixPoint(F&& f) noexcept {
+  return FixPoint<F>{std::forward<F>(f)};
+}
+
+void solve2() {
+  ll N, M, X;
+  cin >> N >> M >> X;
+
+  struct Book {
+    ll cost;
+    VL as;
+  };
+
+  V<Book> bs(N);
+
+  rep(i, N) {
+    cin >> bs[i].cost;
+    bs[i].as.resize(M);
+    rep(j, M) cin >> bs[i].as[j];
+  }
+
+  ll res = INF;
+
+  auto check = [&](V<bool> uses) {
+    ll sum_cost = 0;
+    VL got_as(M);
+
+    rep(i, N) {
+      unless(uses[i]) continue;
+      sum_cost += bs[i].cost;
+      rep(j, M) got_as[j] += bs[i].as[j];
+    }
+
+    if (all_of(all(got_as), [&](ll v) { return v >= X; })) {
+      chmin(res, sum_cost);
+    }
+  };
+
+  auto dfs = makeFixPoint([&](auto f, V<bool> uses) -> void {
+    if (len(uses) == N) {
+      check(uses);
+      return;
+    }
+
+    for (auto v : {true, false}) {
+      uses.push_back(v);
+      f(uses);
+      uses.pop_back();
+    }
+  });
+
+  V<bool> uses;
+  dfs(uses);
 
   if (res == INF) drop(-1);
 
