@@ -52,7 +52,6 @@ macro_rules! read_value {
     };
 }
 
-// NOTE: AtCoder の Rust 1.15.1 では BTreeSet の range が使えない
 #[allow(unused, non_snake_case)]
 pub fn solve<R: BufRead, W: Write>(mut io: Io<R, W>) {
     let input = io.read_all();
