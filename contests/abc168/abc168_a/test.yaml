@@ -1,0 +1,12 @@
+- in: |
+    16
+  out: |
+    pon
+- in: |
+    2
+  out: |
+    hon
+- in: |
+    183
+  out: |
+    bon
