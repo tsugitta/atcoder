@@ -1,0 +1,8 @@
+- in: |
+    B
+  out: |
+    A
+- in: |
+    a
+  out: |
+    a

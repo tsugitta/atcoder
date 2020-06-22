@@ -1,0 +1,12 @@
+- in: |
+    2
+  out: |
+    b
+- in: |
+    27
+  out: |
+    aa
+- in: |
+    123456789
+  out: |
+    jjddja
