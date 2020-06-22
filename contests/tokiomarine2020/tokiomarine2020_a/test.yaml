@@ -1,0 +1,8 @@
+- in: |
+    takahashi
+  out: |
+    tak
+- in: |
+    naohiro
+  out: |
+    nao
