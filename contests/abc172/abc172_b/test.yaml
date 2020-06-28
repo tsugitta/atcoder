@@ -1,0 +1,15 @@
+- in: |
+    cupofcoffee
+    cupofhottea
+  out: |
+    4
+- in: |
+    abcde
+    bcdea
+  out: |
+    5
+- in: |
+    apple
+    apple
+  out: |
+    0
