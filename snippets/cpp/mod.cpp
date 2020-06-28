@@ -116,4 +116,4 @@ mint c_m(ll n, ll k) {
 // 重複組合せ n 種類から k 個重複を許して取る通り
 mint h_m(ll n, ll k) { return c_m((n - 1) + k, k); }
 
-mint p_m(ll n, ll k, combination_table& ct) { return c_m(n, k) * ct.fact[k]; }
+mint p_m(ll n, ll k) { return c_m(n, k) * ct.fact[k]; }
