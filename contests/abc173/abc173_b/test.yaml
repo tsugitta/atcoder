@@ -1,0 +1,30 @@
+- in: |
+    6
+    AC
+    TLE
+    AC
+    AC
+    WA
+    TLE
+  out: |
+    AC x 3
+    WA x 1
+    TLE x 2
+    RE x 0
+- in: |
+    10
+    AC
+    AC
+    AC
+    AC
+    AC
+    AC
+    AC
+    AC
+    AC
+    AC
+  out: |
+    AC x 10
+    WA x 0
+    TLE x 0
+    RE x 0
