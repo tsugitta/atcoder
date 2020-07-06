@@ -68,6 +68,7 @@ void drop(T res) {
 const ll INF = 1e18;
 
 void solve();
+void solve2();
 
 #ifndef TEST
 int main() {
@@ -75,7 +76,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve2();
   } catch (exit_exception& e) {
   }
 
@@ -309,6 +310,89 @@ void solve() {
   } else {
     res /= add_plus_removed;
     res *= add_plus_added;
+  }
+
+  cout << res << "\n";
+}
+
+void solve2() {
+  ll N, K;
+  cin >> N >> K;
+
+  VL as(N);
+  VL pluses;  // ゼロ含む
+  VL minuses;
+  rep(i, N) {
+    ll a;
+    cin >> a;
+    as[i] = a;
+
+    if (a >= 0) {
+      pluses.push_back(a);
+    } else if (a < 0) {
+      minuses.push_back(a);
+    }
+  }
+
+  mint res = 1;
+
+  if (K == N) {
+    rep(i, K) res *= as[i];
+    drop(res);
+  }
+
+  ll plus_ct = pluses.size();
+  ll minus_ct = minuses.size();
+
+  // 必ずマイナスになってしまうケース
+  if (minus_ct == N && K % 2 == 1) {
+    sort(as.rbegin(), as.rend());
+    rep(i, K) res *= as[i];
+    drop(res);
+  }
+
+  // 必ず非負にできる。よってマイナスを使うなら２個セットで使うとして良い
+  // マイナスを２個セットで使うのは、プラス２個セットの積より大きい時に限られる
+
+  sort(pluses.rbegin(), pluses.rend());
+  sort(all(minuses));
+
+  ll next_plus_i = 0;
+  ll next_minus_i = 0;
+
+  while (next_plus_i + next_minus_i < K) {
+    if (next_plus_i + next_minus_i == K - 1) {
+      res *= pluses[next_plus_i];
+      next_plus_i++;
+      continue;
+    }
+
+    bool can_add_two_pluses = next_plus_i + 1 < plus_ct;
+    bool can_add_two_minuses = next_minus_i + 1 < minus_ct;
+
+    if (can_add_two_minuses) {
+      ll minus_product = minuses[next_minus_i] * minuses[next_minus_i + 1];
+
+      if (can_add_two_pluses) {
+        ll plus_product = pluses[next_plus_i] * pluses[next_plus_i + 1];
+
+        if (minus_product > plus_product) {
+          res *= minus_product;
+          next_minus_i += 2;
+        } else {
+          res *= pluses[next_plus_i];
+          next_plus_i++;
+        }
+      } else {
+        res *= minus_product;
+        next_minus_i += 2;
+      }
+
+      continue;
+    }
+
+    res *= pluses[next_plus_i];
+    next_plus_i++;
   }
 
   cout << res << "\n";
