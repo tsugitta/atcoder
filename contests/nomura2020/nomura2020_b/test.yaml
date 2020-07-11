@@ -1,0 +1,8 @@
+- in: |
+    PD?D??P
+  out: |
+    PDPDPDP
+- in: |
+    P?P?
+  out: |
+    PDPD
