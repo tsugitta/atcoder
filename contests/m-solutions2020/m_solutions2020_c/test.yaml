@@ -1,0 +1,23 @@
+- in: |
+    5 3
+    96 98 95 100 20
+  out: |
+    Yes
+    No
+- in: |
+    3 2
+    1001 869120 1001
+  out: |
+    No
+- in: |
+    15 7
+    3 1 4 1 5 9 2 6 5 3 5 8 9 7 9
+  out: |
+    Yes
+    Yes
+    No
+    Yes
+    Yes
+    No
+    Yes
+    Yes
