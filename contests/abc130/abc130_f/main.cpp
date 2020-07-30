@@ -38,8 +38,6 @@ void print_ints(vector<ll> v);
 template <typename T>
 void drop(T a);
 
-const ll INF = 1e18;
-
 void solve() {
   ll N;
   cin >> N;
@@ -52,21 +50,39 @@ void solve() {
 
   V<Pt> ps(N);
 
+  const double MAX_POSITION = 1e9;
+
   rep(i, N) {
     double x, y;
     char d;
     cin >> x >> y >> d;
+    // 0 以上にする
+    x += 1e8;
+    y += 1e8;
 
     ps[i] = {x, y, d};
   }
 
-  V<double> ts(0);
+  map<char, char> rotate_map{
+      {'U', 'R'},
+      {'R', 'D'},
+      {'D', 'L'},
+      {'L', 'U'},
+  };
 
-  ts.push_back(0);
+  auto rotate = [&]() {
+    rep(i, N) {
+      auto p = ps[i];
+      ps[i].x = p.y;
+      ps[i].y = MAX_POSITION - p.x;
+      ps[i].d = rotate_map[p.d];
+    }
+  };
 
-  double inf = 1e18;
+  const double INF = 1e18;
+
   auto area = [&](double t) -> double {
-    double top = -inf, right = -inf, bottom = inf, left = inf;
+    double top = -INF, right = -INF, bottom = INF, left = INF;
 
     for (auto p : ps) {
       double x = p.x;
@@ -84,11 +100,14 @@ void solve() {
     return (top - bottom) * (right - left);
   };
 
+  V<double> ts;
+  ts.push_back(0);
+
   // x_max が変わりうるタイミングは最右端の R, L, UD だけを見ればわかる
-  {
-    double r = -inf;
-    double l = -inf;
-    double ud = -inf;
+  auto retrieve_timings = [&]() {
+    double r = -INF;
+    double l = -INF;
+    double ud = -INF;
 
     for (auto p : ps) {
       if (p.d == 'R')
@@ -99,76 +118,18 @@ void solve() {
         chmax(ud, p.x);
     }
 
-    auto exists = [&](double a) -> bool { return a > -inf; };
+    auto exists = [&](double a) -> bool { return a > -INF; };
     if (exists(r) && exists(l)) ts.push_back(abs(r - l) / 2);
     if (exists(r) && exists(ud)) ts.push_back(abs(r - ud));
     if (exists(l) && exists(ud)) ts.push_back(abs(l - ud));
+  };
+
+  rep(i, 4) {
+    retrieve_timings();
+    rotate();
   }
 
-  // x_min
-  {
-    double r = inf;
-    double l = inf;
-    double ud = inf;
-
-    for (auto p : ps) {
-      if (p.d == 'R')
-        chmin(r, p.x);
-      else if (p.d == 'L')
-        chmin(l, p.x);
-      else
-        chmin(ud, p.x);
-    }
-
-    auto exists = [&](double a) -> bool { return a < inf; };
-    if (exists(r) && exists(l)) ts.push_back(abs(r - l) / 2);
-    if (exists(r) && exists(ud)) ts.push_back(abs(r - ud));
-    if (exists(l) && exists(ud)) ts.push_back(abs(l - ud));
-  }
-
-  // y_max
-  {
-    double u = -inf;
-    double d = -inf;
-    double lr = -inf;
-
-    for (auto p : ps) {
-      if (p.d == 'U')
-        chmax(u, p.y);
-      else if (p.d == 'D')
-        chmax(d, p.y);
-      else
-        chmax(lr, p.y);
-    }
-
-    auto exists = [&](double a) -> bool { return a > -inf; };
-    if (exists(u) && exists(d)) ts.push_back(abs(u - d) / 2);
-    if (exists(u) && exists(lr)) ts.push_back(abs(u - lr));
-    if (exists(d) && exists(lr)) ts.push_back(abs(d - lr));
-  }
-
-  // y_min
-  {
-    double u = inf;
-    double d = inf;
-    double lr = inf;
-
-    for (auto p : ps) {
-      if (p.d == 'U')
-        chmin(u, p.y);
-      else if (p.d == 'D')
-        chmin(d, p.y);
-      else
-        chmin(lr, p.y);
-    }
-
-    auto exists = [&](double a) -> bool { return a < inf; };
-    if (exists(u) && exists(d)) ts.push_back(abs(u - d) / 2);
-    if (exists(u) && exists(lr)) ts.push_back(abs(u - lr));
-    if (exists(d) && exists(lr)) ts.push_back(abs(d - lr));
-  }
-
-  double res = inf;
+  double res = INF;
   for (auto t : ts) {
     chmin(res, area(t));
   }
