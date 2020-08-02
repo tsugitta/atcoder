@@ -1,0 +1,15 @@
+- in: |
+    4
+    WWRR
+  out: |
+    2
+- in: |
+    2
+    RR
+  out: |
+    0
+- in: |
+    8
+    WRWWRWRR
+  out: |
+    3
