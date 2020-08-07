@@ -21,16 +21,22 @@
 #define fi first
 #define se second
 using namespace std;
-typedef long long ll;
-typedef long double ld;
+using ll = long long;
+using ld = long double;
 template <typename T>
 using V = vector<T>;
 using VL = V<ll>;
-using VVL = V<VL>;
+template <typename T>
+using VV = V<V<T>>;
+using VVL = VV<ll>;
+template <typename T>
+using VVV = VV<V<T>>;
 template <typename T, typename U>
 using P = pair<T, U>;
 using PL = P<ll, ll>;
 using VPL = V<PL>;
+template <typename T>
+using asc_pq = priority_queue<T, V<T>, greater<T>>;
 
 template <typename T>
 inline bool chmax(T& a, T b) {
