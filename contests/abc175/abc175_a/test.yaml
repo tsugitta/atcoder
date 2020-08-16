@@ -1,0 +1,12 @@
+- in: |
+    RRS
+  out: |
+    2
+- in: |
+    SSS
+  out: |
+    0
+- in: |
+    RSR
+  out: |
+    1
