@@ -33,6 +33,7 @@ int main() {
 
   map<string, function<void(void)>> function_map = {
       {"solve", solve},
+      {"solve2", solve2},
   };
 
   bool passed = true;

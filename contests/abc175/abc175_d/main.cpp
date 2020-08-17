@@ -74,6 +74,7 @@ void drop(T res) {
 const ll INF = 1e18;
 
 void solve();
+void solve2();
 
 #ifndef TEST
 int main() {
@@ -81,7 +82,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve2();
   } catch (exit_exception& e) {
   }
 
@@ -198,6 +199,55 @@ void solve() {
     }
 
     chmax(res, max_sum);
+  }
+
+  cout << res << "\n";
+}
+
+void solve2() {
+  ll N, K;
+  cin >> N >> K;
+
+  VL ps(N);
+  rep(i, N) cin >> ps[i];
+  rep(i, N) ps[i]--;
+
+  VL cs(N);
+  rep(i, N) cin >> cs[i];
+
+  int D = 30;
+  VVL nexts(D, VL(N));
+  VVL sums(D, VL(N));
+  VVL max_sums(D, VL(N));
+
+  rep(i, N) {
+    nexts[0][i] = ps[i];
+    sums[0][i] = cs[i];
+    max_sums[0][i] = cs[i];
+  }
+
+  rep(d, D - 1) {
+    rep(i, N) {
+      nexts[d + 1][i] = nexts[d][nexts[d][i]];
+      sums[d + 1][i] = sums[d][i] + sums[d][nexts[d][i]];
+      max_sums[d + 1][i] =
+          max(max_sums[d][i], sums[d][i] + max_sums[d][nexts[d][i]]);
+    }
+  }
+
+  ll res = -INF;
+
+  rep(i, N) {
+    ll sum = 0;
+    ll offset = i;
+
+    repr(d, D) {
+      if (K & (1LL << d)) {
+        chmax(res, sum + max_sums[d][offset]);
+        sum += sums[d][offset];
+        offset = nexts[d][offset];
+      }
+    }
   }
 
   cout << res << "\n";
