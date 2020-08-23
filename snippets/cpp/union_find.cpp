@@ -40,7 +40,7 @@ struct UnionFind {
     parents[br] = ar;
   }
 
-  ll size(ll a) { return -parents[a]; }
+  ll size(ll a) { return -parents[root(a)]; }
 
   ll group_count() {
     ll res = 0;
