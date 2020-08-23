@@ -179,21 +179,19 @@ void solve2() {
   LazySegTree<ll, ll> st(N + 1, fm, fa, fl, INF, INF);
   st.update(0, 1, 0);
 
-  V<P<PL, ll>> edges(M);
+  V<tuple<ll, ll, ll>> edges(M);
 
   rep(i, M) {
     ll l, r, c;
     cin >> l >> r >> c;
     l--, r--;
-    edges[i] = {PL(l, r), c};
+    edges[i] = {l, r, c};
   }
 
   sort(all(edges));
 
   for (auto &e : edges) {
-    ll l = e.fi.fi;
-    ll r = e.fi.se;
-    ll c = e.se;
+    auto [l, r, c] = e;
     ll min_of_range = st.get(l, r + 1);
     st.update(l, r + 1, min_of_range + c);
   }

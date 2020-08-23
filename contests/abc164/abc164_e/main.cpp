@@ -112,16 +112,16 @@ void solve() {
 
   ll initial_s = min(S, sum_silver_cost);
 
-  priority_queue<P<PL, ll>, V<P<PL, ll>>, greater<P<PL, ll>>> q;
-  q.emplace(PL(0, initial_s), 0);
+  priority_queue<tuple<ll, ll, ll>, V<tuple<ll, ll, ll>>,
+                 greater<tuple<ll, ll, ll>>>
+      q;
+  q.emplace(0, initial_s, 0);
 
   while (!q.empty()) {
     auto p = q.top();
     q.pop();
 
-    ll cur_time = p.fi.fi;
-    ll cur_silver = p.fi.se;
-    ll u = p.se;
+    auto [cur_time, cur_silver, u] = p;
 
     if (cur_time > costs[u][cur_silver]) continue;
 
@@ -133,7 +133,7 @@ void solve() {
         ll n_time = cur_time + change_time_costs[u] * changed_ct + e.time_cost;
 
         if (chmin(costs[e.to][n_silver], n_time)) {
-          q.emplace(PL(n_time, n_silver), e.to);
+          q.emplace(n_time, n_silver, e.to);
         }
       }
     }
