@@ -7,8 +7,6 @@ using namespace std;
 typedef long long ll;
 
 struct UnionFind {
-  vector<ll> parents;
-
   UnionFind(ll n) : parents(vector<ll>(n, -1)) {}
 
   ll root(ll a) {
@@ -53,4 +51,7 @@ struct UnionFind {
 
     return res;
   }
+
+ private:
+  vector<ll> parents;
 };
