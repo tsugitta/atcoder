@@ -1,0 +1,25 @@
+- in: |
+    3
+    3 4 5
+  out: |
+    pairwise coprime
+- in: |
+    3
+    6 10 15
+  out: |
+    setwise coprime
+- in: |
+    3
+    6 10 16
+  out: |
+    not coprime
+- in: |
+    2
+    9 9
+  out: |
+    not coprime
+- in: |
+    2
+    7 7
+  out: |
+    not coprime

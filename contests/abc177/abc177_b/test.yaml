@@ -1,0 +1,15 @@
+- in: |
+    cabacc
+    abc
+  out: |
+    1
+- in: |
+    ca
+    cb
+  out: |
+    1
+- in: |
+    codeforces
+    atcoder
+  out: |
+    6
