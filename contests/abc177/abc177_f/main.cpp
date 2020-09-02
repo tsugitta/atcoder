@@ -74,6 +74,7 @@ void drop(T res) {
 const ll INF = 1e18;
 
 void solve();
+void solve2();
 
 #ifndef TEST
 int main() {
@@ -81,7 +82,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve2();
   } catch (exit_exception &e) {
   }
 
@@ -131,5 +132,111 @@ void solve() {
     }
 
     cout << res << "\n";
+  }
+}
+
+template <typename Monoid>
+struct SegmentTree {
+  ll n;  // 最下段の数
+  vector<Monoid> nodes;
+  using F = function<Monoid(Monoid, Monoid)>;
+  const F f;
+  const Monoid UNITY;
+
+  SegmentTree(vector<Monoid> vs, const Monoid &unity, const F f)
+      : UNITY(unity), f(f) {
+    n = 1;
+
+    while (n < vs.size()) {
+      n *= 2;
+    }
+
+    nodes = vector<ll>(2 * n - 1, UNITY);
+
+    rep(i, vs.size()) nodes[i + n - 1] = vs[i];
+
+    for (ll i = n - 2; i >= 0; i--) {
+      nodes[i] = f(nodes[i * 2 + 1], nodes[i * 2 + 2]);
+    }
+  }
+
+  void update(Monoid i, Monoid val) {
+    i += n - 1;
+    nodes[i] = val;
+
+    while (i > 0) {
+      i = (i - 1) / 2;
+      nodes[i] = f(nodes[2 * i + 1], nodes[2 * i + 2]);
+    }
+  }
+
+  //  [from, to)
+  Monoid query(ll from, ll to) {
+    ll res = queryInternal(from, to, 0, 0, n);
+    return res;
+  }
+
+  Monoid queryInternal(ll from, ll to, ll k, ll l, ll r) {
+    if (r <= from || to <= l) {
+      return UNITY;
+    }
+
+    if (from <= l && r <= to) {
+      return nodes[k];
+    }
+
+    ll vl = queryInternal(from, to, 2 * k + 1, l, (l + r) / 2);
+    ll vr = queryInternal(from, to, 2 * k + 2, (l + r) / 2, r);
+
+    return f(vl, vr);
+  }
+};
+
+// multiset の代わりにセグメントツリーを使う
+void solve2() {
+  ll H, W;
+  cin >> H >> W;
+
+  map<int, int> pos_to_start;
+
+  VL st_default(W);
+  SegmentTree<ll> st(st_default, INF, [](ll a, ll b) { return min(a, b); });
+
+  rep(w, W) {
+    pos_to_start[w] = w;
+    st.update(w, 0);
+  }
+
+  rep(h, H) {
+    ll l, r;
+    cin >> l >> r;
+    --l;
+
+    auto it = pos_to_start.lower_bound(l);
+
+    int most_right = -1;
+
+    while (it != pos_to_start.end()) {
+      auto [pos, start] = *it;
+      unless(pos <= r) break;
+
+      chmax(most_right, start);
+      st.update(pos, INF);
+      pos_to_start.erase(it++);
+    }
+
+    if (most_right != -1 && r < W) {
+      st.update(r, r - most_right);
+      pos_to_start[r] = most_right;
+    }
+
+    ll res = st.query(0, W);
+
+    if (res == INF) {
+      cout << -1 << "\n";
+      continue;
+    }
+
+    cout << res + h + 1 << "\n";
   }
 }

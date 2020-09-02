@@ -3,6 +3,7 @@
 #include "iostream"
 #include "main.h"
 #include "map"
+#include "random"
 using namespace std;
 
 struct test_case {
@@ -28,12 +29,77 @@ vector<test_case> load_cases() {
   return cases;
 }
 
+string get_random_case() {
+  std::mt19937 mt{std::random_device{}()};
+
+  std::uniform_int_distribution<int> dist(1, 10);
+
+  int H = dist(mt);
+  int W = dist(mt);
+
+  stringstream r;
+  r << H << " " << W << endl;
+
+  for (int i = 0; i < H; ++i) {
+    std::uniform_int_distribution<int> dist2(1, W);
+    int A = dist2(mt);
+    int B = dist2(mt);
+    r << A << " " << B << endl;
+  }
+
+  return r.str();
+}
+
+void random_case_check() {
+  for (int i = 0; i < 100; ++i) {
+    string c = get_random_case();
+    stringbuf in = stringbuf(c);
+    streambuf *cinbuf = cin.rdbuf();
+    cin.rdbuf(&in);
+
+    stringbuf out;
+    streambuf *coutbuf = cout.rdbuf();
+    cout.rdbuf(&out);
+
+    solve();
+
+    cin.rdbuf(cinbuf);
+    cout.rdbuf(coutbuf);
+
+    stringbuf in2 = stringbuf(c);
+    streambuf *cinbuf2 = cin.rdbuf();
+    cin.rdbuf(&in2);
+
+    stringbuf out2;
+    streambuf *coutbuf2 = cout.rdbuf();
+    cout.rdbuf(&out2);
+
+    solve2();
+
+    cin.rdbuf(cinbuf2);
+    cout.rdbuf(coutbuf2);
+
+    if (out2.str() != out.str()) {
+      cout << "--MIS MATCH--" << endl;
+      cout << "input" << endl;
+      cout << c << endl;
+      cout << "ok" << endl;
+      cout << out.str() << endl;
+      cout << "ng" << endl;
+      cout << out2.str() << endl;
+    }
+  }
+}
+
 int main() {
   auto cases = load_cases();
 
   map<string, function<void(void)>> function_map = {
       {"solve", solve},
+      {"solve2", solve2},
   };
+
+  random_case_check();
 
   bool passed = true;
 
