@@ -1,0 +1,12 @@
+- in: |
+    apple
+  out: |
+    apples
+- in: |
+    bus
+  out: |
+    buses
+- in: |
+    box
+  out: |
+    boxs
