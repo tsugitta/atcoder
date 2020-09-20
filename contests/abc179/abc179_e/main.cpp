@@ -74,6 +74,7 @@ void drop(T res) {
 const ll INF = 1e18;
 
 void solve();
+void solve2();
 
 #ifndef TEST
 int main() {
@@ -81,7 +82,7 @@ int main() {
   ios::sync_with_stdio(false);
 
   try {
-    solve();
+    solve2();
   } catch (exit_exception& e) {
   }
 
@@ -126,6 +127,56 @@ void solve() {
       res += sum[bit][cur];
       cur = val[bit][cur];
     }
+  }
+
+  cout << res << "\n";
+}
+
+void solve2() {
+  ll N, X, M;
+  cin >> N >> X >> M;
+
+  ll loop_val = -1;
+  ll loop_length = -1;
+  ll loop_sum = 0;
+
+  {
+    VL visited_i(M, -1);
+    VL sums(M);
+    ll cur = X;
+    ll cur_sum = 0;
+
+    rep(i, N) {
+      if (visited_i[cur] != -1) {
+        loop_val = cur;
+        loop_length = i - visited_i[cur];
+        loop_sum = cur + cur_sum - sums[cur];
+        break;
+      }
+
+      visited_i[cur] = i;
+      cur_sum += cur;
+      sums[cur] = cur_sum;
+      cur = cur * cur % M;
+    }
+  }
+
+  ll rest = N - 1;
+  ll cur = X;
+  ll res = cur;
+
+  while (rest > 0) {
+    if (cur == loop_val) {
+      ll ct = rest / loop_length;
+      res += ct * loop_sum;
+      rest %= loop_length;
+    }
+
+    if (rest == 0) break;
+
+    cur = cur * cur % M;
+    res += cur;
+    --rest;
   }
 
   cout << res << "\n";
