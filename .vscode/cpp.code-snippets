@@ -9,6 +9,11 @@
     "body": ["cout << fixed << setprecision(10) << $1 << endl;"],
     "scope": "cpp"
   },
+  "fill-array": {
+    "prefix": "fill-array",
+    "body": ["fill(&$1$2, &$1$2 + sizeof($1) / sizeof($1$2), $3);"],
+    "scope": "cpp"
+  },
   "priority_queue_asc": {
     "prefix": "priority_queue_asc",
     "body": ["priority_queue<$1, V<$1>, greater<$1>> $2;"],
