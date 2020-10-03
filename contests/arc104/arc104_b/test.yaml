@@ -1,0 +1,12 @@
+- in: |
+    4 AGCT
+  out: |
+    2
+- in: |
+    4 ATAT
+  out: |
+    4
+- in: |
+    10 AAATACCGCG
+  out: |
+    6
