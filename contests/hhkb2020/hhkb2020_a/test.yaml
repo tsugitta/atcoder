@@ -1,0 +1,10 @@
+- in: |
+    Y
+    a
+  out: |
+    A
+- in: |
+    N
+    b
+  out: |
+    b
