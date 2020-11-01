@@ -1,0 +1,12 @@
+- in: |
+    1234
+  out: |
+    Yes
+- in: |
+    1333
+  out: |
+    No
+- in: |
+    8
+  out: |
+    Yes
