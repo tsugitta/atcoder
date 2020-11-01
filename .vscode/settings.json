@@ -93,6 +93,9 @@
     "typeinfo": "cpp",
     "*.tcc": "cpp",
     "memory_resource": "cpp",
-    "cinttypes": "cpp"
+    "cinttypes": "cpp",
+    "filesystem": "cpp",
+    "unordered_set": "cpp",
+    "all": "cpp"
   }
 }
