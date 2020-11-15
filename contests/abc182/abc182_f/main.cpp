@@ -1,0 +1,124 @@
+// https://atcoder.jp/contests/abc182/tasks/abc182_f
+
+#include <atcoder/all>
+
+#include "algorithm"
+#include "bitset"
+#include "cmath"
+#include "functional"
+#include "iomanip"
+#include "iostream"
+#include "numeric"
+#include "queue"
+#include "set"
+#include "string"
+#include "unordered_map"
+#include "vector"
+#define rep(i, to) for (ll i = 0; i < (to); ++i)
+#define rep1(i, to) for (ll i = 1; i <= (to); ++i)
+#define repf(i, from, to) for (ll i = from; i < (to); ++i)
+#define repr(i, from) for (ll i = from - 1; i >= 0; --i)
+#define all(vec) vec.begin(), vec.end()
+#define unless(cond) if (!(cond))
+#define fi first
+#define se second
+using namespace std;
+using namespace atcoder;
+using ll = long long;
+using ld = long double;
+template <typename T>
+using V = vector<T>;
+using VL = V<ll>;
+template <typename T>
+using VV = V<V<T>>;
+using VVL = VV<ll>;
+template <typename T>
+using VVV = VV<V<T>>;
+template <typename T, typename U>
+using P = pair<T, U>;
+using PL = P<ll, ll>;
+using VPL = V<PL>;
+template <typename T>
+using asc_pq = priority_queue<T, V<T>, greater<T>>;
+
+template <typename T>
+inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+
+template <typename T>
+inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+
+template <typename T>
+inline ll len(V<T> arr) {
+  return arr.size();
+}
+
+struct exit_exception : public std::exception {
+  const char* what() const throw() { return "Exited"; }
+};
+
+template <typename T>
+void drop(T res) {
+  cout << res << endl;
+  throw exit_exception();
+}
+
+const ll INF = 1e18;
+
+void solve();
+
+#ifndef TEST
+int main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  try {
+    solve();
+  } catch (exit_exception& e) {
+  }
+
+  return 0;
+}
+#endif
+
+void solve() {
+  ll N, X;
+  cin >> N >> X;
+
+  VL as(N);
+  rep(i, N) cin >> as[i];
+
+  V<unordered_map<ll, ll>> memo(N);
+  auto f = [&](auto self, ll x, ll i) -> ll {
+    if (i == N - 1) {
+      return x >= 0;
+    }
+
+    if (memo[i].count(x)) return memo[i][x];
+
+    ll a = as[i];
+    ll b = as[i + 1];
+
+    assert(x % a == 0);
+    if (x % b == 0) return memo[i][x] = self(self, x, i + 1);
+
+    // その金額を払うか、払わずにお釣りを貰うかの二択
+    // 払う場合は x%b 円払い、貰う場合は x - x%b + b 円を払うこととなる
+    return memo[i][x] =
+               self(self, x - x % b, i + 1) + self(self, x - x % b + b, i + 1);
+  };
+
+  ll res = f(f, X, 0);
+  cout << res << "\n";
+}
