@@ -1,0 +1,15 @@
+- in: |
+    3 0
+    xox
+  out: |
+    0
+- in: |
+    20 199999
+    oooooooooxoooooooooo
+  out: |
+    200017
+- in: |
+    20 10
+    xxxxxxxxxxxxxxxxxxxx
+  out: |
+    0
