@@ -1,0 +1,12 @@
+- in: |
+    (ab)c
+  out: |
+    abbac
+- in: |
+    past
+  out: |
+    past
+- in: |
+    (d(abc)e)()
+  out: |
+    dabccbaeeabccbad
