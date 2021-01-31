@@ -1,0 +1,12 @@
+- in: |
+    2 1 0
+  out: |
+    Takahashi
+- in: |
+    2 2 0
+  out: |
+    Aoki
+- in: |
+    2 2 1
+  out: |
+    Takahashi
