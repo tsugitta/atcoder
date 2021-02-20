@@ -1,0 +1,12 @@
+- in: |
+    dIfFiCuLt
+  out: |
+    Yes
+- in: |
+    eASY
+  out: |
+    No
+- in: |
+    a
+  out: |
+    Yes
