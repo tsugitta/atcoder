@@ -22,6 +22,7 @@
 #define unless(cond) if (!(cond))
 #define fi first
 #define se second
+#define i128 __int128_t
 using namespace std;
 using namespace atcoder;
 using ll = long long;
@@ -100,14 +101,13 @@ void solve() {
   ll cur = X;
 
   while (true) {
-    ll _;
-    if (__builtin_mul_overflow(cur, A - 1, &_)) break;
+    if ((i128)cur * A >= Y) break;
+
     ll kako_diff = cur * (A - 1);
     ll ac_diff = B;
 
     unless(kako_diff < ac_diff) break;
     cur *= A;
-    if (cur >= Y) drop(res);
     res++;
   }
 

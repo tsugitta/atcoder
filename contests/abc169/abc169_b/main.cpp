@@ -18,6 +18,7 @@
 #define repr(i, from) for (ll i = from - 1; i >= 0; --i)
 #define all(vec) vec.begin(), vec.end()
 #define unless(cond) if (!(cond))
+#define i128 __int128_t
 #define fi first
 #define se second
 using namespace std;
@@ -96,16 +97,15 @@ void solve() {
     drop(0);
   }
 
-  ll acc = 1;
+  i128 acc = 1;
+  ll LIMIT = 1e18;
 
   rep(i, N) {
-    ll _;
-    if (__builtin_mul_overflow(acc, as[i], &_)) drop(-1);
     acc *= as[i];
+    if (acc > LIMIT) drop(-1);
   }
 
-  ll LIMIT = 1e18;
-  if (acc > LIMIT) drop(-1);
+  ll res = acc;
 
-  cout << acc << "\n";
+  cout << res << "\n";
 }
