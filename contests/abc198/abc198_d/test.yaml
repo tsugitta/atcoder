@@ -1,0 +1,36 @@
+- in: |
+    a
+    b
+    c
+  out: |
+    1
+    2
+    3
+- in: |
+    x
+    x
+    y
+  out: |
+    1
+    1
+    2
+- in: |
+    p
+    q
+    p
+  out: |
+    UNSOLVABLE
+- in: |
+    abcd
+    efgh
+    ijkl
+  out: |
+    UNSOLVABLE
+- in: |
+    send
+    more
+    money
+  out: |
+    9567
+    1085
+    10652
