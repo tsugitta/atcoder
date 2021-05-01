@@ -1,0 +1,8 @@
+- in: |
+    abc
+  out: |
+    bca
+- in: |
+    aab
+  out: |
+    aba
