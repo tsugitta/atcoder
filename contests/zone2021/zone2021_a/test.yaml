@@ -1,0 +1,12 @@
+- in: |
+    abcdZONefghi
+  out: |
+    1
+- in: |
+    ZONeZONeZONe
+  out: |
+    3
+- in: |
+    helloAtZoner
+  out: |
+    0
