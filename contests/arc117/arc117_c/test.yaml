@@ -1,0 +1,25 @@
+- in: |
+    3
+    BWR
+  out: |
+    W
+- in: |
+    4
+    RRBB
+  out: |
+    W
+- in: |
+    6
+    BWWRBW
+  out: |
+    B
+- in: |
+    8
+    WWBRBBWB
+  out: |
+    R
+- in: |
+    21
+    BWBRRBBRWBRBBBRRBWWWR
+  out: |
+    B
