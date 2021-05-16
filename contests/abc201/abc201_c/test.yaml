@@ -1,0 +1,12 @@
+- in: |
+    ooo???xxxx
+  out: |
+    108
+- in: |
+    o?oo?oxoxo
+  out: |
+    0
+- in: |
+    xxxxx?xxxo
+  out: |
+    15

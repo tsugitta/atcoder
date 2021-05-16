@@ -1,0 +1,18 @@
+- in: |
+    3 3
+    ---
+    +-+
+    +--
+  out: |
+    Takahashi
+- in: |
+    2 4
+    +++-
+    -+-+
+  out: |
+    Aoki
+- in: |
+    1 1
+    -
+  out: |
+    Draw
