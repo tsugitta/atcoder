@@ -1,0 +1,8 @@
+- in: |
+    2 2 4
+  out: |
+    baab
+- in: |
+    30 30 118264581564861424
+  out: |
+    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
