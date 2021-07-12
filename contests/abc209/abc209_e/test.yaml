@@ -1,0 +1,27 @@
+- in: |
+    3
+    abcd
+    bcda
+    ada
+  out: |
+    Aoki
+    Takahashi
+    Draw
+- in: |
+    1
+    ABC
+  out: |
+    Draw
+- in: |
+    5
+    eaaaabaa
+    eaaaacaa
+    daaaaaaa
+    eaaaadaa
+    daaaafaa
+  out: |
+    Takahashi
+    Takahashi
+    Takahashi
+    Aoki
+    Takahashi
