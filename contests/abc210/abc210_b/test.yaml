@@ -1,0 +1,10 @@
+- in: |
+    5
+    00101
+  out: |
+    Takahashi
+- in: |
+    3
+    010
+  out: |
+    Aoki
