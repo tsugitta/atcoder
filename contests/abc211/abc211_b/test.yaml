@@ -1,0 +1,14 @@
+- in: |
+    3B
+    HR
+    2B
+    H
+  out: |
+    Yes
+- in: |
+    2B
+    3B
+    HR
+    3B
+  out: |
+    No

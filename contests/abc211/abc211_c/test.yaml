@@ -1,0 +1,12 @@
+- in: |
+    chchokudai
+  out: |
+    3
+- in: |
+    atcoderrr
+  out: |
+    0
+- in: |
+    chokudaichokudaichokudai
+  out: |
+    45
