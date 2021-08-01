@@ -1,0 +1,12 @@
+- in: |
+    7777
+  out: |
+    Weak
+- in: |
+    0112
+  out: |
+    Strong
+- in: |
+    9012
+  out: |
+    Weak

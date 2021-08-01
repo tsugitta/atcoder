@@ -1,0 +1,16 @@
+- in: |
+    50 50
+  out: |
+    Alloy
+- in: |
+    100 0
+  out: |
+    Gold
+- in: |
+    0 100
+  out: |
+    Silver
+- in: |
+    100 2
+  out: |
+    Alloy
