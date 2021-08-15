@@ -1,0 +1,24 @@
+- in: |
+    abc
+  out: |
+    4
+- in: |
+    aa
+  out: |
+    1
+- in: |
+    aaa
+  out: |
+    2
+- in: |
+    aaaa
+  out: |
+    2
+- in: |
+    acba
+  out: |
+    6
+- in: |
+    chokudai
+  out: |
+    54
