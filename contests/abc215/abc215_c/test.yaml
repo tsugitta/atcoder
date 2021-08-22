@@ -1,0 +1,12 @@
+- in: |
+    aab 2
+  out: |
+    aba
+- in: |
+    baba 4
+  out: |
+    baab
+- in: |
+    ydxwacbz 40320
+  out: |
+    zyxwdcba

@@ -1,0 +1,30 @@
+- in: |
+    4
+    BGBH
+  out: |
+    13
+- in: |
+    1
+    A
+  out: |
+    1
+- in: |
+    2
+    AA
+  out: |
+    3
+- in: |
+    2
+    AB
+  out: |
+    3
+- in: |
+    3
+    ABA
+  out: |
+    6
+- in: |
+    100
+    BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBIEIJEIJIJCGCCFGIEBIHFCGFBFAEJIEJAJJHHEBBBJJJGJJJCCCBAAADCEHIIFEHHBGF
+  out: |
+    330219020

@@ -1,0 +1,12 @@
+- in: |
+    Hello,World!
+  out: |
+    AC
+- in: |
+    Hello,world!
+  out: |
+    WA
+- in: |
+    Hello!World!
+  out: |
+    WA
