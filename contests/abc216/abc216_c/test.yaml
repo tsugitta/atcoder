@@ -1,0 +1,8 @@
+- in: |
+    5
+  out: |
+    AABA
+- in: |
+    14
+  out: |
+    BBABBAAAB

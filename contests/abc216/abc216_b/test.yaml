@@ -1,0 +1,22 @@
+- in: |
+    3
+    tanaka taro
+    sato hanako
+    tanaka taro
+  out: |
+    Yes
+- in: |
+    3
+    saito ichiro
+    saito jiro
+    saito saburo
+  out: |
+    No
+- in: |
+    4
+    sypdgidop bkseq
+    bajsqz hh
+    ozjekw mcybmtt
+    qfeysvw dbo
+  out: |
+    No
