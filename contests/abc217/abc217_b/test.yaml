@@ -1,0 +1,12 @@
+- in: |
+    ARC
+    AGC
+    AHC
+  out: |
+    ABC
+- in: |
+    AGC
+    ABC
+    ARC
+  out: |
+    AHC

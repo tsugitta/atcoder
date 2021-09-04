@@ -1,0 +1,12 @@
+- in: |
+    abc atcoder
+  out: |
+    Yes
+- in: |
+    arc agc
+  out: |
+    No
+- in: |
+    a aa
+  out: |
+    Yes
