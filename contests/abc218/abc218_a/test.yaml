@@ -1,0 +1,10 @@
+- in: |
+    4
+    oooxoox
+  out: |
+    No
+- in: |
+    7
+    ooooooo
+  out: |
+    Yes
