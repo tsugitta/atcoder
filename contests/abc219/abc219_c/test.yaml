@@ -1,0 +1,26 @@
+- in: |
+    bacdefghijklmnopqrstuvwxzy
+    4
+    abx
+    bzz
+    bzy
+    caa
+  out: |
+    bzz
+    bzy
+    abx
+    caa
+- in: |
+    zyxwvutsrqponmlkjihgfedcba
+    5
+    a
+    ab
+    abc
+    ac
+    b
+  out: |
+    b
+    a
+    ac
+    ab
+    abc

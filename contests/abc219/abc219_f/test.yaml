@@ -1,0 +1,25 @@
+- in: |
+    RDRUL
+    2
+  out: |
+    7
+- in: |
+    DLDRU
+    2
+  out: |
+    7
+- in: |
+    LR
+    1000000000000
+  out: |
+    2
+- in: |
+    UD
+    1000000000000
+  out: |
+    2
+- in: |
+    UUURRDDDRRRUUUURDLLUURRRDDDDDDLLLLLLU
+    31415926535
+  out: |
+    219911485785

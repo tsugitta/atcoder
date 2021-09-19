@@ -1,0 +1,21 @@
+- in: |
+    mari
+    to
+    zzo
+    1321
+  out: |
+    marizzotomari
+- in: |
+    abra
+    cad
+    abra
+    123
+  out: |
+    abracadabra
+- in: |
+    a
+    b
+    c
+    1
+  out: |
+    a
