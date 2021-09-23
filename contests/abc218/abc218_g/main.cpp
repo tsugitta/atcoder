@@ -197,7 +197,7 @@ void solve() {
   cout << dp[0] << "\n";
 }
 
-// 座標圧縮 + BIT 上の二分探索 (⚠️ WA)
+// 座標圧縮 + BIT 上の二分探索
 void solve2() {
   ll N;
   cin >> N;
@@ -228,64 +228,38 @@ void solve2() {
 
   auto remove = [&](ll val) { bit.add(num_to_i[val], -1); };
 
+  // n: [1, vals.size()]
+  auto get_nth_from_lower = [&](ll n) -> ll {
+    ll total = bit.sum(0, vals.size());
+
+    assert(n <= total);
+
+    ll ng = -1;
+    ll ok = vals.size() - 1;
+
+    while (ok - ng > 1) {
+      ll mid = (ok + ng) / 2;
+
+      if (bit.sum(0, mid + 1) >= n) {
+        ok = mid;
+      } else {
+        ng = mid;
+      }
+    }
+
+    return vals[ok];
+  };
+
   auto get_median = [&]() -> ll {
     ll total = bit.sum(0, vals.size());
 
     if (total % 2 == 1) {
-      ll ng = -1;
-      ll ok = vals.size() - 1;
-
-      while (ok - ng > 1) {
-        ll mid = (ok + ng) / 2;
-
-        if (bit.sum(0, mid + 1) >= total / 2) {
-          ok = mid;
-        } else {
-          ng = mid;
-        }
-      }
-
-      return vals[ok];
+      return get_nth_from_lower(total / 2 + 1);
+    } else {
+      return (get_nth_from_lower(total / 2) +
+              get_nth_from_lower(total / 2 + 1)) /
+             2;
     }
-
-    ll low_ok;
-    ll high_ok;
-
-    {
-      ll ng = -1;
-      ll ok = vals.size() - 1;
-
-      while (ok - ng > 1) {
-        ll mid = (ok + ng) / 2;
-
-        if (bit.sum(0, mid + 1) >= total / 2) {
-          ok = mid;
-        } else {
-          ng = mid;
-        }
-      }
-
-      low_ok = ok;
-    }
-
-    {
-      ll ng = -1;
-      ll ok = vals.size() - 1;
-
-      while (ok - ng > 1) {
-        ll mid = (ok + ng) / 2;
-
-        if (bit.sum(0, mid + 1) > total / 2) {
-          ok = mid;
-        } else {
-          ng = mid;
-        }
-      }
-
-      high_ok = ok;
-    }
-
-    return (vals[low_ok] + vals[high_ok]) / 2;
   };
 
   // その頂点を触る人にとって最善に動かした時の最終値
